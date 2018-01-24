@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/21 20:20:51 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/24 13:25:55 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,13 @@ SRC =
 
 SRC_VM =
 
-SRC_ASM =
+SRC_ASM = main.c \
+		  assembler.c \
+		  op_ext.c
 
 OBJ = $(SRC:.c=.o)
+OBJ_VM = $(SRC_VM:.c=.o)
+OBJ_ASM = $(SRC_ASM:.c=.o)
 
 SRCDIR = srcs/
 SRCDIR_VM = srcs_vm/
@@ -42,7 +46,7 @@ OBJS_ASM = $(addprefix $(OBJDIR_ASM), $(OBJ)) \
 		   $(addprefix $(OBJDIR_ASM), $(OBJ_ASM))
 
 LIBS = -L $(LIBDIR) -lft -lncurses
-HEADER = -I includes -I $(LIBDIR)/includes
+HEADER = -I includes -I $(LIBDIR)
 
 CC = gcc
 CFLAG = -c
@@ -86,12 +90,12 @@ $(ASM): $(OBJS_ASM)
 	@echo "\x1b[32;1m[$(ASM) - 모래반지 빵야빵야!]\x1b[0m"
 
 clean:
-	@/bin/rm -rf $(OBJDIR) $(OBJDIR_VM) $(OBJSDIR_ASM)
+	@/bin/rm -rf $(OBJDIR) $(OBJDIR_VM) $(OBJDIR_ASM)
 	@make -C $(LIBDIR) clean
 	@echo "\x1b[35;1m[$(NAME) - clean]\x1b[0m"
 
 fclean: clean
-	@/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME) $(VM) $(ASM)
 	@rm -f $(LIBDIR)/libft.a
 	@echo "\x1b[31m[$(NAME) - fclean]\x1b[0m"
 

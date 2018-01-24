@@ -6,7 +6,7 @@
 #    By: ashih <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/01/15 21:31:54 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/24 13:20:29 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -130,16 +130,16 @@ SRC = del_and_gnl.c\
 	  skip_next_line.c
 
 $(NAME):
-	$(CC) -c $(CFLAGS) $(SRC) -I.
-	ar rc $(NAME) $(SRC:.c=.o)
-	ranlib $(NAME)
+	@$(CC) -c $(CFLAGS) $(SRC) -I.
+	@ar rc $(NAME) $(SRC:.c=.o)
+	@ranlib $(NAME)
 
 all: $(NAME)
 
 clean:
-	/bin/rm -f $(SRC:.c=.o)
+	@/bin/rm -f $(SRC:.c=.o)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 
 re: fclean all
