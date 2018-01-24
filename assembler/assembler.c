@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "op_ext.h"
+#include "assembler.h"
 
 void		write_byteswapped(void *dst, void *src, size_t n)
 {
@@ -41,7 +40,7 @@ char		**parse_source(char *source, t_program *program)
 			while (source[i] && source[i] == ' ')
 				i++;
 			if (source[i] != '"')
-				return ((char **)(long)ft_puterror("Found '.name', but there isn't a name!\n", 0));
+				return ((char **)throw_error("Found '.name', but there isn't a name!", 0));
 			j = 0;
 			source[i++] = ' ';
 			ft_bzero(program->header.prog_name, PROG_NAME_LENGTH);
@@ -52,7 +51,7 @@ char		**parse_source(char *source, t_program *program)
 				source[i++] = ' ';
 			}
 			if (!source[i])
-				return ((char **)(long)ft_puterror("'.name' is interrupted by an EOF!\n", 0));
+				return ((char **)throw_error("'.name' is interrupted by an EOF!", 0));
 			source[i++] = ' ';
 		}
 		if (!ft_strncmp(&source[i], COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1))
@@ -63,7 +62,7 @@ char		**parse_source(char *source, t_program *program)
 			while (source[i] && source[i] == ' ')
 				i++;
 			if (source[i] != '"')
-				return ((char **)(long)ft_puterror("Found '.comment', but there isn't a comment!\n", 0));
+				return ((char **)throw_error("Found '.comment', but there isn't a comment!", 0));
 			j = 0;
 			source[i++] = ' ';
 			ft_bzero(program->header.comment, COMMENT_LENGTH);
@@ -74,7 +73,7 @@ char		**parse_source(char *source, t_program *program)
 				source[i++] = ' ';
 			}
 			if (!source[i])
-				return ((char **)(long)ft_puterror("'.comment' is interrupted by an EOF!\n", 0));
+				return ((char **)throw_error("'.comment' is interrupted by an EOF!", 0));
 			source[i++] = ' ';
 		}
 		if (source[i] == COMMENT_CHAR || source[i] == COMMENT_ALT)
@@ -115,7 +114,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 				if (assembly[*i][0] == 'r' || assembly[*i][0] == 'R')
 				{
 					if (!(g_op_tab[j].arg_types[arg] & T_REG))
-						return (-1);
+						return (throw_verbose_error("Invalid type 'REG' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
 					k = 2 * (3 - arg);
 					if (g_op_tab[j].type_byte)
 						code[1] |= REG_CODE << k;
@@ -124,12 +123,12 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 					while (ft_isdigit(assembly[*i][k]))
 						k++;
 					if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
-						return (-2);
+						return (throw_verbose_error("Bad 'REG' value |%s|!", (long)assembly[*i], 0, 0));
 				}
 				else if (assembly[*i][0] == DIRECT_CHAR)
 				{
 					if (!(g_op_tab[j].arg_types[arg] & T_DIR))
-						return (-3);
+						return (throw_verbose_error("Invalid type 'DIRECT' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
 					k = 2 * (3 - arg);
 					if (g_op_tab[j].type_byte)
 						code[1] |= DIR_CODE << k;
@@ -147,7 +146,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 							if (label)
 								k = label->content_size - program->header.prog_size;
 							else
-								return (-4);
+								return (throw_verbose_error("Undefined 'DIRECT' label '%s'!", (long)&assembly[*i][2], 0, 0));
 						}
 					}
 					else
@@ -158,7 +157,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						while (ft_isdigit(assembly[*i][k]))
 							k++;
 						if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
-							return (-5);
+							return (throw_verbose_error("Bad 'DIRECT' value |%s|!", (long)assembly[*i], 0, 0));
 						k = ft_atoi(&assembly[*i][1]);
 					}
 					write_byteswapped(&code[pc], &k, g_op_tab[j].short_dir ? 2 : 4);
@@ -168,7 +167,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						ft_isdigit(assembly[*i][0]) || assembly[*i][0] == LABEL_CHAR)
 				{
 					if (!(g_op_tab[j].arg_types[arg] & T_IND))
-						return (-6);
+						return (throw_verbose_error("Invalid type 'INDIRECT' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
 					k = 2 * (3 - arg);
 					if (g_op_tab[j].type_byte)
 						code[1] |= IND_CODE << k;
@@ -186,7 +185,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 							if (label)
 								k = label->content_size - program->header.prog_size;
 							else
-								return (-7);
+								return (throw_verbose_error("Undefined 'INDIRECT' label '%s'!", (long)&assembly[*i][2], 0, 0));
 						}
 					}
 					else
@@ -195,27 +194,27 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						while (ft_isdigit(assembly[*i][k]))
 							k++;
 						if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
-							return (-8);
+							return (throw_verbose_error("Bad 'INDIRECT' value |%s|!", (long)assembly[*i], 0, 0));
 						k = ft_atoi(assembly[*i]);
 					}
 					write_byteswapped(&code[pc], &k, 2);
 					pc += 2;
 				}
 				else
-					return (-9);
+					return (throw_verbose_error("Unknown arguement |%s|!", (long)assembly[*i], 0, 0));
 				arg++;
 				k = ft_strlen(assembly[*i]);
 				if (arg < g_op_tab[j].num_args && assembly[*i][k - 1] != SEPARATOR_CHAR)
-					return (-10);
+					return (throw_verbose_error("Not enough arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
 				else if (arg >= g_op_tab[j].num_args && assembly[*i][k - 1] == SEPARATOR_CHAR)
-					return (-11);
+					return (throw_verbose_error("Too many arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
 			}
 			if (arg < g_op_tab[j].num_args)
-				return (-12);
+				return (throw_error("File ended abruptly!", -1));
 			break ;
 		}
 	if (!g_op_tab[j].mnemonic)
-		return (-13);
+		return (throw_verbose_error("Invalid instruction |%s|!", (long)assembly[*i], 0, 0));
 	if (program)
 		ft_memcpy(&program->code[program->header.prog_size], code, pc);
 	return (pc);
@@ -237,7 +236,6 @@ t_list		*init_labels(char **assembly)
 		error = assemble(assembly, &i, 0, labels);
 		if (error < 0)
 		{
-			ft_printf("Assembly error! Error code: %d; |%s|\n", error, assembly[i]);
 			ft_lstdel(&labels, (void (*)(void *, size_t))free);
 			return (0);
 		}
@@ -246,7 +244,7 @@ t_list		*init_labels(char **assembly)
 			if (!(label = ft_lstnew(assembly[i], ft_strlen(assembly[i]))))
 			{
 				ft_lstdel(&labels, (void (*)(void *, size_t))free);
-				return ((t_list *)(long)ft_puterror("Failed to allocate memory!\n", 0));
+				return ((t_list *)(long)throw_error("Failed to allocate memory!", 0));
 			}
 			i++;
 			label->content_size = pc;
@@ -266,7 +264,7 @@ t_program	*the_assemble_everything_function(char *source)
 	int			error;
 
 	if (!(program = ft_memalloc(sizeof(t_program) + CHAMP_MAX_SIZE)))
-		return ((t_program *)(long)ft_puterror("Failed to allocate memory!\n", 0));
+		return ((t_program *)throw_error("Failed to allocate memory!", 0));
 	program->header.magic = ((COREWAR_EXEC_MAGIC & 0xFF) << 24) | ((COREWAR_EXEC_MAGIC & 0xFF00) << 8) |
 							((COREWAR_EXEC_MAGIC & 0xFF0000) >> 8) | ((COREWAR_EXEC_MAGIC & 0xFF000000) >> 24);
 	assembly = parse_source(source, program);
@@ -281,7 +279,6 @@ t_program	*the_assemble_everything_function(char *source)
 		error = assemble(assembly, &i, program, labels);
 		if (error < 0)
 		{
-			ft_printf("Assembly error! Error code: %d\n", error);
 			ft_lstdel(&labels, (void (*)(void *, size_t))free);
 			free(program);
 			return (0);

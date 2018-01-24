@@ -12,13 +12,23 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include "libft.h"
-#include "op_ext.h"
+#include "assembler.h"
 
-void		write_byteswapped(void *dst, void *src, size_t n);
-t_program	*the_assemble_everything_function(char *source);
+long			throw_error(char *string, long result)
+{
+	ft_printf("[!] %s\n", string);
+	return (result);
+}
 
-size_t	ft_getfilesize(char *path)
+long			throw_verbose_error(char *format, long f0, long f1, long f2)
+{
+	ft_printf("[!] ");
+	ft_printf(format, f0, f1, f2);
+	ft_printf("\n");
+	return (-1);
+}
+
+size_t			ft_getfilesize(char *path)
 {
 	unsigned char	buffer[4096];
 	size_t			size;
@@ -64,9 +74,10 @@ unsigned char	*ft_readfile(char *path, size_t *size)
 	return (buffer);
 }
 
-int	main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	char		*source;
+	char		*deleteme;
 	size_t		size;
 	t_program	*program;
 	int			i;
@@ -75,17 +86,42 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (++i < argc)
 	{
-		ft_printf("Assembling %s...\n", argv[i]);
-		source = (char *)ft_readfile(argv[i], &size);
-		if ((program = the_assemble_everything_function(source)))
+		size = ft_strlen(argv[i]);
+		if (!size || (argv[i][size - 1] != 's' &&
+				argv[i][size - 1] != 'S') || argv[i][size - 2] != '.')
 		{
-			fd = open(ft_strjoin(argv[i], ".cor"), O_CREAT | O_TRUNC | O_WRONLY, 0666);
-			size = program->header.prog_size;
-			write_byteswapped(&program->header.prog_size, &size, 4);
-			write(fd, program, sizeof(t_program) + size);
-			close(fd);
-			ft_printf("Done!\n", argv[i]);
+			ft_printf("[!] %s has an invalid filetype!\n", argv[i]);
+			continue ;
 		}
+		ft_printf("Assembling %s...\n", argv[i]);
+		if ((source = (char *)ft_readfile(argv[i], &size)))
+		{
+			if ((program = the_assemble_everything_function(source)))
+			{
+				size = ft_strlen(argv[i]);
+				if ((deleteme = ft_strjoin(argv[i], "or")))
+				{
+					deleteme[size - 1] = 'c';
+					if ((fd = open(deleteme, O_CREAT | O_TRUNC | O_WRONLY, 0666)) >= 0)
+					{
+						size = program->header.prog_size;
+						write_byteswapped(&program->header.prog_size, &size, 4);
+						write(fd, program, sizeof(t_program) + size);
+						close(fd);
+						ft_printf("Done!\n", argv[i]);
+					}
+					else
+						ft_printf("[!] Failed to create file, %s!\n", deleteme);
+					free(deleteme);
+				}
+				else
+					throw_error("Failed to allocate memory!", 0);
+				free(program);
+			}
+			free(source);
+		}
+		else
+			ft_printf("[!] Failed to read %s!\n", argv[i]);
 	}
 	return (0);
 }
