@@ -6,7 +6,7 @@
 #    By: ashih <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/01/24 13:20:29 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/24 14:53:44 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,15 +129,28 @@ SRC = del_and_gnl.c\
 	  get_next_line.c\
 	  skip_next_line.c
 
-$(NAME):
-	@$(CC) -c $(CFLAGS) $(SRC) -I.
-	@ar rc $(NAME) $(SRC:.c=.o)
+OBJ = $(SRC:.c=.o)
+
+SRCDIR = srcs/
+OBJDIR = objs/
+
+SRCS = $(addprefix $(SRCDIR), $(SRC:.c=.o))
+OBJS = $(addprefix $(OBJDIR), $(OBJ))
+
+HEADER = -I includes
+
+$(OBJDIR)%.o: $(SRCDIR)%.c
+	@mkdir -p $(OBJDIR)
+	@$(CC) -c $(CFLAGS) $(HEADER) $< -o $@
+
+$(NAME): $(OBJS)
+	@ar rc $(NAME) $(OBJS)
 	@ranlib $(NAME)
 
 all: $(NAME)
 
 clean:
-	@/bin/rm -f $(SRC:.c=.o)
+	@/bin/rm -rf $(OBJDIR)
 
 fclean: clean
 	@/bin/rm -f $(NAME)

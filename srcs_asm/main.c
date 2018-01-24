@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/23 13:55:17 by apuel            ###   ########.fr       */
+/*   Updated: 2018/01/24 14:51:29 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,49 +28,19 @@ long			throw_verbose_error(char *format, long f0, long f1, long f2)
 	return (-1);
 }
 
-size_t			ft_getfilesize(char *path)
-{
-	unsigned char	buffer[4096];
-	size_t			size;
-	int				fd;
-	int				br;
-
-	fd = open(path, O_RDONLY, 0);
-	size = 0;
-	if (fd >= 0)
-	{
-		while ((br = read(fd, buffer, 4096)) > 0)
-			size += br;
-		close(fd);
-	}
-	return (size);
-}
-
 unsigned char	*ft_readfile(char *path, size_t *size)
 {
 	unsigned char	*buffer;
-	size_t			i;
 	int				fd;
-	int				br;
 
-	if (size)
-		*size = ft_getfilesize(path);
-	if (size && *size)
-		buffer = malloc(*size);
-	else
-		return ((unsigned char *)0);
-	if (buffer)
-	{
-		fd = open(path, O_RDONLY, 0);
-		i = 0;
-		if (fd >= 0)
-		{
-			while ((br = read(fd, &buffer[i], 4096)) > 0)
-				i += br;
-			close(fd);
-			buffer[i] = '\0';
-		}
-	}
+	if ((fd = open(path, O_RDONLY, 0)) < 0)
+		return (NULL);
+	*size = lseek(fd, 0, SEEK_END);
+	if ((*size < 1) || !(buffer = ft_memalloc(*size)))
+		return (NULL);
+	lseek(fd, 0, SEEK_SET);
+	read(fd, buffer, *size);
+	close(fd);
 	return (buffer);
 }
 
