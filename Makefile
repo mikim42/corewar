@@ -6,11 +6,19 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/25 01:11:45 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/25 01:29:01 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_VM = $(wildcard *.c)
+SRC_VM = curses.c\
+		 debug.c\
+		 display.c\
+		 draw.c\
+		 keys.c\
+		 main.c\
+		 rainbow_road.c\
+		 read.c\
+		 sprite.c
 
 SRC_ASM = main.c \
 		  assembler.c \
