@@ -137,7 +137,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						{
 							label = labels;
 							k = ft_strlen(&assembly[*i][2]);
-							while (label && ft_strncmp(label->content, &assembly[*i][2], k))
+							while (label && (ft_strncmp(label->content, &assembly[*i][2], k) || ((char *)label->content)[k] != LABEL_CHAR))
 								label = label->next;
 							if (label)
 								k = label->content_size - program->header.prog_size;
@@ -174,7 +174,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						{
 							label = labels;
 							k = ft_strlen(&assembly[*i][1]);
-							while (label && ft_strncmp(label->content, &assembly[*i][1], k))
+							while (label && (ft_strncmp(label->content, &assembly[*i][1], k) || ((char *)label->content)[k] != LABEL_CHAR))
 								label = label->next;
 							if (label)
 								k = label->content_size - program->header.prog_size;

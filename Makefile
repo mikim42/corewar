@@ -17,8 +17,15 @@ SRC_ASM = main.c \
 		  split_syntax.c \
 		  op_ext.c
 
+SRC_CHAMP = marysue.s \
+			livepls.s \
+			replicationcentral.s \
+			doyoulikeforks.s \
+			plagiarism.s
+
 OBJ_VM = $(SRC_VM:.c=.o)
 OBJ_ASM = $(SRC_ASM:.c=.o)
+OBJ_CHAMP = $(SRC_CHAMP:.s=.cor)
 
 SRCDIR_VM = srcs_vm/
 SRCDIR_ASM = srcs_asm/
@@ -35,6 +42,9 @@ OBJS_VM = $(addprefix $(OBJDIR_VM), $(OBJ_VM))
 SRCS_ASM = $(addprefix $(SRCDIR_ASM), $(SRC_ASM))
 OBJS_ASM = $(addprefix $(OBJDIR_ASM), $(OBJ_ASM))
 
+SRCS_CHAMP = $(addprefix $(CHAMPDIR), $(SRC_CHAMP))
+OBJS_CHAMP = $(addprefix $(CHAMPDIR), $(OBJ_CHAMP))
+
 LIBS = -L $(LIBDIR) -lft -lncurses
 HEADER = -I includes -I $(LIBDIR)includes
 
@@ -48,7 +58,7 @@ ASM = asm
 .PHONY: all clean fclean re
 .SUFFIXES: .c .o
 
-all: $(VM) $(ASM)
+all: $(VM) $(ASM) $(OBJS_CHAMP)
 
 #COMPILING VIRTUAL MACHINE
 $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
@@ -70,6 +80,10 @@ $(ASM): $(OBJS_ASM)
 	@make -C $(LIBDIR)
 	@$(CC) $(OBJS_ASM) $(LIBS) -o $@
 	@echo "\x1b[32;1m[$(ASM) - 모래반지 빵야빵야!]\x1b[0m"
+
+#COMPILING CHAMPIONS
+%.cor: %.s
+	@./$(ASM) $<
 
 clean:
 	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM)

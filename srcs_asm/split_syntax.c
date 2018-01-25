@@ -21,7 +21,7 @@ static size_t	count_substrings(char const *s)
 {
 	size_t	count;
 	size_t	i;
-	size_t	head;
+	size_t	k;
 
 	count = 0;
 	i = 0;
@@ -31,8 +31,8 @@ static size_t	count_substrings(char const *s)
 			i++;
 		if (!s[i])
 			return (count);
-		head = i;
-		while (!(is_space(s[i]) || (i > head && s[i] == SEPARATOR_CHAR) || !s[i]))
+		k = i;
+		while (!(is_space(s[i]) || (i > k && s[i] == SEPARATOR_CHAR) || !s[i]))
 		{
 			i++;
 			if (s[i - 1] == SEPARATOR_CHAR)
@@ -46,7 +46,7 @@ static void		initialize_strings(char **array, char const *s)
 {
 	size_t	i;
 	size_t	j;
-	size_t	head;
+	size_t	k;
 
 	i = 0;
 	j = 0;
@@ -59,14 +59,14 @@ static void		initialize_strings(char **array, char const *s)
 			array[j] = 0;
 			return ;
 		}
-		head = i;
-		while (!(is_space(s[i]) || (i > head && s[i] == SEPARATOR_CHAR) || !s[i]))
+		k = i;
+		while (!(is_space(s[i]) || (i > k && s[i] == SEPARATOR_CHAR) || !s[i]))
 		{
 			i++;
 			if (s[i - 1] == SEPARATOR_CHAR)
 				break ;
 		}
-		array[j] = malloc(sizeof(char) * (i - head + 1));
+		array[j] = malloc(sizeof(char) * (i - k + 1));
 		j++;
 	}
 }
