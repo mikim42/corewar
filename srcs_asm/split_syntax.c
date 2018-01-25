@@ -19,30 +19,27 @@ static int		is_space(char c)
 
 static size_t	count_substrings(char const *s)
 {
-	size_t	count;
 	size_t	i;
+	size_t	j;
 	size_t	k;
 
-	count = 0;
 	i = 0;
+	j = 0;
 	while (1)
 	{
 		while (is_space(s[i]))
 			i++;
 		if (!s[i])
-			return (count);
+			return (j);
 		k = i;
 		while (!(is_space(s[i]) || (i > k && s[i] == SEPARATOR_CHAR) || !s[i]))
-		{
-			i++;
-			if (s[i - 1] == SEPARATOR_CHAR)
+			if (s[++i - 1] == SEPARATOR_CHAR)
 				break ;
-		}
-		count++;
+		j++;
 	}
 }
 
-static void		initialize_strings(char **array, char const *s)
+static int		initialize_substrings(char **substrings, char const *s)
 {
 	size_t	i;
 	size_t	j;
@@ -55,23 +52,23 @@ static void		initialize_strings(char **array, char const *s)
 		while (is_space(s[i]))
 			i++;
 		if (!s[i])
-		{
-			array[j] = 0;
-			return ;
-		}
+			return (1);
 		k = i;
 		while (!(is_space(s[i]) || (i > k && s[i] == SEPARATOR_CHAR) || !s[i]))
-		{
-			i++;
-			if (s[i - 1] == SEPARATOR_CHAR)
+			if (s[++i - 1] == SEPARATOR_CHAR)
 				break ;
+		if (!(substrings[j++] = ft_memalloc(sizeof(char) * (i - k + 1))))
+		{
+			i = 0;
+			while (substrings[i])
+				free(substrings[i++]);
+			free(substrings);
+			return (0);
 		}
-		array[j] = malloc(sizeof(char) * (i - k + 1));
-		j++;
 	}
 }
 
-static void		fill_array(char **array, char const *s)
+static void		copy_substrings(char **substrings, char const *s)
 {
 	size_t	i;
 	size_t	j;
@@ -89,35 +86,31 @@ static void		fill_array(char **array, char const *s)
 		k = 0;
 		while (!(is_space(s[i]) || (k && s[i] == SEPARATOR_CHAR) || !s[i]))
 		{
-			array[j][k] = s[i];
-			k++;
-			i++;
+			substrings[j][k++] = s[i++];
 			if (s[i - 1] == SEPARATOR_CHAR)
 				break ;
 		}
-		array[j][k] = '\0';
-		j++;
+		substrings[j++][k] = '\0';
 	}
 }
 
 char			**split_syntax(char const *s)
 {
-	char	**total_array;
-	size_t	t;
+	char	**substrings;
+	size_t	count;
 
-	if (s == NULL)
-		return (NULL);
-	if (ft_strlen(s) == 0)
+	if (!s)
+		return (0);
+	if (!ft_strlen(s))
 	{
-		total_array = malloc(sizeof(char*) * 1);
-		total_array[0] = 0;
-		return (total_array);
+		substrings = ft_memalloc(sizeof(char *) * 1);
+		return (substrings);
 	}
-	t = count_substrings(s);
-	total_array = malloc(sizeof(char*) * (t + 1));
-	if (total_array == NULL)
-		return (NULL);
-	initialize_strings(total_array, s);
-	fill_array(total_array, s);
-	return (total_array);
+	count = count_substrings(s);
+	if ((substrings = ft_memalloc(sizeof(char *) * (count + 1))))
+	{
+		if (initialize_substrings(substrings, s))
+			copy_substrings(substrings, s);
+	}
+	return (substrings);
 }

@@ -179,7 +179,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 							if (label)
 								k = label->content_size - program->header.prog_size;
 							else
-								return (throw_verbose_error("Undefined 'INDIRECT' label '%s'!", (long)&assembly[*i][2], 0, 0));
+								return (throw_verbose_error("Undefined 'INDIRECT' label '%s'!", (long)&assembly[*i][1], 0, 0));
 						}
 					}
 					else
@@ -216,39 +216,65 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 	return (pc);
 }
 
-t_list		*init_labels(char **assembly)
+t_program	*init_program(char **assembly, t_program *program, t_list **labels)
 {
-	size_t	i;
-	size_t	pc;
-	int		error;
-	t_list	*label;
-	t_list	*labels;
+	size_t		i;
+	size_t		pc;
+	int			error;
+	t_list		*label;
+	t_program	*resize;
 
 	i = 0;
 	pc = 0;
-	labels = 0;
+	*labels = 0;
 	while (assembly[i])
 	{
-		error = assemble(assembly, &i, 0, labels);
+		error = assemble(assembly, &i, 0, 0);
 		if (error < 0)
 		{
-			ft_lstdel(&labels, (void (*)(void *, size_t))free);
-			return (0);
+			ft_lstdel(labels, (void (*)(void *, size_t))free);
+			return (program);
 		}
 		if (!error)
 		{
-			if (!(label = ft_lstnew(assembly[i], ft_strlen(assembly[i]))))
+			label = *labels;
+			while (label)
 			{
-				ft_lstdel(&labels, (void (*)(void *, size_t))free);
-				return ((t_list *)(long)throw_error("Failed to allocate memory!", 0));
+				if (!ft_strcmp(label->content, assembly[i]))
+				{
+					ft_lstdel(labels, (void (*)(void *, size_t))free);
+					throw_verbose_error("Duplicate label, '%s'!", (long)assembly[i], 0, 0);
+					return (program);
+				}
+				label = label->next;
+			}
+			if (!(label = ft_lstnew(assembly[i], ft_strlen(assembly[i]) + 1)))
+			{
+				ft_lstdel(labels, (void (*)(void *, size_t))free);
+				throw_error("Failed to allocate memory!", 0);
+				return (program);
 			}
 			i++;
 			label->content_size = pc;
-			ft_lstadd(&labels, label);
+			ft_lstadd(labels, label);
 		}
 		pc += (unsigned int)error;
 	}
-	return (labels);
+	if ((resize = realloc(program, sizeof(t_program) + pc)))
+	{
+		program = resize;
+		ft_bzero(((char *)program) + sizeof(t_program), pc);
+		program->header.magic = ((COREWAR_EXEC_MAGIC & 0xFF) << 24) |
+								((COREWAR_EXEC_MAGIC & 0xFF00) << 8) |
+								((COREWAR_EXEC_MAGIC & 0xFF0000) >> 8) |
+								((COREWAR_EXEC_MAGIC & 0xFF000000) >> 24);
+	}
+	else
+	{
+		ft_lstdel(labels, (void (*)(void *, size_t))free);
+		throw_error("Failed to allocate memory!", 0);
+	}
+	return (program);
 }
 
 t_program	*the_assemble_everything_function(char *source)
@@ -259,42 +285,37 @@ t_program	*the_assemble_everything_function(char *source)
 	size_t		i;
 	int			error;
 
-	if (!(program = ft_memalloc(sizeof(t_program) + CHAMP_MAX_SIZE)))
-		return ((t_program *)throw_error("Failed to allocate memory!", 0));
-	program->header.magic = ((COREWAR_EXEC_MAGIC & 0xFF) << 24) | ((COREWAR_EXEC_MAGIC & 0xFF00) << 8) |
-							((COREWAR_EXEC_MAGIC & 0xFF0000) >> 8) | ((COREWAR_EXEC_MAGIC & 0xFF000000) >> 24);
-	if (!(assembly = parse_source(source, program)))
-	{
-		free(program);
-		return (0);
-	}
-	if (!(labels = init_labels(assembly)))
-	{
-		i = 0;
-		while (assembly[i])
-			free(assembly[i++]);
-		free(program);
-		return (0);
-	}
 	i = 0;
-	while (assembly[i])
+	if ((program = ft_memalloc(sizeof(t_program))))
 	{
-		error = assemble(assembly, &i, program, labels);
-		if (error < 0)
+		if ((assembly = parse_source(source, program)))
 		{
+			program = init_program(assembly, program, &labels);
+			if (program->header.magic)
+				while (program && assembly[i])
+				{
+					error = assemble(assembly, &i, program, labels);
+					if (error >= 0)
+					{
+						if (!error)
+							i++;
+						program->header.prog_size += error;
+					}
+					else
+						ft_memdel((void **)&program);
+				}
+			else
+				ft_memdel((void **)&program);
 			ft_lstdel(&labels, (void (*)(void *, size_t))free);
 			i = 0;
 			while (assembly[i])
 				free(assembly[i++]);
-			free(program);
-			return (0);
+			free(assembly);
 		}
-		if (!error)
-			i++;
-		program->header.prog_size += (unsigned int)error;
+		else
+			ft_memdel((void **)&program);
 	}
-	i = 0;
-	while (assembly[i])
-		free(assembly[i++]);
+	else
+		throw_error("Failed to allocate memory!", 0);
 	return (program);
 }

@@ -60,7 +60,7 @@ void	create_binary(t_program *program, char *name, size_t size)
 			ft_printf("Done!\n");
 		}
 		else
-			ft_printf("[!] Failed to create file, %s!\n", tmp);
+			ft_printf("[!] Failed to create file, '%s'!\n", tmp);
 		free(tmp);
 	}
 	else
@@ -81,10 +81,10 @@ int		main(int argc, char **argv)
 		if (!(size = ft_strlen(argv[i])) || (argv[i][size - 1] != 's' &&
 			argv[i][size - 1] != 'S') || argv[i][size - 2] != '.')
 		{
-			ft_printf("[!] %s has an invalid filetype!\n", argv[i]);
+			ft_printf("[!] '%s' has an invalid filetype!\n", argv[i]);
 			continue ;
 		}
-		ft_printf("Assembling %s...\n", argv[i]);
+		ft_printf("Assembling '%s'...\n", argv[i]);
 		if ((source = ft_readfile(argv[i])))
 		{
 			if ((program = the_assemble_everything_function(source)))
@@ -92,7 +92,7 @@ int		main(int argc, char **argv)
 			free(source);
 		}
 		else
-			ft_printf("[!] Failed to read %s!\n", argv[i]);
+			ft_printf("[!] Failed to read '%s'!\n", argv[i]);
 	}
 	return (0);
 }
