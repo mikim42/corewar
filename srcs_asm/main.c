@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/24 15:42:17 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/25 09:30:07 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	create_binary(t_program *program, char *name, size_t size)
 			write_byteswapped(&program->header.prog_size, &size, 4);
 			write(fd, program, sizeof(t_program) + size);
 			close(fd);
-			ft_printf("Done!\n");
 		}
 		else
 			ft_printf("[!] Failed to create file, '%s'!\n", tmp);
@@ -84,7 +83,6 @@ int		main(int argc, char **argv)
 			ft_printf("[!] '%s' has an invalid filetype!\n", argv[i]);
 			continue ;
 		}
-		ft_printf("Assembling '%s'...\n", argv[i]);
 		if ((source = ft_readfile(argv[i])))
 		{
 			if ((program = the_assemble_everything_function(source)))

@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/25 01:29:01 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/25 09:34:55 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,11 @@ SRCDIR_ASM = srcs_asm/
 OBJDIR_VM = objs_vm/
 OBJDIR_ASM = objs_asm/
 
-CHAMPDIR = champions/
-LIBDIR = libft/
+SRCDIR_CHAMP = srcs_champ/
+OBJDIR_CHAMP = objs_champ/
+
+LIBFT = libs/libft/
+MLX = libs/minilibx/
 
 SRCS_VM = $(addprefix $(SRCDIR_VM), $(SRC_VM))
 OBJS_VM = $(addprefix $(OBJDIR_VM), $(OBJ_VM))
@@ -50,13 +53,13 @@ OBJS_VM = $(addprefix $(OBJDIR_VM), $(OBJ_VM))
 SRCS_ASM = $(addprefix $(SRCDIR_ASM), $(SRC_ASM))
 OBJS_ASM = $(addprefix $(OBJDIR_ASM), $(OBJ_ASM))
 
-SRCS_CHAMP = $(addprefix $(CHAMPDIR), $(SRC_CHAMP))
-OBJS_CHAMP = $(addprefix $(CHAMPDIR), $(OBJ_CHAMP))
+SRCS_CHAMP = $(addprefix $(SRCDIR_CHAMP), $(SRC_CHAMP))
+OBJS_CHAMP = $(addprefix $(SRCDIR_CHAMP), $(OBJ_CHAMP))
 
-LIBS = -L $(LIBDIR) -lft -L $(MINILIBX) -lmlx -lncurses -framework OpenGL\
-	   -framework AppKit
-MINILIBX = minilibx
-HEADER = -I includes -I $(LIBDIR)includes -I $(MINILIBX)
+LIBS = -L $(LIBFT) -lft -L $(MLX) -lmlx -lncurses \
+	   -framework OpenGL -framework AppKit
+
+HEADER = -I includes -I $(LIBFT)includes -I $(MLX)
 
 CC = gcc
 CFLAG = -c
@@ -64,47 +67,53 @@ WFLAG = -Wall -Wextra -Werror
 
 VM = corewar
 ASM = asm
+CHAMP = champion
 
 .PHONY: all clean fclean re
 .SUFFIXES: .c .o
 
-all: $(VM) $(ASM) $(OBJS_CHAMP)
+all: $(VM) $(ASM) $(CHAMP)
 
 #COMPILING VIRTUAL MACHINE
 $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
-	@mkdir -p $(OBJDIR_VM)
+	@/bin/mkdir -p $(OBJDIR_VM)
 	@$(CC) $(CFLAG) $(WFLAG) $(HEADER) $< -o $@
 
 $(VM): $(OBJS_VM)
-	@make -C $(LIBDIR)
-	@make -C $(MINILIBX)
+	@make -s -C $(LIBFT)
+	@make -s -C $(MLX)
 	@$(CC) $(OBJS_VM) $(LIBS) -o $@
 	@echo "\x1b[32;1m[$(VM) - 모래반지 빵야빵야!]\x1b[0m"
 
 
 #COMPILING ASSEMBLER
 $(OBJDIR_ASM)%.o: $(SRCDIR_ASM)%.c
-	@mkdir -p $(OBJDIR_ASM)
+	@/bin/mkdir -p $(OBJDIR_ASM)
 	@$(CC) $(CFLAG) $(WFLAG) $(HEADER) $< -o $@
 
 $(ASM): $(OBJS_ASM)
-	@make -C $(LIBDIR)
+	@make -s -C $(LIBFT)
 	@$(CC) $(OBJS_ASM) $(LIBS) -o $@
 	@echo "\x1b[32;1m[$(ASM) - 모래반지 빵야빵야!]\x1b[0m"
 
+ 
 #COMPILING CHAMPIONS
-%.cor: %.s
+$(SRCDIR_CHAMP)%.cor: $(SRCDIR_CHAMP)%.s
+	@/bin/mkdir -p $(OBJDIR_CHAMP)
 	@./$(ASM) $<
+	@/bin/mv $@ $(OBJDIR_CHAMP)
+	
+$(CHAMP): $(OBJS_CHAMP)
+	@echo "\x1b[32;1m[$(CHAMP) has joined the LEAGUE]\x1b[0m"
 
 clean:
 	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM)
-	@make -C $(LIBDIR) clean
+	@make -s -C $(LIBFT) clean
+	@make -s -C $(MLX) clean
 	@echo "\x1b[35;1m[$(VM) - clean]\x1b[0m"
 
 fclean: clean
-	@/bin/rm -f $(VM) $(ASM)
-	@rm -f $(LIBDIR)libft.a
-	@rm -f $(CHAMPDIR)*.cor
+	@/bin/rm -rf $(VM) $(ASM) $(LIBFT)libft.a $(OBJDIR_CHAMP)
 	@echo "\x1b[31m[$(VM) - fclean]\x1b[0m"
 
 re: fclean all
