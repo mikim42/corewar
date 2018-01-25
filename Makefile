@@ -6,11 +6,11 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/24 17:33:35 by apuel            ###   ########.fr        #
+#    Updated: 2018/01/25 01:11:45 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_VM =
+SRC_VM = $(wildcard *.c)
 
 SRC_ASM = main.c \
 		  assembler.c \
@@ -45,8 +45,10 @@ OBJS_ASM = $(addprefix $(OBJDIR_ASM), $(OBJ_ASM))
 SRCS_CHAMP = $(addprefix $(CHAMPDIR), $(SRC_CHAMP))
 OBJS_CHAMP = $(addprefix $(CHAMPDIR), $(OBJ_CHAMP))
 
-LIBS = -L $(LIBDIR) -lft -lncurses
-HEADER = -I includes -I $(LIBDIR)includes
+LIBS = -L $(LIBDIR) -lft -L $(MINILIBX) -lmlx -lncurses -framework OpenGL\
+	   -framework AppKit
+MINILIBX = minilibx
+HEADER = -I includes -I $(LIBDIR)includes -I $(MINILIBX)
 
 CC = gcc
 CFLAG = -c
@@ -67,6 +69,7 @@ $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
 
 $(VM): $(OBJS_VM)
 	@make -C $(LIBDIR)
+	@make -C $(MINILIBX)
 	@$(CC) $(OBJS_VM) $(LIBS) -o $@
 	@echo "\x1b[32;1m[$(VM) - 모래반지 빵야빵야!]\x1b[0m"
 
