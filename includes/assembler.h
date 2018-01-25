@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 14:09:54 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/24 15:43:55 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/24 17:32:31 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 #include "libft.h"
 #include "op_ext.h"
+
+char		**split_syntax(const char *str);
 
 void		write_byteswapped(void *dst, void *src, size_t n);
 long		throw_error(char *string, long result);

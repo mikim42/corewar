@@ -35,9 +35,9 @@ char		**parse_source(char *source, t_program *program)
 		if (!ft_strncmp(&source[i], NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1))
 		{
 			j = 0;
-			while (j++ < sizeof(NAME_CMD_STRING))
+			while (j++ < sizeof(NAME_CMD_STRING) - 1)
 				source[i++] = ' ';
-			while (source[i] && source[i] == ' ')
+			while (source[i] && (source[i] == ' ' || source[i] == '\t'))
 				i++;
 			if (source[i] != '"')
 				return ((char **)throw_error("Found '.name', but there isn't a name!", 0));
@@ -57,9 +57,9 @@ char		**parse_source(char *source, t_program *program)
 		if (!ft_strncmp(&source[i], COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1))
 		{
 			j = 0;
-			while (j++ < sizeof(COMMENT_CMD_STRING))
+			while (j++ < sizeof(COMMENT_CMD_STRING) - 1)
 				source[i++] = ' ';
-			while (source[i] && source[i] == ' ')
+			while (source[i] && (source[i] == ' ' || source[i] == '\t'))
 				i++;
 			if (source[i] != '"')
 				return ((char **)throw_error("Found '.comment', but there isn't a comment!", 0));
@@ -79,12 +79,10 @@ char		**parse_source(char *source, t_program *program)
 		if (source[i] == COMMENT_CHAR || source[i] == COMMENT_ALT)
 			while (source[i] && source[i] != '\n')
 				source[i++] = ' ';
-		if (source[i] == '\n' || source[i] == '\t')
-			source[i] = ' ';
 		if (!source[i])
 			break ;
 	}
-	return (ft_strsplit(source, ' '));
+	return (split_syntax(source));
 }
 
 int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
@@ -122,7 +120,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 					k = 1;
 					while (ft_isdigit(assembly[*i][k]))
 						k++;
-					if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
+					if (assembly[*i][k])
 						return (throw_verbose_error("Bad 'REG' value |%s|!", (long)assembly[*i], 0, 0));
 				}
 				else if (assembly[*i][0] == DIRECT_CHAR)
@@ -139,8 +137,6 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						{
 							label = labels;
 							k = ft_strlen(&assembly[*i][2]);
-							if (assembly[*i][k + 1] == SEPARATOR_CHAR)
-								k--;
 							while (label && ft_strncmp(label->content, &assembly[*i][2], k))
 								label = label->next;
 							if (label)
@@ -156,7 +152,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 							k++;
 						while (ft_isdigit(assembly[*i][k]))
 							k++;
-						if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
+						if (assembly[*i][k])
 							return (throw_verbose_error("Bad 'DIRECT' value |%s|!", (long)assembly[*i], 0, 0));
 						k = ft_atoi(&assembly[*i][1]);
 					}
@@ -178,8 +174,6 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						{
 							label = labels;
 							k = ft_strlen(&assembly[*i][1]);
-							if (assembly[*i][k] == SEPARATOR_CHAR)
-								k--;
 							while (label && ft_strncmp(label->content, &assembly[*i][1], k))
 								label = label->next;
 							if (label)
@@ -193,7 +187,7 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 						k = 1;
 						while (ft_isdigit(assembly[*i][k]))
 							k++;
-						if (assembly[*i][k] && (assembly[*i][k] != SEPARATOR_CHAR || assembly[*i][k + 1]))
+						if (assembly[*i][k])
 							return (throw_verbose_error("Bad 'INDIRECT' value |%s|!", (long)assembly[*i], 0, 0));
 						k = ft_atoi(assembly[*i]);
 					}
@@ -204,10 +198,12 @@ int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
 					return (throw_verbose_error("Unknown arguement |%s|!", (long)assembly[*i], 0, 0));
 				arg++;
 				k = ft_strlen(assembly[*i]);
-				if (arg < g_op_tab[j].num_args && assembly[*i][k - 1] != SEPARATOR_CHAR)
+				if (arg < g_op_tab[j].num_args && (!assembly[*i + 1] || assembly[*i + 1][0] != SEPARATOR_CHAR))
 					return (throw_verbose_error("Not enough arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
-				else if (arg >= g_op_tab[j].num_args && assembly[*i][k - 1] == SEPARATOR_CHAR)
+				else if (arg >= g_op_tab[j].num_args && assembly[*i + 1] && assembly[*i + 1][0] == SEPARATOR_CHAR)
 					return (throw_verbose_error("Too many arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
+				if (arg < g_op_tab[j].num_args)
+					(*i)++;
 			}
 			if (arg < g_op_tab[j].num_args)
 				return (throw_error("File ended abruptly!", -1));
@@ -267,9 +263,16 @@ t_program	*the_assemble_everything_function(char *source)
 		return ((t_program *)throw_error("Failed to allocate memory!", 0));
 	program->header.magic = ((COREWAR_EXEC_MAGIC & 0xFF) << 24) | ((COREWAR_EXEC_MAGIC & 0xFF00) << 8) |
 							((COREWAR_EXEC_MAGIC & 0xFF0000) >> 8) | ((COREWAR_EXEC_MAGIC & 0xFF000000) >> 24);
-	assembly = parse_source(source, program);
+	if (!(assembly = parse_source(source, program)))
+	{
+		free(program);
+		return (0);
+	}
 	if (!(labels = init_labels(assembly)))
 	{
+		i = 0;
+		while (assembly[i])
+			free(assembly[i++]);
 		free(program);
 		return (0);
 	}
@@ -280,6 +283,9 @@ t_program	*the_assemble_everything_function(char *source)
 		if (error < 0)
 		{
 			ft_lstdel(&labels, (void (*)(void *, size_t))free);
+			i = 0;
+			while (assembly[i])
+				free(assembly[i++]);
 			free(program);
 			return (0);
 		}
@@ -287,5 +293,8 @@ t_program	*the_assemble_everything_function(char *source)
 			i++;
 		program->header.prog_size += (unsigned int)error;
 	}
+	i = 0;
+	while (assembly[i])
+		free(assembly[i++]);
 	return (program);
 }

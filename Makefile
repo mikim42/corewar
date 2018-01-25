@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/24 14:53:25 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/24 17:33:35 by apuel            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ SRC_VM =
 
 SRC_ASM = main.c \
 		  assembler.c \
+		  split_syntax.c \
 		  op_ext.c
 
 OBJ_VM = $(SRC_VM:.c=.o)
