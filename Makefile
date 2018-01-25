@@ -54,12 +54,15 @@ SRCS_ASM = $(addprefix $(SRCDIR_ASM), $(SRC_ASM))
 OBJS_ASM = $(addprefix $(OBJDIR_ASM), $(OBJ_ASM))
 
 SRCS_CHAMP = $(addprefix $(SRCDIR_CHAMP), $(SRC_CHAMP))
-OBJS_CHAMP = $(addprefix $(SRCDIR_CHAMP), $(OBJ_CHAMP))
+OBJS_CHAMP = $(addprefix $(OBJDIR_CHAMP), $(OBJ_CHAMP))
 
-LIBS = -L $(LIBFT) -lft -L $(MLX) -lmlx -lncurses \
-	   -framework OpenGL -framework AppKit
+VM_LIBS = -L $(LIBFT) -lft -L $(MLX) -lmlx -lncurses \
+		  -framework OpenGL -framework AppKit
 
-HEADER = -I includes -I $(LIBFT)includes -I $(MLX)
+ASM_LIBS = -L $(LIBFT) -lft
+
+VM_HEADER = -I includes -I $(LIBFT)includes -I $(MLX)
+ASM_HEADER = -I includes -I $(LIBFT)includes
 
 CC = gcc
 CFLAG = -c
@@ -67,44 +70,45 @@ WFLAG = -Wall -Wextra -Werror
 
 VM = corewar
 ASM = asm
-CHAMP = champion
+CHAMP = champions
 
-.PHONY: all clean fclean re
-.SUFFIXES: .c .o
+.PHONY: all $(CHAMP) clean fclean re
+.SUFFIXES: .c .o .s .cor
 
 all: $(VM) $(ASM) $(CHAMP)
 
 #COMPILING VIRTUAL MACHINE
 $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
 	@/bin/mkdir -p $(OBJDIR_VM)
-	@$(CC) $(CFLAG) $(WFLAG) $(HEADER) $< -o $@
+	@$(CC) $(CFLAG) $(WFLAG) $(VM_HEADER) $< -o $@
 
 $(VM): $(OBJS_VM)
 	@make -s -C $(LIBFT)
-	@make -s -C $(MLX)
-	@$(CC) $(OBJS_VM) $(LIBS) -o $@
+	@make -s -C $(MLX) 2>&1 | grep -v 'ar:\screating\sarchive' || true
+	@$(CC) $(OBJS_VM) $(VM_LIBS) -o $@
 	@echo "\x1b[32;1m[$(VM) - 모래반지 빵야빵야!]\x1b[0m"
 
 
 #COMPILING ASSEMBLER
 $(OBJDIR_ASM)%.o: $(SRCDIR_ASM)%.c
 	@/bin/mkdir -p $(OBJDIR_ASM)
-	@$(CC) $(CFLAG) $(WFLAG) $(HEADER) $< -o $@
+	@$(CC) $(CFLAG) $(WFLAG) $(ASM_HEADER) $< -o $@
 
 $(ASM): $(OBJS_ASM)
 	@make -s -C $(LIBFT)
-	@$(CC) $(OBJS_ASM) $(LIBS) -o $@
+	@$(CC) $(OBJS_ASM) $(ASM_LIBS) -o $@
 	@echo "\x1b[32;1m[$(ASM) - 모래반지 빵야빵야!]\x1b[0m"
 
  
 #COMPILING CHAMPIONS
-$(SRCDIR_CHAMP)%.cor: $(SRCDIR_CHAMP)%.s
+$(OBJDIR_CHAMP)%.cor: $(SRCDIR_CHAMP)%.s
 	@/bin/mkdir -p $(OBJDIR_CHAMP)
 	@./$(ASM) $<
-	@/bin/mv $@ $(OBJDIR_CHAMP)
-	
+	@/bin/mv $(<:.s=.cor) $(OBJDIR_CHAMP)
+	@echo "\x1b[32;1m[$(notdir $(<:.s=)) has joined the LEAGUE!]\x1b[0m"
+
 $(CHAMP): $(OBJS_CHAMP)
-	@echo "\x1b[32;1m[$(CHAMP) has joined the LEAGUE]\x1b[0m"
+
 
 clean:
 	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM)
@@ -114,6 +118,6 @@ clean:
 
 fclean: clean
 	@/bin/rm -rf $(VM) $(ASM) $(LIBFT)libft.a $(OBJDIR_CHAMP)
-	@echo "\x1b[31m[$(VM) - fclean]\x1b[0m"
+	@echo "\x1b[31;1m[$(VM) - fclean]\x1b[0m"
 
 re: fclean all
