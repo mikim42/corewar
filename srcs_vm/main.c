@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:58:18 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 16:12:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,71 +69,54 @@ void		run_processes(t_master *m)
 		{
 			process = process_list->content;
 
-			run_process(process);
+			run_process(process, m);
 
 			process_list = process_list->next;
 		}
 	}
 }
 
-void		run_process(t_process *process)
+void		run_process(t_process *process, t_master *m)
 {
-	// just move to next core position LOL
+	int		i;
+	unsigned char last_opcode;
+
+	i = -1;
+	while (g_op_tab[++i].opcode != 0)
+	{
+		if (g_op_tab[i].opcode == (unsigned char)m->core[process->pc].value)
+		{
+			if (++process->cycles == (int)g_op_tab[i].cycles)
+			{
+				last_opcode = g_op_tab[i].opcode;
+				g_op_tab[i].func(process, m);
+				process->cycles = 0;
+				if (last_opcode != 9)	// if we didn't just do zjmp
+					process->pc = (process->pc + find_op_length(process, m))
+						% MEM_SIZE;
+			}
+			return ;
+		}
+	}
+	// for invalid opcode, just move to next core position
 	process->pc = (process->pc + 1) % MEM_SIZE;
 }
 
+unsigned int	find_op_length(t_process *process, t_master *m)
+{
+	int			i;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	i = -1;
+	while (g_op_length[++i].op_code != 0)
+	{
+		if (g_op_length[i].op_code == m->core[process->pc].value &&
+			(g_op_length[i].args_code == 0 ||
+			 g_op_length[i].args_code ==
+			 m->core[(process->pc + 1) % MEM_SIZE].value))
+			return (g_op_length[i].length);
+	}
+	return (0);
+}
 
 
 

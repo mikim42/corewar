@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 01:14:38 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 16:07:54 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <math.h>
 # include "libft.h"
 # include "mlx.h"
-# include "op_ext.h"
 
 #define BANNER "\n\n"\
 "\t   ____   U  ___ u   ____    U _____ u                      _       ____\n"\
@@ -28,7 +27,7 @@
 "\t _// \\\\      \\\\     //   \\\\_  <<   >>     .-,_\\ /\\ /_,-. \\\\    >>  //   \\\\_\n"\
 "\t(__)(__)    (__)   (__)  (__)(__) (__)     \\_)-'  '-(_/ (__)  (__)(__)  (__)\n"
 
-#define BANNER2 "\n"\
+#define BANNER2 \
 "              _____                   _______                   _____                    _____                            _____                    _____                    _____\n"\
 "             /\\    \\                 /::\\    \\                 /\\    \\                  /\\    \\                          /\\    \\                  /\\    \\                  /\\    \\\n"\
 "            /::\\    \\               /::::\\    \\               /::\\    \\                /::\\    \\                        /::\\____\\                /::\\    \\                /::\\    \\\n"\
@@ -78,8 +77,84 @@
 # define SPRITE_02 "sprites/robot.sprite"
 # define SPRITE_03 "sprites/virus.sprite"
 
-
 # define AFFLOG_SIZE 32
+
+
+# define IND_SIZE				2
+# define REG_SIZE				4
+# define DIR_SIZE				REG_SIZE
+
+# define REG_CODE				1
+# define DIR_CODE				2
+# define IND_CODE				3
+
+# define MAX_ARGS_NUMBER		4
+# define MAX_PLAYERS			4
+# define MEM_SIZE				(4*1024)
+# define IDX_MOD				(MEM_SIZE / 8)
+# define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
+
+# define COMMENT_CHAR			'#'
+# define COMMENT_ALT			';'
+# define LABEL_CHAR				':'
+# define DIRECT_CHAR			'%'
+# define SEPARATOR_CHAR			','
+
+# define LABEL_CHARS			"abcdefghijklmnopqrstuvwxyz_0123456789"
+
+# define NAME_CMD_STRING		".name"
+# define COMMENT_CMD_STRING		".comment"
+
+# define REG_NUMBER				16
+
+# define CYCLE_TO_DIE			1536
+# define CYCLE_DELTA			50
+# define NBR_LIVE				21
+# define MAX_CHECKS				10
+
+# define T_REG					1
+# define T_DIR					2
+# define T_IND					4
+# define T_LAB					8
+
+# define PROG_NAME_LENGTH		(128)
+# define COMMENT_LENGTH			(2048)
+# define COREWAR_EXEC_MAGIC		0xea83f3
+
+
+
+/*
+typedef struct					s_header
+{
+  unsigned int					magic;
+  char							prog_name[PROG_NAME_LENGTH + 1];
+  unsigned int					prog_size;
+  char							comment[COMMENT_LENGTH + 1];
+}								t_header;
+
+typedef struct					s_program
+{
+	t_header					header;
+	unsigned char				code[];
+}								t_program;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 typedef struct		s_sprite
 {
@@ -110,16 +185,18 @@ typedef struct		s_player
 typedef struct		s_process
 {
 	int				id;
+	int				owner; // = {1, 2, 3, 4}
 	unsigned int	reg[REG_NUMBER];
 	unsigned int	pc;
 	int				lives;
 	int				cycles;
+	int				carry_flag;
 }					t_process;
 
 typedef struct		s_core
 {
 	unsigned int	value;
-	int				owner; // owner = {1, 2, 3, 4}
+	int				owner; // = {1, 2, 3, 4}
 	int				x;
 	int				y;
 }					t_core;
@@ -142,6 +219,7 @@ typedef struct		s_master
 	WINDOW			*win_core;
 	WINDOW			*win_control;
 	WINDOW			*win_player[MAX_PLAYERS];
+	WINDOW			*win_extra;
 
 	int				current_cycle;
 
@@ -156,6 +234,36 @@ typedef struct		s_master
 	t_core			core[MEM_SIZE];
 
 }					t_master;
+
+typedef char					t_arg_type;
+typedef void					(*t_func)(t_process *, t_master *);
+
+typedef struct					s_op
+{
+	char						*mnemonic;
+	unsigned int				num_args;
+	t_arg_type					arg_types[3];
+	unsigned char				opcode;
+	unsigned int				cycles;
+	char						*debug;
+	int							type_byte;
+	int							short_dir;
+	t_func						func;
+}								t_op;
+
+typedef struct					s_op_length
+{
+	unsigned char				op_code;
+	unsigned char				args_code;	// let this be 0 if unneeded
+	unsigned int				length;
+}								t_op_length;
+
+extern t_op						g_op_tab[17];
+extern t_op_length				g_op_length[59];
+
+/*
+** op_ext.c - just the assembly instruction table lol
+*/
 
 /*
 ** keys.c
@@ -195,7 +303,7 @@ void		draw_process_pc(t_master *m);
 */
 int			init_minilibx(t_master *m);
 void		assign_core_pos(t_master *m);
-void		init_rainbow_road(t_master *m);
+int			init_rainbow_road(t_master *m);
 void		update_rainbow_road(t_master *m);
 
 /*
@@ -221,7 +329,32 @@ void		update_windows(t_master *m);
 int			main(int argc, char **argv);
 void		step_forward(t_master *m);
 void		run_processes(t_master *m);
-void		run_process(t_process *process);
+void		run_process(t_process *process, t_master *m);
+unsigned int	find_op_length(t_process *process, t_master *m);
+
+
+void		do_live(t_process *process, t_master *m);
+void		do_ld(t_process *process, t_master *m);
+void		do_st(t_process *process, t_master *m);
+void		do_add(t_process *process, t_master *m);
+void		do_sub(t_process *process, t_master *m);
+void		do_and(t_process *process, t_master *m);
+void		do_or(t_process *process, t_master *m);
+void		do_xor(t_process *process, t_master *m);
+void		do_zjmp(t_process *process, t_master *m);
+void		do_ldi(t_process *process, t_master *m);
+void		do_sti(t_process *process, t_master *m);
+void		do_fork(t_process *process, t_master *m);
+void		do_lld(t_process *process, t_master *m);
+void		do_lldi(t_process *process, t_master *m);
+void		do_lfork(t_process *process, t_master *m);
+void		do_aff(t_process *process, t_master *m);
+void		do_fork(t_process *process, t_master *m);
+
+
+
+
+
 
 /*
 ** debug.c
@@ -229,6 +362,19 @@ void		run_process(t_process *process);
 void		print_all_players(t_master *m);
 void		print_player(t_player *p);
 void		print_core(t_master *m);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

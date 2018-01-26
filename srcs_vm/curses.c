@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:53:21 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:56:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 15:47:15 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ int			init_ncurses_stuffz(t_master *m)
 int			init_windows(t_master *m)
 {
 	// draw banner window
-	m->win_banner = newwin(24, 195, 0, 0);
+	m->win_banner = newwin(24-2, 195, 0, 0);
 	wprintw(m->win_banner, "%s", BANNER2);
 	box(m->win_banner, 0, 0);
 	wrefresh(m->win_banner);
 
 	// draw core window
-	m->win_core = newwin(66, 195, 24, 0);
+	m->win_core = newwin(66, 195, 24-2, 0);
 	display_core(m);
 
 	// draw control window
@@ -57,11 +57,16 @@ int			init_windows(t_master *m)
 	display_control(m);
 
 	// draw player window (all 4, always)
-	m->win_player[0] = newwin(15 + 2, 50, 25 + 1 - 4, 195 + 1);
-	m->win_player[1] = newwin(15 + 2, 50, 40 + 2 - 3, 195 + 1);
-	m->win_player[2] = newwin(15 + 2, 50, 55 + 3 - 2, 195 + 1);
-	m->win_player[3] = newwin(15 + 2, 50, 70 + 4 - 1, 195 + 1);
+	m->win_player[0] = newwin(15 + 1, 50, 25 + 1 - 4, 195 + 1);
+	m->win_player[1] = newwin(15 + 1, 50, 40 + 2 - 3 - 1, 195 + 1);
+	m->win_player[2] = newwin(15 + 1, 50, 55 + 3 - 2 - 2, 195 + 1);
+	m->win_player[3] = newwin(15 + 1, 50, 70 + 4 - 1 - 3, 195 + 1);
 	display_players(m);
+
+	m->win_extra = newwin(2, 50, 85 + 5 - 1 - 3, 195 + 1);
+	wprintw(m->win_extra, "This program was made possible thanks to\n"\
+		"contributions from viewers like you!");
+	wrefresh(m->win_extra);
 	return (0);
 }
 
