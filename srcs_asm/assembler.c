@@ -24,58 +24,53 @@ void		write_byteswapped(void *dst, void *src, size_t n)
 	}
 }
 
+long		preprocess(char *source, char *ref, char *dst, size_t size)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	if (!ft_strncmp(source, ref, ft_strlen(ref)))
+	{
+		ft_memset(source, ' ', (i = ft_strlen(ref)));
+		while (source[i] && (source[i] == ' ' || source[i] == '\t'))
+			i++;
+		if (source[i] != '"')
+			return (throw_verbose_error("Invalid '%s'!", (long)ref, 0, 0));
+		j = 0;
+		source[i++] = ' ';
+		ft_bzero(dst, size + 1);
+		while (source[i] && source[i] != '"')
+		{
+			if (j < size)
+				dst[j++] = source[i];
+			source[i++] = ' ';
+		}
+		if (!source[i])
+			return (throw_verbose_error("'%s' reaches EOF!", (long)ref, 0, 0));
+		source[i++] = ' ';
+	}
+	return (i);
+}
+
 char		**parse_source(char *source, t_program *program)
 {
 	size_t			i;
-	size_t			j;
+	long			result;
 
 	i = -1;
 	while (source[++i])
 	{
-		if (!ft_strncmp(&source[i], NAME_CMD_STRING, sizeof(NAME_CMD_STRING) - 1))
-		{
-			j = 0;
-			while (j++ < sizeof(NAME_CMD_STRING) - 1)
-				source[i++] = ' ';
-			while (source[i] && (source[i] == ' ' || source[i] == '\t'))
-				i++;
-			if (source[i] != '"')
-				return ((char **)throw_error("Found '.name', but there isn't a name!", 0));
-			j = 0;
-			source[i++] = ' ';
-			ft_bzero(program->header.prog_name, PROG_NAME_LENGTH);
-			while (source[i] && source[i] != '"')
-			{
-				if (j < PROG_NAME_LENGTH)
-					program->header.prog_name[j++] = source[i];
-				source[i++] = ' ';
-			}
-			if (!source[i])
-				return ((char **)throw_error("'.name' is interrupted by an EOF!", 0));
-			source[i++] = ' ';
-		}
-		if (!ft_strncmp(&source[i], COMMENT_CMD_STRING, sizeof(COMMENT_CMD_STRING) - 1))
-		{
-			j = 0;
-			while (j++ < sizeof(COMMENT_CMD_STRING) - 1)
-				source[i++] = ' ';
-			while (source[i] && (source[i] == ' ' || source[i] == '\t'))
-				i++;
-			if (source[i] != '"')
-				return ((char **)throw_error("Found '.comment', but there isn't a comment!", 0));
-			j = 0;
-			source[i++] = ' ';
-			ft_bzero(program->header.comment, COMMENT_LENGTH);
-			while (source[i] && source[i] != '"')
-			{
-				if (j < COMMENT_LENGTH)
-					program->header.comment[j++] = source[i];
-				source[i++] = ' ';
-			}
-			if (!source[i])
-				return ((char **)throw_error("'.comment' is interrupted by an EOF!", 0));
-			source[i++] = ' ';
-		}
+		result = preprocess(&source[i], NAME_CMD_STRING,
+				program->header.prog_name, PROG_NAME_LENGTH);
+		if (result == -1)
+			return (0);
+		i += (size_t)result;
+		result = preprocess(&source[i], COMMENT_CMD_STRING,
+				program->header.comment, COMMENT_LENGTH);
+		if (result < 0)
+			return (0);
+		i += (size_t)result;
 		if (source[i] == COMMENT_CHAR || source[i] == COMMENT_ALT)
 			while (source[i] && source[i] != '\n')
 				source[i++] = ' ';
@@ -85,135 +80,210 @@ char		**parse_source(char *source, t_program *program)
 	return (split_syntax(source));
 }
 
-int			assemble(char **assembly, size_t *i, t_program *program, t_list *labels)
+long		reg_arg(char *argument, t_asm_ctx *ctx)
 {
-	unsigned char	code[0x10];
-	t_list			*label;
-	size_t			arg;
-	size_t			pc;
-	size_t			j;
-	size_t			k;
+	size_t	i;
 
-	ft_bzero(code, 0x10);
-	k = ft_strlen(assembly[*i]);
-	if (!k || assembly[*i][k - 1] == LABEL_CHAR)
-		return (0);
-	j = -1;
-	pc = 0;
-	while (g_op_tab[++j].mnemonic)
-		if (!ft_strcmp(assembly[*i], g_op_tab[j].mnemonic))
+	if (argument[0] == 'r' || argument[0] == 'R')
+	{
+		if (!(g_op_tab[ctx->op].arg_types[ctx->arg] & T_REG))
 		{
-			code[pc++] = g_op_tab[j].opcode;
-			if (g_op_tab[j].type_byte)
-				pc++;
-			arg = 0;
-			while (assembly[++(*i)] && arg < g_op_tab[j].num_args)
+			return (throw_verbose_error(
+					"Invalid type 'REG' for %s, argument %lu!",
+					(long)g_op_tab[ctx->op].mnemonic, ctx->arg + 1, 0));
+		}
+		i = 2 * (3 - ctx->arg);
+		if (g_op_tab[ctx->op].type_byte)
+			ctx->code[1] |= REG_CODE << i;
+		ctx->code[(ctx->pc)++] = (unsigned char)ft_atoi(&argument[1]);
+		i = 1;
+		while (ft_isdigit(argument[i]))
+			i++;
+		if (argument[i])
+		{
+			return (throw_verbose_error("Bad 'REG' value; '%s'!",
+				(long)argument, 0, 0));
+		}
+		return (1);
+	}
+	return (0);
+}
+
+long		label_arg(char *argument, t_program *program,
+							t_list *labels, int *result)
+{
+	t_list	*label;
+	size_t	len;
+
+	*result = 0;
+	if (program)
+	{
+		label = labels;
+		len = ft_strlen(argument);
+		while (label &&
+				(ft_strncmp(label->content, argument, len) ||
+				((char *)label->content)[len] != LABEL_CHAR))
+			label = label->next;
+		if (label)
+			*result = label->content_size - program->header.prog_size;
+		else
+			return (throw_verbose_error("Undefined label '%s'!",
+					(long)argument, 0, 0));
+	}
+	return (0);
+}
+
+long		dir_ext(char *argument, t_asm_ctx *ctx,
+						t_program *program, t_list *labels)
+{
+	int	i;
+
+	if (g_op_tab[ctx->op].type_byte)
+		ctx->code[1] |= DIR_CODE << (2 * (3 - ctx->arg));
+	if (argument[1] == LABEL_CHAR)
+	{
+		if (label_arg(&argument[2], program, labels, &i) < 0)
+			return (-1);
+	}
+	else
+	{
+		i = 2;
+		while (ft_isdigit(argument[i]))
+			i++;
+		if (argument[i])
+		{
+			return (throw_verbose_error("Bad 'DIRECT' value; '%s'!",
+					(long)argument, 0, 0));
+		}
+		i = ft_atoi(&argument[1]);
+	}
+	write_byteswapped(&(ctx->code[ctx->pc]), &i,
+			g_op_tab[ctx->op].short_dir ? 2 : 4);
+	ctx->pc += g_op_tab[ctx->op].short_dir ? 2 : 4;
+	return (1);
+}
+
+long		dir_arg(char *argument, t_asm_ctx *ctx,
+						t_program *program, t_list *labels)
+{
+	if (argument[0] == DIRECT_CHAR)
+	{
+		if (!(g_op_tab[ctx->op].arg_types[ctx->arg] & T_DIR))
+		{
+			return (throw_verbose_error(
+					"Invalid type 'DIRECT' for '%s', argument %lu!",
+					(long)g_op_tab[ctx->op].mnemonic, ctx->arg + 1, 0));
+		}
+		if (argument[1] != '-' && argument[1] != '+' &&
+			!ft_isdigit(argument[1]) && argument[1] != LABEL_CHAR)
+		{
+			return (throw_verbose_error("Bad 'DIRECT' value; '%s'!",
+					(long)argument, 0, 0));
+		}
+		return (dir_ext(argument, ctx, program, labels));
+	}
+	return (0);
+}
+
+long		ind_ext(char *argument, t_asm_ctx *ctx,
+						t_program *program, t_list *labels)
+{
+	int	i;
+
+	i = 2 * (3 - ctx->arg);
+	if (g_op_tab[ctx->op].type_byte)
+		ctx->code[1] |= IND_CODE << i;
+	if (argument[0] == LABEL_CHAR)
+	{
+		if (label_arg(&argument[1], program, labels, &i) < 0)
+			return (-1);
+	}
+	else
+	{
+		i = 1;
+		while (ft_isdigit(argument[i]))
+			i++;
+		if (argument[i])
+		{
+			return (throw_verbose_error("Bad 'INDIRECT' value; '%s'!",
+					(long)argument, 0, 0));
+		}
+		i = ft_atoi(argument);
+	}
+	write_byteswapped(&(ctx->code[ctx->pc]), &i, 2);
+	ctx->pc += 2;
+	return (1);
+}
+
+long		ind_arg(char *argument, t_asm_ctx *ctx,
+						t_program *program, t_list *labels)
+{
+	if (argument[0] == '-' || argument[0] == '+' ||
+			ft_isdigit(argument[0]) || argument[0] == LABEL_CHAR)
+	{
+		if (!(g_op_tab[ctx->op].arg_types[ctx->arg] & T_IND))
+		{
+			return (throw_verbose_error(
+					"Invalid type 'INDIRECT' for '%s', argument %lu!",
+					(long)g_op_tab[ctx->op].mnemonic, ctx->arg + 1, 0));
+		}
+		return (ind_ext(argument, ctx, program, labels));
+	}
+	return (0);
+}
+
+long		assemble(char **assembly, size_t *i,
+						t_program *program, t_list *labels)
+{
+	t_asm_ctx		ctx;
+	long			res;
+
+	ft_bzero(&ctx, sizeof(t_asm_ctx));
+	res = ft_strlen(assembly[*i]);
+	if (res && assembly[*i][res - 1] == LABEL_CHAR)
+		return (0);
+	ctx.op = -1;
+	while (g_op_tab[++(ctx.op)].mnemonic)
+		if (!ft_strcmp(assembly[*i], g_op_tab[ctx.op].mnemonic))
+		{
+			ctx.code[(ctx.pc)++] = g_op_tab[ctx.op].opcode;
+			if (g_op_tab[ctx.op].type_byte)
+				ctx.pc++;
+			ctx.arg = 0;
+			while (assembly[++(*i)] && ctx.arg < g_op_tab[ctx.op].num_args)
 			{
-				if (assembly[*i][0] == 'r' || assembly[*i][0] == 'R')
+				if ((res = reg_arg(assembly[*i], &ctx)))
 				{
-					if (!(g_op_tab[j].arg_types[arg] & T_REG))
-						return (throw_verbose_error("Invalid type 'REG' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
-					k = 2 * (3 - arg);
-					if (g_op_tab[j].type_byte)
-						code[1] |= REG_CODE << k;
-					code[pc++] = (unsigned char)ft_atoi(&assembly[*i][1]);
-					k = 1;
-					while (ft_isdigit(assembly[*i][k]))
-						k++;
-					if (assembly[*i][k])
-						return (throw_verbose_error("Bad 'REG' value |%s|!", (long)assembly[*i], 0, 0));
+					if (res < 0)
+						return (res);
 				}
-				else if (assembly[*i][0] == DIRECT_CHAR)
+				else if ((res = dir_arg(assembly[*i], &ctx, program, labels)))
 				{
-					if (!(g_op_tab[j].arg_types[arg] & T_DIR))
-						return (throw_verbose_error("Invalid type 'DIRECT' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
-					k = 2 * (3 - arg);
-					if (g_op_tab[j].type_byte)
-						code[1] |= DIR_CODE << k;
-					if (assembly[*i][1] == LABEL_CHAR)
-					{
-						k = 0;
-						if (program)
-						{
-							label = labels;
-							k = ft_strlen(&assembly[*i][2]);
-							while (label && (ft_strncmp(label->content, &assembly[*i][2], k) || ((char *)label->content)[k] != LABEL_CHAR))
-								label = label->next;
-							if (label)
-								k = label->content_size - program->header.prog_size;
-							else
-								return (throw_verbose_error("Undefined 'DIRECT' label '%s'!", (long)&assembly[*i][2], 0, 0));
-						}
-					}
-					else
-					{
-						k = 1;
-						if (assembly[*i][k] == '-' || assembly[*i][k] == '+')
-							k++;
-						while (ft_isdigit(assembly[*i][k]))
-							k++;
-						if (assembly[*i][k])
-							return (throw_verbose_error("Bad 'DIRECT' value |%s|!", (long)assembly[*i], 0, 0));
-						k = ft_atoi(&assembly[*i][1]);
-					}
-					write_byteswapped(&code[pc], &k, g_op_tab[j].short_dir ? 2 : 4);
-					pc += g_op_tab[j].short_dir ? 2 : 4;
+					if (res < 0)
+						return (res);
 				}
-				else if (assembly[*i][0] == '-' || assembly[*i][0] == '+' ||
-						ft_isdigit(assembly[*i][0]) || assembly[*i][0] == LABEL_CHAR)
+				else if ((res = ind_arg(assembly[*i], &ctx, program, labels)))
 				{
-					if (!(g_op_tab[j].arg_types[arg] & T_IND))
-						return (throw_verbose_error("Invalid type 'INDIRECT' for %s, argument %li!", (long)g_op_tab[j].mnemonic, arg + 1, 0));
-					k = 2 * (3 - arg);
-					if (g_op_tab[j].type_byte)
-						code[1] |= IND_CODE << k;
-					if (assembly[*i][0] == LABEL_CHAR)
-					{
-						k = 0;
-						if (program)
-						{
-							label = labels;
-							k = ft_strlen(&assembly[*i][1]);
-							while (label && (ft_strncmp(label->content, &assembly[*i][1], k) || ((char *)label->content)[k] != LABEL_CHAR))
-								label = label->next;
-							if (label)
-								k = label->content_size - program->header.prog_size;
-							else
-								return (throw_verbose_error("Undefined 'INDIRECT' label '%s'!", (long)&assembly[*i][1], 0, 0));
-						}
-					}
-					else
-					{
-						k = 1;
-						while (ft_isdigit(assembly[*i][k]))
-							k++;
-						if (assembly[*i][k])
-							return (throw_verbose_error("Bad 'INDIRECT' value |%s|!", (long)assembly[*i], 0, 0));
-						k = ft_atoi(assembly[*i]);
-					}
-					write_byteswapped(&code[pc], &k, 2);
-					pc += 2;
+					if (res < 0)
+						return (res);
 				}
 				else
-					return (throw_verbose_error("Unknown arguement |%s|!", (long)assembly[*i], 0, 0));
-				arg++;
-				k = ft_strlen(assembly[*i]);
-				if (arg < g_op_tab[j].num_args && (!assembly[*i + 1] || assembly[*i + 1][0] != SEPARATOR_CHAR))
-					return (throw_verbose_error("Not enough arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
-				else if (arg >= g_op_tab[j].num_args && assembly[*i + 1] && assembly[*i + 1][0] == SEPARATOR_CHAR)
-					return (throw_verbose_error("Too many arguements for %s!", (long)g_op_tab[j].mnemonic, 0, 0));
-				if (arg < g_op_tab[j].num_args)
+					return (throw_verbose_error("Unknown argument; '%s'!", (long)assembly[*i], 0, 0));
+				(ctx.arg)++;
+				if (ctx.arg < g_op_tab[ctx.op].num_args && (!assembly[*i + 1] || assembly[*i + 1][0] != SEPARATOR_CHAR))
+					return (throw_verbose_error("Not enough arguments for %s!", (long)g_op_tab[ctx.op].mnemonic, 0, 0));
+				else if (ctx.arg >= g_op_tab[ctx.op].num_args && assembly[*i + 1] && assembly[*i + 1][0] == SEPARATOR_CHAR)
+					return (throw_verbose_error("Too many arguments for %s!", (long)g_op_tab[ctx.op].mnemonic, 0, 0));
+				if (ctx.arg < g_op_tab[ctx.op].num_args)
 					(*i)++;
 			}
-			if (arg < g_op_tab[j].num_args)
+			if (ctx.arg < g_op_tab[ctx.op].num_args)
 				return (throw_error("File ended abruptly!", -1));
-			break ;
+			if (program)
+				ft_memcpy(&program->code[program->header.prog_size], ctx.code, ctx.pc);
+			return (ctx.pc);
 		}
-	if (!g_op_tab[j].mnemonic)
-		return (throw_verbose_error("Invalid instruction |%s|!", (long)assembly[*i], 0, 0));
-	if (program)
-		ft_memcpy(&program->code[program->header.prog_size], code, pc);
-	return (pc);
+	return (throw_verbose_error("Invalid instruction '%s'!", (long)assembly[*i], 0, 0));
 }
 
 t_program	*init_program(char **assembly, t_program *program, t_list **labels)

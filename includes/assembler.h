@@ -16,13 +16,20 @@
 #include "libft.h"
 #include "op_ext.h"
 
-char		**split_syntax(const char *str);
+typedef struct		s_asm_ctx
+{
+	unsigned char	code[0x10];
+	size_t			pc;
+	int				op;
+	size_t			arg;
+}					t_asm_ctx;
 
-void		write_byteswapped(void *dst, void *src, size_t n);
-long		throw_error(char *string, long result);
-long		throw_verbose_error(char *format, long f0, long f1, long f2);
-void		create_binary(t_program *program, char *name, size_t size);
+char			**split_syntax(const char *str);
 
-t_program	*the_assemble_everything_function(char *source);
+void			write_byteswapped(void *dst, void *src, size_t n);
+t_program		*the_assemble_everything_function(char *source);
+
+long			throw_error(char *string, long result);
+long			throw_verbose_error(char *format, long f0, long f1, long f2);
 
 #endif
