@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 23:33:47 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 00:18:03 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@
 # define SPRITE_02				"sprites/robot.sprite"
 # define SPRITE_03				"sprites/virus.sprite"
 
-# define AFFLOG_SIZE			32
+# define AFFLOG_SIZE			(45 * 3)
 
 # define P1_ID					0xFFFFFFFF
 

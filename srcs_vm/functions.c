@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 15:53:27 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 22:49:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 00:39:26 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,15 +189,21 @@ void		append_afflog(unsigned int reg_num, t_process *process, t_master *m)
 {
 	char	*afflog;
 	int		i;
-	
+
 	afflog = m->player[process->owner - 1].afflog;
 	i = 0;
 	while (afflog[i])
 		i++;
-	afflog[i++] = process->reg[reg_num] % 256;
-	afflog[i] = '\0';
+	if (i != AFFLOG_SIZE)
+	{
+		afflog[i] = process->reg[reg_num] % 256;
+		return ;
+	}
+	i = -1;
+	while (++i < AFFLOG_SIZE - 1)
+		afflog[i] =afflog[i + 1];
+	afflog[i] = process->reg[reg_num] % 256;
 }
-
 
 void		do_aff(t_process *process, t_master *m)
 {
