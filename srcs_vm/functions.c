@@ -274,8 +274,8 @@ void		do_ld(t_process *process, t_master *m)
 
 	if (validate_args(process, m))
 	{
-		reg_num = m->core[(process->pc + 2) % MEM_SIZE].value - 1;
-		process->reg[reg_num] = read_arg(process, m, 1);
+		reg_num = read_reg_exact(process, m, 1);
+		process->reg[reg_num] = read_arg(process, m, 0);
 		process->carry = (process->reg[reg_num] == 0);
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
@@ -283,7 +283,6 @@ void		do_ld(t_process *process, t_master *m)
 
 void		do_st(t_process *process, t_master *m)
 {
-	unsigned char	reg_num;
 	unsigned char	type;
 	unsigned int	offset;
 
@@ -291,14 +290,13 @@ void		do_st(t_process *process, t_master *m)
 	{
 		type = m->core[(process->pc + 1) % MEM_SIZE].value;
 		type = (type >> 4) & 3;
-		reg_num = m->core[(process->pc + 2) % MEM_SIZE].value - 1;
 		if (type == T_REG)
-			process->reg[read_reg_exact(process, m, 1)] = process->reg[reg_num];
+			process->reg[read_reg_exact(process, m, 1)] = read_arg(process, m, 0);
 		else
 		{
 			offset = process->pc;
 			offset += read_ind_exact(process, m, 1) % IDX_MOD;
-			write_int(process, m, offset, process->reg[reg_num]);
+			write_int(process, m, offset, read_arg(process, m, 0));
 		}
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
@@ -307,16 +305,12 @@ void		do_st(t_process *process, t_master *m)
 void		do_add(t_process *process, t_master *m)
 {
 	unsigned char	reg_num;
-	unsigned char	reg_num2;
-	unsigned char	reg_num3;
 
-	reg_num = m->core[(process->pc + 2) % MEM_SIZE].value - 1;
-	reg_num2 = m->core[(process->pc + 3) % MEM_SIZE].value - 1;
-	reg_num3 = m->core[(process->pc + 4) % MEM_SIZE].value - 1;
-	if (is_valid_reg(reg_num) && is_valid_reg(reg_num2) &&
-		is_valid_reg(reg_num3))
+	if (validate_args(process, m))
 	{
-		process->reg[reg_num3] = process->reg[reg_num] + process->reg[reg_num2];
+		reg_num = read_reg_exact(process, m, 2);
+		process->reg[reg_num] =
+			read_arg(process, m, 0) + read_arg(process, m, 1);
 		process->carry = (process->reg[reg_num] == 0);
 	}
 	process->pc = (process->pc + 4) % MEM_SIZE;
@@ -325,16 +319,12 @@ void		do_add(t_process *process, t_master *m)
 void		do_sub(t_process *process, t_master *m)
 {
 	unsigned char	reg_num;
-	unsigned char	reg_num2;
-	unsigned char	reg_num3;
 
-	reg_num = m->core[(process->pc + 2) % MEM_SIZE].value - 1;
-	reg_num2 = m->core[(process->pc + 3) % MEM_SIZE].value - 1;
-	reg_num3 = m->core[(process->pc + 4) % MEM_SIZE].value - 1;
-	if (is_valid_reg(reg_num) && is_valid_reg(reg_num2) &&
-		is_valid_reg(reg_num3))
+	if (validate_args(process, m))
 	{
-		process->reg[reg_num3] = process->reg[reg_num] - process->reg[reg_num2];
+		reg_num = read_reg_exact(process, m, 2);
+		process->reg[reg_num] =
+			read_arg(process, m, 0) - read_arg(process, m, 1);
 		process->carry = (process->reg[reg_num] == 0);
 	}
 	process->pc = (process->pc + 4) % MEM_SIZE;
@@ -440,8 +430,8 @@ void		do_lld(t_process *process, t_master *m)
 
 	if (validate_args(process, m))
 	{
-		reg_num = m->core[(process->pc + 2) % MEM_SIZE].value - 1;
-		process->reg[reg_num] = read_larg(process, m, 1);
+		reg_num = read_reg_exact(process, m, 1);
+		process->reg[reg_num] = read_larg(process, m, 0);
 		process->carry = (process->reg[reg_num] == 0);
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
