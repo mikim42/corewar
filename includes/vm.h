@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 16:07:54 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 22:37:26 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 
 # define AFFLOG_SIZE 32
 
+# define P1_ID 0xFFFFFFFF
 
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -186,11 +187,11 @@ typedef struct		s_process
 {
 	int				id;
 	int				owner; // = {1, 2, 3, 4}
-	unsigned int	reg[REG_NUMBER];
+	int				reg[REG_NUMBER];
 	unsigned int	pc;
 	int				lives;
 	int				cycles;
-	int				carry_flag;
+	int				carry;
 }					t_process;
 
 typedef struct		s_core
@@ -332,24 +333,35 @@ void		run_processes(t_master *m);
 void		run_process(t_process *process, t_master *m);
 unsigned int	find_op_length(t_process *process, t_master *m);
 
+/*
+** functions.c
+*/
+unsigned int	count_bytes(unsigned char arg_code, int short_dir);
+int				is_valid_reg(unsigned char reg_num);
+void			do_live(t_process *process, t_master *m);
+void			do_ld(t_process *process, t_master *m);
 
-void		do_live(t_process *process, t_master *m);
-void		do_ld(t_process *process, t_master *m);
-void		do_st(t_process *process, t_master *m);
-void		do_add(t_process *process, t_master *m);
-void		do_sub(t_process *process, t_master *m);
-void		do_and(t_process *process, t_master *m);
-void		do_or(t_process *process, t_master *m);
-void		do_xor(t_process *process, t_master *m);
-void		do_zjmp(t_process *process, t_master *m);
-void		do_ldi(t_process *process, t_master *m);
-void		do_sti(t_process *process, t_master *m);
-void		do_fork(t_process *process, t_master *m);
-void		do_lld(t_process *process, t_master *m);
-void		do_lldi(t_process *process, t_master *m);
-void		do_lfork(t_process *process, t_master *m);
-void		do_aff(t_process *process, t_master *m);
-void		do_fork(t_process *process, t_master *m);
+void			do_st(t_process *process, t_master *m);
+void			do_add(t_process *process, t_master *m);
+void			do_sub(t_process *process, t_master *m);
+void			do_and(t_process *process, t_master *m);
+void			do_or(t_process *process, t_master *m);
+void			do_xor(t_process *process, t_master *m);
+
+void			do_zjmp(t_process *process, t_master *m);
+
+void			do_ldi(t_process *process, t_master *m);
+void			do_sti(t_process *process, t_master *m);
+void			do_fork(t_process *process, t_master *m);
+void			do_lld(t_process *process, t_master *m);
+void			do_lldi(t_process *process, t_master *m);
+void			do_lfork(t_process *process, t_master *m);
+
+void			append_afflog(unsigned int reg_num, t_process *process, t_master *m);
+void			do_aff(t_process *process, t_master *m);
+
+void			do_fork(t_process *process, t_master *m);
+void			do_nop(t_process *process, t_master *m);
 
 
 

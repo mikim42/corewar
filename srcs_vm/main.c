@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 16:12:28 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 19:44:13 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,6 @@ void		run_process(t_process *process, t_master *m)
 				last_opcode = g_op_tab[i].opcode;
 				g_op_tab[i].func(process, m);
 				process->cycles = 0;
-				if (last_opcode != 9)	// if we didn't just do zjmp
-					process->pc = (process->pc + find_op_length(process, m))
-						% MEM_SIZE;
 			}
 			return ;
 		}

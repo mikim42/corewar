@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:49:03 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/25 22:57:35 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,10 @@ void		display_player(int i, t_master *m)
 	wattroff(m->win_player[i], COLOR_PAIR(i + 1));
 
 	wprintw(m->win_player[i], "  COMMENT:\t%.33s\n", m->player[i].comment);
-	wprintw(m->win_player[i], "\n  PLAYER ID:\t%d\n", m->player[i].id);
+	wprintw(m->win_player[i], "\n  PLAYER ID:\t%X\n", m->player[i].id);
 	wprintw(m->win_player[i], "\n  PROCESSES:\t%d\n",
 		m->player[i].process_count);
 	wprintw(m->win_player[i], "\n  LIVES:\t%d\n", m->player[i].lives);
 	wprintw(m->win_player[i], "\n  LAST LIVES:\t%d\n", m->player[i].last_lives);
-	wprintw(m->win_player[i], "\n  AFF:\t\t%.33s\n", "...");
+	wprintw(m->win_player[i], "\n  AFF:\t\t%.33s\n", m->player[i].afflog);
 }
