@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/25 15:18:05 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/25 22:40:32 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ SRC_VM = curses.c\
 
 SRC_ASM = main.c \
 		  assembler.c \
+		  assembler_two.c \
+		  assembler_three.c \
+		  assembler_four.c \
 		  split_syntax.c \
 		  op_ext.c
 
