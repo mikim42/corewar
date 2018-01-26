@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/25 09:30:07 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/25 20:42:55 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ long	throw_error(char *string, long result)
 	return (result);
 }
 
-long	throw_verbose_error(char *format, long f0, long f1, long f2)
+long	throw_verr(char *format, long f0, long f1, long f2)
 {
 	ft_printf("[!] ");
 	ft_printf(format, f0, f1, f2);
@@ -63,7 +63,7 @@ void	create_binary(t_program *program, char *name, size_t size)
 			close(fd);
 		}
 		else
-			throw_verbose_error("Failed to write '%s'!", (long)tmp, 0, 0);
+			throw_verr("Failed to write '%s'!", (long)tmp, 0, 0);
 		free(tmp);
 	}
 	else
