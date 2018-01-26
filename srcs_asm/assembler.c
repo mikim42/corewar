@@ -248,7 +248,7 @@ long		assemble(char **assembly, size_t *i,
 		{
 			ctx.code[(ctx.pc)++] = g_op_tab[ctx.op].opcode;
 			if (g_op_tab[ctx.op].type_byte)
-				ctx.pc++;
+				(ctx.pc)++;
 			ctx.arg = 0;
 			while (assembly[++(*i)] && ctx.arg < g_op_tab[ctx.op].num_args)
 			{
