@@ -24,7 +24,7 @@
 # define EOF_ERR "'%s' reaches EOF!"
 
 # define INVALID_REG "Invalid type 'REG' for %s, argument %lu!"
-# define BAD_REG "Bad 'REG' value; '%s'!" 
+# define BAD_REG "Bad 'REG' value; '%s'!"
 
 # define DUP_LABEL "Duplicate label, '%s'!"
 # define UNDEF_LABEL "Undefined label '%s'!"
@@ -54,32 +54,33 @@ t_program			*the_assemble_everything_function(char *source);
 long				throw_error(char *string, long result);
 long				throw_verr(char *format, long f0, long f1, long f2);
 
-long		label_arg(char *argument, t_program *program,
+long				label_arg(char *argument, t_program *program,
 							t_list *labels, int *result);
-long		reg_arg(char *argument, t_asm_ctx *ctx);
-char		**parse_source(char *source, t_program *program);
-long		preprocess(char *source, char *ref, char *dst, size_t size);
-void		write_byteswapped(void *dst, void *src, size_t n);
+long				reg_arg(char *argument, t_asm_ctx *ctx);
+char				**parse_source(char *source, t_program *program);
+long				preprocess(char *source, char *ref, char *dst, size_t size);
+void				write_byteswapped(void *dst, void *src, size_t n);
 
-long		dir_ext(char *argument, t_asm_ctx *ctx,
+long				dir_ext(char *argument, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
-long		dir_arg(char *argument, t_asm_ctx *ctx,
+long				dir_arg(char *argument, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
-long		ind_ext(char *argument, t_asm_ctx *ctx,
+long				ind_ext(char *argument, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
-long		ind_arg(char *argument, t_asm_ctx *ctx,
+long				ind_arg(char *argument, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
-long		check_arg(char *assem, t_asm_ctx *ctx,
+long				check_arg(char *assem, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
 
-t_list		*create_label(char **assembly, t_list **labels,
+t_list				*create_label(char **assembly, t_list **labels,
 							size_t i, size_t pc);
-long		assemble(char **assembly, size_t *i,
+long				assemble(char **assembly, size_t *i,
 						t_program *program, t_list *labels);
-long		assemble_instruction(char **assembly, size_t *i,
+long				assemble_instruction(char **assembly, size_t *i,
 									t_asm_ctx *ctx, t_program *program);
-t_program	*resize_program(t_program *program, t_list **labels, size_t pc);
-t_program	*init_program(char **assembly, t_program *program,
+t_program			*resize_program(t_program *program, t_list **labels,
+										size_t pc);
+t_program			*init_program(char **assembly, t_program *program,
 							t_list **labels, size_t pc);
 
 #endif
