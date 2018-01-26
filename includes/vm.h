@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 23:30:00 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/25 23:31:22 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,8 +225,8 @@ typedef struct					s_master
 
 	int							cycle_to_die;
 	int							cycle_delta;
-	int							nbr_live;	// :thinking_face:
-	int							max_checks; // :thinking_face:
+	int							nbr_live;	// 🤔🤔🤔🤔????
+	int							max_checks; // ??🤔🤔🤔🤔??
 	int							player_count;
 	t_player					player[MAX_PLAYERS];
 
