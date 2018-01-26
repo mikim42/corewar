@@ -258,7 +258,6 @@ typedef struct					s_op_length
 }								t_op_length;
 
 extern t_op						g_op_tab[17];
-extern t_op_length				g_op_length[59];
 
 /*
 ** op_ext.c - just the assembly instruction table lol
@@ -329,12 +328,11 @@ int								main(int argc, char **argv);
 void							step_forward(t_master *m);
 void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);
-unsigned int					find_op_length(t_process *process, t_master *m);
 
 /*
 ** functions.c
 */
-unsigned int					count_bytes(unsigned char arg_code, int short_dir);
+size_t							count_bytes(unsigned char arg_code, int short_dir);
 int								is_valid_reg(unsigned char reg_num);
 void							do_live(t_process *process, t_master *m);
 void							do_ld(t_process *process, t_master *m);

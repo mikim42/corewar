@@ -98,25 +98,3 @@ void		run_process(t_process *process, t_master *m)
 	// for invalid opcode, just move to next core position
 	process->pc = (process->pc + 1) % MEM_SIZE;
 }
-
-unsigned int	find_op_length(t_process *process, t_master *m)
-{
-	int			i;
-
-	i = -1;
-	while (g_op_length[++i].op_code != 0)
-	{
-		if (g_op_length[i].op_code == m->core[process->pc].value &&
-			(g_op_length[i].args_code == 0 ||
-			 g_op_length[i].args_code ==
-			 m->core[(process->pc + 1) % MEM_SIZE].value))
-			return (g_op_length[i].length);
-	}
-	return (0);
-}
-
-
-
-
-
-
