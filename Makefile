@@ -85,7 +85,7 @@ $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
 
 $(VM): $(OBJS_VM)
 	@make -s -C $(LIBFT)
-	@make -s -C $(MLX) 2>&1 | grep -v 'ar:\screating\sarchive' || true
+	@make -s -C $(MLX)
 	@$(CC) $(OBJS_VM) $(VM_LIBS) -o $@
 	@echo "\x1b[32;1m[$(VM) - 모래반지 빵야빵야!]\x1b[0m"
 
