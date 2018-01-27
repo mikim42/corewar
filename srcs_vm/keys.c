@@ -50,8 +50,6 @@ int			key_release_hook(int keycode, t_master *m)
 {
 	(void)keycode;
 	(void)m;
-//	if (keycode == 126)
-//		m->forward = 0;
 	return (0);
 }
 

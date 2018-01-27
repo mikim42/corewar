@@ -51,8 +51,8 @@ void		write_int(t_process *process, t_master *m,
 	m->core[(offset + 1) % MEM_SIZE].value = (value >> 16) & 0xFF;
 	m->core[(offset + 2) % MEM_SIZE].value = (value >> 8) & 0xFF;
 	m->core[(offset + 3) % MEM_SIZE].value = (value >> 0) & 0xFF;
-	m->core[(offset + 0) % MEM_SIZE].owner = process->owner;
-	m->core[(offset + 1) % MEM_SIZE].owner = process->owner;
-	m->core[(offset + 2) % MEM_SIZE].owner = process->owner;
-	m->core[(offset + 3) % MEM_SIZE].owner = process->owner;
+	m->core[(offset + 0) % MEM_SIZE].owner = -(process->player->id);
+	m->core[(offset + 1) % MEM_SIZE].owner = -(process->player->id);
+	m->core[(offset + 2) % MEM_SIZE].owner = -(process->player->id);
+	m->core[(offset + 3) % MEM_SIZE].owner = -(process->player->id);
 }

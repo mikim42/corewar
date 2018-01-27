@@ -15,55 +15,50 @@
 int			main(int argc, char **argv)
 {
 	t_master	m;
-	ft_bzero(&m, sizeof(t_master));
 
+	ft_bzero(&m, sizeof(t_master));
 	m.cycle_to_die = CYCLE_TO_DIE;
 	m.ctd_counter = 0;
-
 	if (argc == 1 || argc > 5)
 		return (ft_puterror(ERROR_USAGE, 0));
 	if (read_players(argc, argv, &m))
 		return (1);
-
 	init_ncurses_stuffz(&m);
 	init_rainbow_road(&m);
-
-
 	return (0);
 }
 
-void		ft_lst_cond_remove(t_list **list, int (*cond)(void *),
+void		ft_lst_cond_remove(t_list **list, int (*cond)(void *, size_t),
 	   							void (*del)(void *, size_t))
 {
 	t_list	*temp;
 	t_list	*prev;
+	t_list	*next;
 
 	temp = *list;
-	while (temp && cond(temp->content))
-	{
-		*list = (*list)->next;
-		if (del != 0)
-			del(temp->content, temp->content_size);
-		ft_memdel((void **)&temp);
-		temp = *list;
-	}
+	prev = 0;
 	while (temp)
 	{
-		if (cond(temp->content))
+		next = temp->next;
+		if (cond(temp->content, temp->content_size))
 		{
-			prev->next = temp->next;
-			if (del != 0)
+			if (prev)
+				prev->next = temp->next;
+			else
+				*list = temp->next;
+			if (del)
 				del(temp->content, temp->content_size);
 			ft_memdel((void **)&temp);
-			temp = prev;
 		}
-		prev = temp;
-		temp = temp->next;
+		else
+			prev = temp;
+		temp = next;
 	}
 }
 
-int			process_should_die(void *process)
+int			process_should_die(void *process, size_t size)
 {
+	(void)size;
 	return (((t_process *)process)->lives == 0);
 }
 
@@ -93,10 +88,13 @@ void		reap_processes(t_master *m)
 void		step_forward(t_master *m)
 {
 	if (m->cycle_to_die <= 0)
+	{
+		update_windows(m);
+		update_rainbow_road(m);
 		return ;
+	}
 	m->current_cycle++;
 	m->ctd_counter++;
-
 	if (m->ctd_counter == m->cycle_to_die)
 	{
 		reap_processes(m);
@@ -104,18 +102,9 @@ void		step_forward(t_master *m)
 		m->cycle_to_die -= CYCLE_DELTA;
 	}
 	run_processes(m);
-	if (m->forward == 1)
+	if (!(m->forward) || ++(m->fs_counter) >= m->frame_skip)
 	{
-		m->fs_counter++;
-		if (m->fs_counter >= m->frame_skip)
-		{
-			m->fs_counter = 0;
-			update_windows(m);
-			update_rainbow_road(m);
-		}
-	}
-	else
-	{
+		m->fs_counter = 0;
 		update_windows(m);
 		update_rainbow_road(m);
 	}
@@ -124,7 +113,6 @@ void		step_forward(t_master *m)
 void		run_processes(t_master *m)
 {
 	int			i;
-
 	t_list		*process_list;
 	t_process	*process;
 
@@ -135,9 +123,7 @@ void		run_processes(t_master *m)
 		while (process_list != 0)
 		{
 			process = process_list->content;
-
 			run_process(process, m);
-
 			process_list = process_list->next;
 		}
 	}

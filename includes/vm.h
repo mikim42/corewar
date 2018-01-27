@@ -187,7 +187,6 @@ typedef struct					s_player
 typedef struct					s_process
 {
 	t_player					*player;
-	int							owner; // = {1, 2, 3, 4}
 	int							reg[REG_NUMBER];
 	unsigned int				pc;
 	int							lives;
@@ -199,7 +198,7 @@ typedef struct					s_process
 typedef struct					s_core
 {
 	unsigned int				value;
-	int							owner; // = {1, 2, 3, 4}
+	int							owner;
 	int							x;
 	int							y;
 }								t_core;
@@ -369,7 +368,7 @@ void							do_aff(t_process *process, t_master *m);
 void							do_fork(t_process *process, t_master *m);
 void							do_nop(t_process *process, t_master *m);
 void							append_afflog(unsigned int reg_num,
-											t_process *process, t_master *m);
+											t_process *process);
 
 unsigned char					get_type(t_process *process, t_master *m,
 												unsigned int i);

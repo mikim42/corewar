@@ -98,7 +98,6 @@ void	init_prog(int i, t_master *m)
 	// initialize 1 process
 	first = ft_memalloc(sizeof(t_process));
 	m->player[i].process_count++;
-	first->owner = i + 1;
 	first->player = &(m->player[i]);
 	first->reg[0] = m->player[i].id;
 	ft_lstadd(&(m->player[i].process_list),

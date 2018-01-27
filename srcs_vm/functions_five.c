@@ -63,8 +63,8 @@ void		do_fork(t_process *process, t_master *m)
 	new_process.lives = 0;
 	new_process.cycles = 0;
 	new_process.opcode = 0;
-	m->player[process->owner - 1].process_count++;
-	ft_lstadd(&(m->player[process->owner - 1].process_list),
+	process->player->process_count++;
+	ft_lstadd(&(process->player->process_list),
 		ft_lstnew(&new_process, sizeof(t_process)));
 	process->pc = (process->pc + 3) % MEM_SIZE;
 }
