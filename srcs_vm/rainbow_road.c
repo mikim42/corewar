@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 13:53:03 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:13:51 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@ int			init_minilibx(t_master *m)
 
 void		assign_core_pos(t_master *m)
 {
-	static const int radius_table[16] = {WIN_WIDTH / 2 - 5, WIN_WIDTH / 2 - 10,
+	static const int	radius_table[16] = {
+		WIN_WIDTH / 2 - 5, WIN_WIDTH / 2 - 10,
 		WIN_WIDTH / 2 - 15, WIN_WIDTH / 2 - 20, WIN_WIDTH / 2 - 30,
 		WIN_WIDTH / 2 - 35, WIN_WIDTH / 2 - 40, WIN_WIDTH / 2 - 45,
 		WIN_WIDTH / 2 - 55, WIN_WIDTH / 2 - 60, WIN_WIDTH / 2 - 65,
 		WIN_WIDTH / 2 - 70, WIN_WIDTH / 2 - 80, WIN_WIDTH / 2 - 85,
-		WIN_WIDTH / 2 - 90, WIN_WIDTH / 2 - 95};
-	int		radius;
-	int		i;
+		WIN_WIDTH / 2 - 90, WIN_WIDTH / 2 - 95
+	};
+	int					radius;
+	int					i;
 
 	i = -1;
 	while (++i < MEM_SIZE)
@@ -54,10 +56,10 @@ void		assign_core_pos(t_master *m)
 
 int			init_rainbow_road(t_master *m)
 {
-	static const int color_table[5] = {DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR,
-		P4_COLOR};
-	char	*str;
-	int		i;
+	static const int	color_table[5] = {
+		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
+	char				*str;
+	int					i;
 
 	if (init_minilibx(m))
 		return (1);
@@ -77,10 +79,10 @@ int			init_rainbow_road(t_master *m)
 
 void		update_rainbow_road(t_master *m)
 {
-	static const int color_table[5] = {DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR,
-		P4_COLOR};
-	char	*str;
-	int		i;
+	static const int	color_table[5] = {
+		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
+	char				*str;
+	int					i;
 
 	mlx_clear_window(m->mlx, m->win);
 	ft_bzero(m->frame, WIN_WIDTH * WIN_HEIGHT * m->bpp);

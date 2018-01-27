@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 17:26:45 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:14:09 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void		step_forward(t_master *m)
 void		run_processes(t_master *m)
 {
 	int			i;
+
 	t_list		*process_list;
 	t_process	*process;
 
