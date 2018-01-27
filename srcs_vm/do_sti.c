@@ -19,8 +19,8 @@ void		do_sti(t_process *process, t_master *m)
 	if (validate_args(process, m))
 	{
 		offset = process->pc;
-		offset += (read_ind_exact(process, m, 1) +
-					read_ind_exact(process, m, 2)) % IDX_MOD;
+		offset += (read_arg(process, m, 1) +
+					read_arg(process, m, 2)) % IDX_MOD;
 		write_int(process, m, offset, read_arg(process, m, 0));
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;

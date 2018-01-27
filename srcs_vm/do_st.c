@@ -14,17 +14,14 @@
 
 void	do_st(t_process *process, t_master *m)
 {
-	unsigned char	type;
 	unsigned int	offset;
 
 	if (validate_args(process, m))
 	{
-		type = m->core[(process->pc + 1) % MEM_SIZE].value;
-		type = (type >> 4) & 3;
-		if (type == T_REG)
+		if (get_type(process, m, 1) == T_REG)
 		{
 			process->reg[read_reg_exact(process, m, 1)] =
-													read_arg(process, m, 0);
+							read_arg(process, m, 0);
 		}
 		else
 		{

@@ -20,7 +20,7 @@ void		do_lldi(t_process *process, t_master *m)
 	if (validate_args(process, m))
 	{
 		offset = process->pc;
-		offset += read_arg(process, m, 0) + read_arg(process, m, 1);
+		offset += read_larg(process, m, 0) + read_larg(process, m, 1);
 		reg_num = read_reg_exact(process, m, 2);
 		process->reg[reg_num] = read_int(m, offset);
 		process->carry = (process->reg[reg_num] == 0);
