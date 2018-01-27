@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 21:37:36 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 22:58:39 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,9 @@ void							update_rainbow_road(t_master *m);
 void							puthex(unsigned char c, WINDOW *win);
 void							display_process_pc(t_master *m);
 void							display_core(t_master *m);
+void							find_lives(t_master *m);
+int								whose_pid(t_process *process, t_master *m);
+void							highlight_pid(t_process *process, t_master *m);
 void							display_control(t_master *m);
 void							display_players(t_master *m);
 void							display_player(int i, t_master *m);
