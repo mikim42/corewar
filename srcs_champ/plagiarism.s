@@ -26,7 +26,7 @@ start:
 
 barrier:							; this portion is derived from helltrain
 		st r10, 11
-		st r2, -5
+		st r2, -4
 		live %0
 		st r2, -87
 		st r2, -96
@@ -163,7 +163,7 @@ live:
 
 persistence:
 		st r10, 11
-		st r3, -5
+		st r3, -4
 persist:
 		live %0
 		zjmp %:persist
