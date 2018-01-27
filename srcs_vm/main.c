@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 14:38:05 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 15:33:00 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,15 @@ void		reap_processes(t_master *m)
 
 void		step_forward(t_master *m)
 {
+	/*
+	if (m->current_cycle == 3089)
+	{
+		m->forward = 0;
+		update_windows(m);
+		update_rainbow_road(m);
+		return ;
+	}
+	*/
 	if (m->show_winner)
 		return ;
 	if (m->cycle_to_die <= 0)
@@ -109,6 +118,7 @@ void		step_forward(t_master *m)
 		if (m->checks == MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
+			m->forward = 0;
 			m->checks = 0;
 		}
 		m->nbr_lives = 0;
