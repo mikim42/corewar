@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 21:45:33 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 22:03:43 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		ft_lst_cond_remove(t_list **list, int (*cond)(void *),
 	{
 		*list = (*list)->next;
 		if (del != 0)
-			del(temp->content, sizeof(temp->content));
+			del(temp->content, temp->content_size);
 		ft_memdel((void **)&temp);
 		temp = *list;
 	}
@@ -53,8 +53,9 @@ void		ft_lst_cond_remove(t_list **list, int (*cond)(void *),
 		{
 			prev->next = temp->next;
 			if (del != 0)
-				del(temp->content, sizeof(temp->content));
+				del(temp->content, temp->content_size);
 			ft_memdel((void **)&temp);
+			temp = prev;
 		}
 		prev = temp;
 		temp = temp->next;
