@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 14:09:38 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 14:38:05 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,6 @@ void		reap_processes(t_master *m)
 		m->player[i].lives = 0;
 	}
 }
-/*
-int			total_lives(t_master *m)
-{
-	int		total;
-	int		i;
-
-	total = 0;
-	i = -1;
-	while (++i < m->player_count)
-	{
-		total += m->player[i].lives;
-	}
-	return (total);
-}
-*/
-
 
 
 void		step_forward(t_master *m)

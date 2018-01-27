@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 14:10:18 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 14:46:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,12 @@ void	display_player(int i, t_master *m)
 	wprintw(m->win_player[i], "%.33s\n", m->player[i].name);
 	wattroff(m->win_player[i], COLOR_PAIR(i + 1));
 	wprintw(m->win_player[i], "  COMMENT:\t%.33s\n", m->player[i].comment);
-	wprintw(m->win_player[i], "\n  PLAYER ID:\t%X\n", m->player[i].id);
+	wprintw(m->win_player[i], "  PLAYER ID:\t%X\n", m->player[i].id);
 	wprintw(m->win_player[i], "\n  PROCESSES:\t%d\n",
 			m->player[i].process_count);
-	wprintw(m->win_player[i], "\n  LIVES:\t%d\n", m->player[i].lives);
-	wprintw(m->win_player[i], "  LAST LIVES:\t%d\n", m->player[i].last_lives);
+	wprintw(m->win_player[i], "\n  LAST LIVE:\t%d\n", m->player[i].cycle_last_live);
+	wprintw(m->win_player[i], "  LIVES:\t%d\n", m->player[i].lives);
+	wprintw(m->win_player[i], "  PREV LIVES:\t%d\n", m->player[i].last_lives);
 //	wprintw(m->win_player[i], "\n  AFF:\t\t%.33s\n", m->player[i].afflog);
 	wprintw(m->win_player[i], "\n  AFF:");
 	wattron(m->win_player[i], COLOR_PAIR(i + 1));
