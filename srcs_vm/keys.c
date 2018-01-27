@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 23:24:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:24:47 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 19:50:34 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int			key_press_hook(int keycode, t_master *m)
 		step_forward(m);
 	else if (keycode == 126)
 		m->forward = 1;
+//---------
+	if (keycode == 49)
+		m->forward = m->forward ? 0 : 1;
 	return (0);
 }
 
