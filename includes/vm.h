@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 19:45:10 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 21:37:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
+# define MAX_FRAME_SKIP			100
+
 typedef struct					s_sprite
 {
 	int							id;
@@ -184,6 +186,7 @@ typedef struct					s_player
 
 typedef struct					s_process
 {
+	t_player					*player;
 	int							owner; // = {1, 2, 3, 4}
 	int							reg[REG_NUMBER];
 	unsigned int				pc;
@@ -222,12 +225,11 @@ typedef struct					s_master
 	WINDOW						*win_extra;
 
 	int							current_cycle;
+	int							frame_skip;
+	int							fs_counter;
 
 	int							cycle_to_die;
 	int							ctd_counter;
-//	int							cycle_delta;
-//	int							nbr_live;	// 🤔🤔🤔🤔????
-//	int							max_checks; // ??🤔🤔🤔🤔??
 	int							player_count;
 	t_player					player[MAX_PLAYERS];
 

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 18:08:06 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 21:41:48 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ void	display_control(t_master *m)
 {
 	wmove(m->win_control, 0, 0);
 	wprintw(m->win_control, "\n\n  *PAUSE*\n");
+
+	wprintw(m->win_control, "  Frame Skip:\t\t%d\n\n", m->frame_skip);
+
 	wprintw(m->win_control, "  Cycles:\t\t%d\n\n", m->current_cycle);
-//	wprintw(m->win_control, "  CYCLE_TO_DIE:\t\t%d\n", m->cycle_to_die);
-//	wprintw(m->win_control, "  CYCLE_DELTA:\t\t%d/%d\n",
-//			m->cycle_delta, CYCLE_DELTA);
 	wprintw(m->win_control, "  CYCLE_TO_DIE:\t\t%d/%d\n",
 			m->ctd_counter, m->cycle_to_die);
 	wprintw(m->win_control, "  CYCLE_DELTA:\t\t%d\n", CYCLE_DELTA);

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 20:14:09 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 21:45:33 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ int			main(int argc, char **argv)
 
 	m.cycle_to_die = CYCLE_TO_DIE;
 	m.ctd_counter = 0;
-//	m.cycle_delta = 0;
-//	m.nbr_live = NBR_LIVE;			// wtf is this?
-//	m.max_checks = MAX_CHECKS;		// and this?
 
 	if (argc == 1 || argc > 5)
 		return (ft_puterror(ERROR_USAGE, 0));
@@ -31,14 +28,66 @@ int			main(int argc, char **argv)
 	init_ncurses_stuffz(&m);
 	init_rainbow_road(&m);
 
-	// minilibx handles events and updates both minilibx and ncurses windows
-	//
-	// with minilibx window selected,
-	//   tap RIGHT ARROW to go to next cycle
-	//   hold UP ARROW to fast-forward to next cycles
 
 	return (0);
 }
+
+void		ft_lst_cond_remove(t_list **list, int (*cond)(void *),
+	   							void (*del)(void *, size_t))
+{
+	t_list	*temp;
+	t_list	*prev;
+
+	temp = *list;
+	while (temp && cond(temp->content))
+	{
+		*list = (*list)->next;
+		if (del != 0)
+			del(temp->content, sizeof(temp->content));
+		ft_memdel((void **)&temp);
+		temp = *list;
+	}
+	while (temp)
+	{
+		if (cond(temp->content))
+		{
+			prev->next = temp->next;
+			if (del != 0)
+				del(temp->content, sizeof(temp->content));
+			ft_memdel((void **)&temp);
+		}
+		prev = temp;
+		temp = temp->next;
+	}
+}
+
+int			process_should_die(void *process)
+{
+	return (((t_process *)process)->lives == 0);
+}
+
+void		del_process(void *process, size_t size)
+{
+	(void)size;
+	((t_process *)process)->player->process_count--;
+	ft_memdel(&process);
+}
+
+
+void		reap_processes(t_master *m)
+{
+	int			i;
+
+	i = -1;
+	while (++i < m->player_count)
+	{
+		ft_lst_cond_remove(&(m->player[i].process_list), process_should_die,
+			del_process);
+		m->player[i].last_lives = m->player[i].lives;
+		m->player[i].lives = 0;
+	}
+}
+
 
 void		step_forward(t_master *m)
 {
@@ -49,22 +98,26 @@ void		step_forward(t_master *m)
 
 	if (m->ctd_counter == m->cycle_to_die)
 	{
+		reap_processes(m);
 		m->ctd_counter = 0;
 		m->cycle_to_die -= CYCLE_DELTA;
 	}
-
-
-/*
-	m->cycle_delta++;
-	if (m->cycle_delta == CYCLE_DELTA)
-	{
-		m->cycle_delta = 0;
-		m->cycle_to_die -= CYCLE_DELTA;
-	}
-*/
 	run_processes(m);
-	update_windows(m);
-	update_rainbow_road(m);
+	if (m->forward == 1)
+	{
+		m->fs_counter++;
+		if (m->fs_counter >= m->frame_skip)
+		{
+			m->fs_counter = 0;
+			update_windows(m);
+			update_rainbow_road(m);
+		}
+	}
+	else
+	{
+		update_windows(m);
+		update_rainbow_road(m);
+	}
 }
 
 void		run_processes(t_master *m)
@@ -91,39 +144,17 @@ void		run_processes(t_master *m)
 
 void		run_process(t_process *process, t_master *m)
 {
-//	int		i;
-//	unsigned char last_opcode;
-
 	if (process->cycles == 0)
 		process->opcode = m->core[process->pc].value;
 
 	if (!(1 <= process->opcode && process->opcode <= 16))
 	{
-		// for invalid opcode, just move to next core position
 		process->pc = (process->pc + 1) % MEM_SIZE;
 		return ;
 	}
-
 	if (++process->cycles == (int)g_op_tab[process->opcode - 1].cycles)
 	{
 		g_op_tab[process->opcode - 1].func(process, m);
 		process->cycles = 0;
 	}
-
-/*
-	i = -1;
-	while (g_op_tab[++i].opcode != 0)
-	{
-		if (g_op_tab[i].opcode == (unsigned char)m->core[process->pc].value)
-		{
-			if (++process->cycles == (int)g_op_tab[i].cycles)
-			{
-				last_opcode = g_op_tab[i].opcode;
-				g_op_tab[i].func(process, m);
-				process->cycles = 0;
-			}
-			return ;
-		}
-	}
-*/
 }

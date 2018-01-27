@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 17:58:39 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 21:18:44 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	init_prog(int i, t_master *m)
 	first = ft_memalloc(sizeof(t_process));
 	m->player[i].process_count++;
 	first->owner = i + 1;
+	first->player = &(m->player[i]);
 	first->reg[0] = m->player[i].id;
 	ft_lstadd(&(m->player[i].process_list),
 	ft_lst_new_ref(first, sizeof(t_process)));
