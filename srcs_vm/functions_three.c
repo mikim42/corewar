@@ -59,18 +59,17 @@ size_t	instruction_length(t_process *process, t_master *m)
 
 void	do_live(t_process *process, t_master *m)
 {
-	unsigned int	arg1;
+	unsigned int	pid;
+	int				i;
 
 	process->lives++;
-	arg1 = read_int(m, process->pc + 1);
-	if (arg1 == m->player[0].id)
-		m->player[0].lives++;
-	else if (arg1 == m->player[1].id)
-		m->player[1].lives++;
-	else if (arg1 == m->player[2].id)
-		m->player[2].lives++;
-	else if (arg1 == m->player[3].id)
-		m->player[3].lives++;
+	pid = read_int(m, process->pc + 1);
+	i = -1;
+	while (++i < m->player_count)
+	{
+		if (pid == m->player[i].id)
+			m->player[i].lives++;
+	}
 	process->pc = (process->pc + 5) % MEM_SIZE;
 }
 

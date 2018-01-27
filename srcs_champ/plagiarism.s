@@ -127,6 +127,7 @@ preserve:
 		ld %1, r5
 		ld %5, r6
 		ld %490, r8
+		st r10, 6
 
 lspawn:
 		live %0
@@ -136,8 +137,7 @@ lspawn:
 		zjmp %:lspawn
 
 write:
-		st r10, 11
-		st r2, -5
+		st r10, 6
 		live %0
 		sti r2, %:end, r3
 		add r3, r5, r3
@@ -163,7 +163,7 @@ live:
 
 persistence:
 		st r10, 11
-		st r2, -5
+		st r3, -5
 persist:
 		live %0
 		zjmp %:persist
