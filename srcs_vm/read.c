@@ -6,15 +6,16 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 17:08:36 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 17:58:39 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int				read_players(int argc, char **argv, t_master *m)
+int		read_players(int argc, char **argv, t_master *m)
 {
-	int			i;
+	int	i;
+
 	i = 0;
 	while (++i < argc)
 	{
@@ -26,9 +27,9 @@ int				read_players(int argc, char **argv, t_master *m)
 	return (0);
 }
 
-int			read_file(char *filename, t_player *p)
+int		read_file(char *filename, t_player *p)
 {
-	int		fd;
+	int	fd;
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		return (ft_puterror(ERROR_OPEN_FILE, 1));
@@ -39,7 +40,7 @@ int			read_file(char *filename, t_player *p)
 	return (0);
 }
 
-int					read_everything(int fd, t_player *p)
+int		read_everything(int fd, t_player *p)
 {
 	unsigned char	buf[4];
 
@@ -49,8 +50,8 @@ int					read_everything(int fd, t_player *p)
 
 	// read player name, no error checking
 	read(fd, p->name, PROG_NAME_LENGTH);
-//	p->name[PROG_NAME_LENGTH] = '\0';
 
+	//	p->name[PROG_NAME_LENGTH] = '\0';
 	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
 		return (1);
@@ -65,7 +66,8 @@ int					read_everything(int fd, t_player *p)
 
 	// read player comment, no error checking
 	read(fd, p->comment, COMMENT_LENGTH);
-//	p->comment[COMMENT_LENGTH] = '\0';
+
+	//	p->comment[COMMENT_LENGTH] = '\0';
 
 	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
@@ -76,20 +78,19 @@ int					read_everything(int fd, t_player *p)
 	if (!(read(fd, p->prog, p->prog_size) == p->prog_size &&
 		read(fd, buf, 4) == 0))
 		return (1);
-		
 	return (0);
 }
 
-void		init_progs(t_master *m)
+void	init_progs(t_master *m)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (++i < m->player_count)
 		init_prog(i, m);
 }
 
-void		init_prog(int i, t_master *m)
+void	init_prog(int i, t_master *m)
 {
 	t_process		*first;
 	unsigned int	j;
@@ -100,7 +101,7 @@ void		init_prog(int i, t_master *m)
 	first->owner = i + 1;
 	first->reg[0] = m->player[i].id;
 	ft_lstadd(&(m->player[i].process_list),
-		ft_lst_new_ref(first, sizeof(t_process)));
+	ft_lst_new_ref(first, sizeof(t_process)));
 
 	// copy prog to core
 	first->pc = MEM_SIZE / (unsigned int)m->player_count * i;

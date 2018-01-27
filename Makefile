@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/25 23:16:50 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/26 19:42:01 by mikim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,11 @@ SRC_VM = curses.c \
 		 draw.c \
 		 keys.c \
 		 functions.c \
+		 functions_two.c \
+		 functions_three.c \
+		 functions_four.c \
+		 functions_five.c \
+		 functions_six.c \
 		 main.c \
 		 op_ext.c \
 		 rainbow_road.c \

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 17:24:31 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 19:45:10 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,12 +279,14 @@ int								init_sprite_table(t_master *m);
 int								load_sprite(t_sprite **sprite, char *file);
 int								init_sprite_dimen(t_sprite *sprite, int fd);
 void							read_sprite_data(t_sprite *sprite, int fd);
-void							draw_sprite(t_sprite *sprite, int x, int y, t_master *m);
+void							draw_sprite(t_sprite *sprite, int x, int y,
+											t_master *m);
 
 /*
 ** read.c
 */
-int								read_players(int argc, char **argv, t_master *m);
+int								read_players(int argc, char **argv,
+												t_master *m);
 int								read_file(char *filename, t_player *p);
 int								read_everything(int fd, t_player *p);
 void							init_progs(t_master *m);
@@ -294,7 +296,8 @@ void							init_prog(int i, t_master *m);
 ** draw.c -	draw to minilibx window
 */
 void							draw_dot(int x, int y, int color, t_master *m);
-void							draw_square(int x, int y, int color, t_master *m);
+void							draw_square(int x, int y, int color,
+											t_master *m);
 void							draw_process_pc(t_master *m);
 
 /*
@@ -333,33 +336,49 @@ void							run_process(t_process *process, t_master *m);
 /*
 ** functions.c
 */
-size_t							count_bytes(unsigned char arg_code, int short_dir);
+size_t							count_bytes(unsigned char arg_code,
+											int short_dir);
 int								is_valid_reg(unsigned char reg_num);
+short							read_short(t_master *m, unsigned int offset);
+int								read_int(t_master *m, unsigned int offset);
+void							write_int(t_process *process, t_master *m,
+											unsigned int offset, int value);
+
+int								validate_args(t_process *process, t_master *m);
+size_t							instruction_length(t_process *process,
+													t_master *m);
+
 void							do_live(t_process *process, t_master *m);
 void							do_ld(t_process *process, t_master *m);
-
 void							do_st(t_process *process, t_master *m);
 void							do_add(t_process *process, t_master *m);
 void							do_sub(t_process *process, t_master *m);
 void							do_and(t_process *process, t_master *m);
 void							do_or(t_process *process, t_master *m);
 void							do_xor(t_process *process, t_master *m);
-
 void							do_zjmp(t_process *process, t_master *m);
-
 void							do_ldi(t_process *process, t_master *m);
 void							do_sti(t_process *process, t_master *m);
 void							do_fork(t_process *process, t_master *m);
 void							do_lld(t_process *process, t_master *m);
 void							do_lldi(t_process *process, t_master *m);
 void							do_lfork(t_process *process, t_master *m);
-
-void							append_afflog(unsigned int reg_num, t_process *process, t_master *m);
 void							do_aff(t_process *process, t_master *m);
-
 void							do_fork(t_process *process, t_master *m);
 void							do_nop(t_process *process, t_master *m);
+void							append_afflog(unsigned int reg_num,
+											t_process *process, t_master *m);
 
+unsigned char					get_type(t_process *process, t_master *m,
+												unsigned int i);
+int								read_larg(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_arg(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_ind_exact(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_reg_exact(t_process *process, t_master *m,
+												unsigned int arg);
 /*
 ** debug.c
 */

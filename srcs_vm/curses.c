@@ -6,13 +6,13 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:53:21 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 00:17:06 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 18:06:36 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int			init_ncurses_stuffz(t_master *m)
+int		init_ncurses_stuffz(t_master *m)
 {
 	initscr();
 	start_color();
@@ -24,32 +24,31 @@ int			init_ncurses_stuffz(t_master *m)
 	init_pair(3, COLOR_MAGENTA, COLOR_BLACK);
 	init_pair(4, COLOR_CYAN, COLOR_BLACK);
 
-	// for showing each process's pc on the core	
+	// for showing each process's pc on the core
 	init_pair(5, COLOR_BLACK, COLOR_GREEN);
 	init_pair(6, COLOR_BLACK, COLOR_YELLOW);
 	init_pair(7, COLOR_BLACK, COLOR_MAGENTA);
 	init_pair(8, COLOR_BLACK, COLOR_CYAN);
-	
+
 	raw();
 	keypad(stdscr, TRUE);
 	curs_set(FALSE);
 	noecho();
 	refresh();
 	init_windows(m);
-
 	return (0);
 }
 
-int			init_windows(t_master *m)
+int		init_windows(t_master *m)
 {
 	// draw banner window
-	m->win_banner = newwin(24-2, 195, 0, 0);
+	m->win_banner = newwin(24 - 2, 195, 0, 0);
 	wprintw(m->win_banner, "%s", BANNER2);
 	box(m->win_banner, 0, 0);
 	wrefresh(m->win_banner);
 
 	// draw core window
-	m->win_core = newwin(66, 195, 24-2, 0);
+	m->win_core = newwin(66, 195, 24 - 2, 0);
 	display_core(m);
 
 	// draw control window
@@ -65,16 +64,16 @@ int			init_windows(t_master *m)
 
 	m->win_extra = newwin(2, 50, 85 + 5 - 1 - 3, 195 + 1);
 	wprintw(m->win_extra, "This program was made possible thanks to\n"\
-		"contributions from viewers like you!");
+							"contributions from viewers like you!");
 	wrefresh(m->win_extra);
 	return (0);
 }
 
-void		update_windows(t_master *m)
+void	update_windows(t_master *m)
 {
 	// update core window
 	display_core(m);
-	
+
 	// update control window
 	display_control(m);
 

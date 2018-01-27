@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:51:50 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:34:19 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 18:00:38 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	draw_square(int x, int y, int color, t_master *m)
 	}
 }
 
-void			draw_process_pc(t_master *m)
+void	draw_process_pc(t_master *m)
 {
 	int			i;
 	t_list		*process_list;
