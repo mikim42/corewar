@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 22:58:39 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 23:50:02 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,9 @@ typedef struct					s_master
 
 	int							cycle_to_die;
 	int							ctd_counter;
+
+	int							checks;
+
 	int							player_count;
 	t_player					player[MAX_PLAYERS];
 
@@ -333,6 +336,10 @@ void							update_windows(t_master *m);
 ** main.c
 */
 int								main(int argc, char **argv);
+void							ft_lst_cond_remove(t_list **list, int (*cond)(void *, size_t), void (*del)(void *, size_t));
+int								process_should_die(void *process, size_t size);
+void							reap_processes(t_master *m);
+int								total_lives(t_master *m);
 void							step_forward(t_master *m);
 void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:23:56 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 23:48:17 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ void	display_control(t_master *m)
 	wprintw(m->win_control, "  CYCLE_TO_DIE:\t\t%d/%d\n",
 			m->ctd_counter, m->cycle_to_die);
 	wprintw(m->win_control, "  CYCLE_DELTA:\t\t%d\n", CYCLE_DELTA);
-	wprintw(m->win_control, "  NBR_LIVE:\t\t%d\n", NBR_LIVE);
-	wprintw(m->win_control, "  MAX_CHECKS:\t\t%d\n", MAX_CHECKS);
+	wprintw(m->win_control, "  NBR_LIVE:\t\t%d/%d\n", total_lives(m), NBR_LIVE);
+	wprintw(m->win_control, "  MAX_CHECKS:\t\t%d/%d\n", m->checks, MAX_CHECKS);
 	wprintw(m->win_control, "\n  Current Lives Ratio:\n");
 	wprintw(m->win_control, "  [----------------------------------------]\n");
 	wprintw(m->win_control, "\n  Last Lives Ratio:\n");

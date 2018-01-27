@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:53:21 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:21:20 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 23:29:48 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,6 @@ int		init_ncurses_stuffz(t_master *m)
 	init_pair(8, COLOR_BLACK, COLOR_CYAN);
 
 	// for showing pid
-/*
-	init_pair(9, COLOR_GREEN, COLOR_WHITE);
-	init_pair(10, COLOR_YELLOW, COLOR_WHITE);
-	init_pair(11, COLOR_MAGENTA, COLOR_WHITE);
-	init_pair(12, COLOR_CYAN, COLOR_WHITE);
-	init_pair(13, COLOR_RED, COLOR_WHITE);
-*/
-
 	init_pair(9, COLOR_WHITE, COLOR_GREEN);
 	init_pair(10, COLOR_WHITE, COLOR_YELLOW);
 	init_pair(11, COLOR_WHITE, COLOR_MAGENTA);
