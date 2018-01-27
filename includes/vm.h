@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 00:18:03 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 17:24:31 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,11 +184,11 @@ typedef struct					s_player
 
 typedef struct					s_process
 {
-	int							id;
 	int							owner; // = {1, 2, 3, 4}
 	int							reg[REG_NUMBER];
 	unsigned int				pc;
 	int							lives;
+	unsigned char				opcode;
 	int							cycles;
 	int							carry;
 }								t_process;
@@ -224,9 +224,10 @@ typedef struct					s_master
 	int							current_cycle;
 
 	int							cycle_to_die;
-	int							cycle_delta;
-	int							nbr_live;	// 🤔🤔🤔🤔????
-	int							max_checks; // ??🤔🤔🤔🤔??
+	int							ctd_counter;
+//	int							cycle_delta;
+//	int							nbr_live;	// 🤔🤔🤔🤔????
+//	int							max_checks; // ??🤔🤔🤔🤔??
 	int							player_count;
 	t_player					player[MAX_PLAYERS];
 

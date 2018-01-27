@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 19:44:13 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/26 17:26:45 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int			main(int argc, char **argv)
 	ft_bzero(&m, sizeof(t_master));
 
 	m.cycle_to_die = CYCLE_TO_DIE;
-	m.cycle_delta = 0;
-	m.nbr_live = NBR_LIVE;			// wtf is this?
-	m.max_checks = MAX_CHECKS;		// and this?
+	m.ctd_counter = 0;
+//	m.cycle_delta = 0;
+//	m.nbr_live = NBR_LIVE;			// wtf is this?
+//	m.max_checks = MAX_CHECKS;		// and this?
 
 	if (argc == 1 || argc > 5)
 		return (ft_puterror(ERROR_USAGE, 0));
@@ -41,15 +42,26 @@ int			main(int argc, char **argv)
 
 void		step_forward(t_master *m)
 {
-	if (m->cycle_to_die < 0)
+	if (m->cycle_to_die <= 0)
 		return ;
 	m->current_cycle++;
+	m->ctd_counter++;
+
+	if (m->ctd_counter == m->cycle_to_die)
+	{
+		m->ctd_counter = 0;
+		m->cycle_to_die -= CYCLE_DELTA;
+	}
+
+
+/*
 	m->cycle_delta++;
 	if (m->cycle_delta == CYCLE_DELTA)
 	{
 		m->cycle_delta = 0;
 		m->cycle_to_die -= CYCLE_DELTA;
 	}
+*/
 	run_processes(m);
 	update_windows(m);
 	update_rainbow_road(m);
@@ -78,9 +90,26 @@ void		run_processes(t_master *m)
 
 void		run_process(t_process *process, t_master *m)
 {
-	int		i;
-	unsigned char last_opcode;
+//	int		i;
+//	unsigned char last_opcode;
 
+	if (process->cycles == 0)
+		process->opcode = m->core[process->pc].value;
+
+	if (!(1 <= process->opcode && process->opcode <= 16))
+	{
+		// for invalid opcode, just move to next core position
+		process->pc = (process->pc + 1) % MEM_SIZE;
+		return ;
+	}
+
+	if (++process->cycles == (int)g_op_tab[process->opcode - 1].cycles)
+	{
+		g_op_tab[process->opcode - 1].func(process, m);
+		process->cycles = 0;
+	}
+
+/*
 	i = -1;
 	while (g_op_tab[++i].opcode != 0)
 	{
@@ -95,6 +124,5 @@ void		run_process(t_process *process, t_master *m)
 			return ;
 		}
 	}
-	// for invalid opcode, just move to next core position
-	process->pc = (process->pc + 1) % MEM_SIZE;
+*/
 }
