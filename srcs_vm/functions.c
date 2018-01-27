@@ -284,7 +284,7 @@ void		do_add(t_process *process, t_master *m)
 			read_arg(process, m, 0) + read_arg(process, m, 1);
 		process->carry = (process->reg[reg_num] == 0);
 	}
-	process->pc = (process->pc + 4) % MEM_SIZE;
+	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }
 
 void		do_sub(t_process *process, t_master *m)
@@ -298,7 +298,7 @@ void		do_sub(t_process *process, t_master *m)
 			read_arg(process, m, 0) - read_arg(process, m, 1);
 		process->carry = (process->reg[reg_num] == 0);
 	}
-	process->pc = (process->pc + 4) % MEM_SIZE;
+	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }
 
 void		do_and(t_process *process, t_master *m)
