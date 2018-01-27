@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 18:42:45 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/27 02:47:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 03:06:14 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,60 +55,4 @@ size_t	instruction_length(t_process *process, t_master *m)
 		length += count_bytes(type, g_op_tab[index].short_dir);
 	}
 	return (length);
-}
-
-void	do_live(t_process *process, t_master *m)
-{
-	unsigned int	pid;
-	int				i;
-
-	process->lives++;
-	pid = read_int(m, process->pc + 1);
-	i = -1;
-	while (++i < m->player_count)
-	{
-		if (pid == m->player[i].id)
-		{
-			m->player[i].lives++;
-			m->winner = &(m->player[i]);
-		}
-	}
-	process->pc = (process->pc + 5) % MEM_SIZE;
-}
-
-void	do_ld(t_process *process, t_master *m)
-{
-	unsigned char	reg_num;
-
-	if (validate_args(process, m))
-	{
-		reg_num = read_reg_exact(process, m, 1);
-		process->reg[reg_num] = read_arg(process, m, 0);
-		process->carry = (process->reg[reg_num] == 0);
-	}
-	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
-}
-
-void	do_st(t_process *process, t_master *m)
-{
-	unsigned char	type;
-	unsigned int	offset;
-
-	if (validate_args(process, m))
-	{
-		type = m->core[(process->pc + 1) % MEM_SIZE].value;
-		type = (type >> 4) & 3;
-		if (type == T_REG)
-		{
-			process->reg[read_reg_exact(process, m, 1)] =
-													read_arg(process, m, 0);
-		}
-		else
-		{
-			offset = process->pc;
-			offset += read_ind_exact(process, m, 1) % IDX_MOD;
-			write_int(process, m, offset, read_arg(process, m, 0));
-		}
-	}
-	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }

@@ -6,18 +6,13 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/26 19:42:01 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/27 03:17:26 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_VM = curses.c \
 		 debug.c \
 		 display.c \
-		 draw.c \
-		 keys.c \
-		 functions.c \
-		 functions_two.c \
-		 functions_three.c \
 		 do_live.c \
 		 do_ld.c \
 		 do_st.c \
@@ -34,6 +29,11 @@ SRC_VM = curses.c \
 		 do_lldi.c \
 		 do_lfork.c \
 		 do_aff.c \
+		 draw.c \
+		 keys.c \
+		 functions.c \
+		 functions_two.c \
+		 functions_three.c \
 		 main.c \
 		 op_ext.c \
 		 rainbow_road.c \

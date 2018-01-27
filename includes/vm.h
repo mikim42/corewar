@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 02:42:47 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 03:15:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,24 +364,85 @@ int								validate_args(t_process *process, t_master *m);
 size_t							instruction_length(t_process *process,
 													t_master *m);
 
+/*
+** do_live.c
+*/
 void							do_live(t_process *process, t_master *m);
+
+/*
+** do_ld.c
+*/
 void							do_ld(t_process *process, t_master *m);
+
+/*
+** do_st.c
+*/
 void							do_st(t_process *process, t_master *m);
+
+/*
+** do_add.c
+*/
 void							do_add(t_process *process, t_master *m);
+
+/*
+** do_sub.c
+*/
 void							do_sub(t_process *process, t_master *m);
+
+/*
+** do_and.c
+*/
 void							do_and(t_process *process, t_master *m);
+
+/*
+** do_or.c
+*/
 void							do_or(t_process *process, t_master *m);
+
+/*
+** do_xor.c
+*/
 void							do_xor(t_process *process, t_master *m);
+
+/*
+** do_zjmp.c
+*/
 void							do_zjmp(t_process *process, t_master *m);
+
+/*
+** do_ldi.c
+*/
 void							do_ldi(t_process *process, t_master *m);
+
+/*
+** do_sti.c
+*/
 void							do_sti(t_process *process, t_master *m);
+
+/*
+** do_fork.c
+*/
 void							do_fork(t_process *process, t_master *m);
+
+/*
+** do_lld.c
+*/
 void							do_lld(t_process *process, t_master *m);
+
+/*
+** do_lldi.c
+*/
 void							do_lldi(t_process *process, t_master *m);
+
+/*
+** do_lfork.c
+*/
 void							do_lfork(t_process *process, t_master *m);
+
+/*
+** do_aff.c
+*/
 void							do_aff(t_process *process, t_master *m);
-void							do_fork(t_process *process, t_master *m);
-void							do_nop(t_process *process, t_master *m);
 void							append_afflog(unsigned int reg_num,
 											t_process *process);
 
