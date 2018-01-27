@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 02:55:46 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 14:09:38 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void		reap_processes(t_master *m)
 		m->player[i].lives = 0;
 	}
 }
-
+/*
 int			total_lives(t_master *m)
 {
 	int		total;
@@ -101,7 +101,7 @@ int			total_lives(t_master *m)
 	}
 	return (total);
 }
-
+*/
 
 
 
@@ -120,13 +120,14 @@ void		step_forward(t_master *m)
 	m->ctd_counter++;
 	if (m->ctd_counter == m->cycle_to_die)
 	{
-		if (total_lives(m) < NBR_LIVE)
+		if (m->nbr_lives < NBR_LIVE)
 			m->checks++;
-		if (m->checks == MAX_CHECKS || total_lives(m) >= NBR_LIVE)
+		if (m->checks == MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
 			m->checks = 0;
 		}
+		m->nbr_lives = 0;
 		m->ctd_counter = 0;
 		reap_processes(m);
 		if (m->process_list == 0)

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 03:03:43 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 03:04:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 14:08:23 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ void	do_live(t_process *process, t_master *m)
 			m->winner = &(m->player[i]);
 		}
 	}
+	m->nbr_lives++;
 	process->pc = (process->pc + 5) % MEM_SIZE;
 }
