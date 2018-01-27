@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 18:08:50 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 18:42:34 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:10:54 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ unsigned char	get_type(t_process *process, t_master *m, unsigned int i)
 	return (type);
 }
 
-int				read_reg_exact(t_process *process, t_master *m, unsigned int arg)
+int				read_reg_exact(t_process *process,
+								t_master *m, unsigned int arg)
 {
 	unsigned char	opcode;
 	unsigned char	type;
@@ -49,7 +50,8 @@ int				read_reg_exact(t_process *process, t_master *m, unsigned int arg)
 	return (0);
 }
 
-int				read_ind_exact(t_process *process, t_master *m, unsigned int arg)
+int				read_ind_exact(t_process *process,
+								t_master *m, unsigned int arg)
 {
 	unsigned char	opcode;
 	unsigned char	type;
@@ -103,8 +105,6 @@ int				read_arg(t_process *process, t_master *m, unsigned int arg)
 		return (read_int(m, process->pc + p));
 	return (0);
 }
-
-
 
 int				read_larg(t_process *process, t_master *m, unsigned int arg)
 {

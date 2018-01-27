@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 19:41:07 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 19:41:12 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:10:06 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		append_afflog(unsigned int reg_num, t_process *process, t_master *m)
 	}
 	i = -1;
 	while (++i < AFFLOG_SIZE - 1)
-		afflog[i] =afflog[i + 1];
+		afflog[i] = afflog[i + 1];
 	afflog[i] = process->reg[reg_num] % 256;
 }
 

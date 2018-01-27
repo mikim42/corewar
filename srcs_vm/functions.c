@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 15:53:27 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 19:41:40 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:09:45 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int			read_int(t_master *m, unsigned int offset)
 			((int)m->core[(offset + 3) % MEM_SIZE].value << 0));
 }
 
-void		write_int(t_process *process, t_master *m, unsigned int offset, int value)
+void		write_int(t_process *process, t_master *m,
+						unsigned int offset, int value)
 {
 	m->core[(offset + 0) % MEM_SIZE].value = (value >> 24) & 0xFF;
 	m->core[(offset + 1) % MEM_SIZE].value = (value >> 16) & 0xFF;

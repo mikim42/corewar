@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 19:40:44 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 19:40:50 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/26 20:09:55 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void		do_sti(t_process *process, t_master *m)
 	if (validate_args(process, m))
 	{
 		offset = process->pc;
-		offset += (read_ind_exact(process, m, 1) + read_ind_exact(process, m, 2)) % IDX_MOD;
+		offset += (read_ind_exact(process, m, 1) +
+					read_ind_exact(process, m, 2)) % IDX_MOD;
 		write_int(process, m, offset, read_arg(process, m, 0));
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
