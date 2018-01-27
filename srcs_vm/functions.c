@@ -63,7 +63,7 @@ int			read_reg_exact(t_process *process, t_master *m, unsigned int arg)
 	unsigned int	pos;
 	unsigned int	i;
 
-	opcode = m->core[process->pc % MEM_SIZE].value;
+	opcode = process->opcode;
 	pos = 2;
 	i = 0;
 	while (i < arg)
@@ -93,7 +93,7 @@ int			read_ind_exact(t_process *process, t_master *m, unsigned int arg)
 	unsigned int	p;
 	unsigned int	i;
 
-	opcode = m->core[process->pc % MEM_SIZE].value;
+	opcode = process->opcode;
 	p = 2;
 	i = 0;
 	while (i < arg)
@@ -122,7 +122,7 @@ int			read_arg(t_process *process, t_master *m, unsigned int arg)
 	unsigned int	p;
 	unsigned int	i;
 
-	opcode = m->core[process->pc % MEM_SIZE].value;
+	opcode = process->opcode;
 	p = 2;
 	i = 0;
 	while (i < arg)
@@ -152,7 +152,7 @@ int			read_larg(t_process *process, t_master *m, unsigned int arg)
 	unsigned int	p;
 	unsigned int	i;
 
-	opcode = m->core[process->pc % MEM_SIZE].value;
+	opcode = process->opcode;
 	p = 2;
 	i = 0;
 	while (i < arg)
@@ -182,7 +182,7 @@ int			validate_args(t_process *process, t_master *m)
 	unsigned int	pos;
 	unsigned int	i;
 
-	index = m->core[process->pc % MEM_SIZE].value - 1;
+	index = process->opcode - 1;
 	pos = 2;
 	i = 0;
 	while (i < g_op_tab[index].num_args)
@@ -210,7 +210,7 @@ size_t		instruction_length(t_process *process, t_master *m)
 	unsigned int	i;
 	size_t			length;
 
-	index = m->core[process->pc % MEM_SIZE].value - 1;
+	index = process->opcode - 1;
 	length = 2;
 	i = 0;
 	while (i < g_op_tab[index].num_args)
@@ -395,7 +395,7 @@ void		do_fork(t_process *process, t_master *m)
 	new_process.opcode = 0;
 	m->player[process->owner - 1].process_count++;
 	ft_lstadd(&(m->player[process->owner - 1].process_list),
-		ft_lstnew(&process, sizeof(t_process)));
+		ft_lstnew(&new_process, sizeof(t_process)));
 	process->pc = (process->pc + 3) % MEM_SIZE;
 }
 
@@ -440,7 +440,7 @@ void		do_lfork(t_process *process, t_master *m)
 	new_process.opcode = 0;
 	m->player[process->owner - 1].process_count++;
 	ft_lstadd(&(m->player[process->owner - 1].process_list),
-		ft_lstnew(&process, sizeof(t_process)));
+		ft_lstnew(&new_process, sizeof(t_process)));
 	process->pc = (process->pc + 3) % MEM_SIZE;
 }
 
