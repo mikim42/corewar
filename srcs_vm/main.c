@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:53:24 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 02:55:46 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ void		reap_processes(t_master *m)
 {
 	int			i;
 
+	ft_lst_cond_remove(&(m->process_list), process_should_die,
+		del_process);
 	i = -1;
 	while (++i < m->player_count)
 	{
-		ft_lst_cond_remove(&(m->player[i].process_list), process_should_die,
-			del_process);
 		m->player[i].last_lives = m->player[i].lives;
 		m->player[i].lives = 0;
 	}
@@ -102,10 +102,16 @@ int			total_lives(t_master *m)
 	return (total);
 }
 
+
+
+
 void		step_forward(t_master *m)
 {
+	if (m->show_winner)
+		return ;
 	if (m->cycle_to_die <= 0)
 	{
+		m->show_winner = 1;
 		update_windows(m);
 		update_rainbow_road(m);
 		return ;
@@ -121,8 +127,15 @@ void		step_forward(t_master *m)
 			m->cycle_to_die -= CYCLE_DELTA;
 			m->checks = 0;
 		}
-		reap_processes(m);
 		m->ctd_counter = 0;
+		reap_processes(m);
+		if (m->process_list == 0)
+		{
+			m->show_winner = 1;
+			update_windows(m);
+			update_rainbow_road(m);
+			return ;
+		}	
 	}
 	run_processes(m);
 	if (!(m->forward) || ++(m->fs_counter) >= m->frame_skip)
@@ -135,20 +148,15 @@ void		step_forward(t_master *m)
 
 void		run_processes(t_master *m)
 {
-	int			i;
 	t_list		*process_list;
 	t_process	*process;
 
-	i = -1;
-	while (++i < m->player_count)
+	process_list = m->process_list;
+	while (process_list != 0)
 	{
-		process_list = m->player[i].process_list;
-		while (process_list != 0)
-		{
-			process = process_list->content;
-			run_process(process, m);
-			process_list = process_list->next;
-		}
+		process = process_list->content;
+		run_process(process, m);
+		process_list = process_list->next;
 	}
 }
 

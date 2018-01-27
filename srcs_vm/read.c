@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:11:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 02:00:19 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ void	init_prog(int i, t_master *m)
 	m->player[i].process_count++;
 	first->player = &(m->player[i]);
 	first->reg[0] = m->player[i].id;
-	ft_lstadd(&(m->player[i].process_list),
-	ft_lst_new_ref(first, sizeof(t_process)));
+	ft_lstadd(&(m->process_list),
+		ft_lst_new_ref(first, sizeof(t_process)));
 
 	// copy prog to core
 	first->pc = MEM_SIZE / (unsigned int)m->player_count * i;

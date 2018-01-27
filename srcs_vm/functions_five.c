@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 19:40:44 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 20:09:55 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/27 01:33:10 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void		do_fork(t_process *process, t_master *m)
 	new_process.cycles = 0;
 	new_process.opcode = 0;
 	process->player->process_count++;
-	ft_lstadd(&(process->player->process_list),
+	ft_lstadd(&(m->process_list),
 		ft_lstnew(&new_process, sizeof(t_process)));
 	process->pc = (process->pc + 3) % MEM_SIZE;
 }

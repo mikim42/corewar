@@ -6,7 +6,7 @@
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 18:42:45 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 19:41:18 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/27 02:47:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ void	do_live(t_process *process, t_master *m)
 	while (++i < m->player_count)
 	{
 		if (pid == m->player[i].id)
+		{
 			m->player[i].lives++;
+			m->winner = &(m->player[i]);
+		}
 	}
 	process->pc = (process->pc + 5) % MEM_SIZE;
 }

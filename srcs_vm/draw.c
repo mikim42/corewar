@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:51:50 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 18:00:38 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/27 01:45:38 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,15 @@ void	draw_square(int x, int y, int color, t_master *m)
 
 void	draw_process_pc(t_master *m)
 {
-	int			i;
 	t_list		*process_list;
 	t_process	*process;
 
-	i = -1;
-	while (++i < m->player_count)
+	process_list = m->process_list;
+	while (process_list != 0)
 	{
-		process_list = m->player[i].process_list;
-		while (process_list != 0)
-		{
-			process = process_list->content;
-			draw_sprite(m->sprite_table[i], m->core[process->pc].x - 7,
-				m->core[process->pc].y - 7, m);
-			process_list = process_list->next;
-		}
+		process = process_list->content;
+		draw_sprite(m->sprite_table[-(process->player->id) - 1],
+			m->core[process->pc].x - 7, m->core[process->pc].y - 7, m);
+		process_list = process_list->next;
 	}
 }

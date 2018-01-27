@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:48:17 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 02:51:47 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,19 @@ void	put_hex(unsigned char c, WINDOW *win)
 
 void	display_process_pc(t_master *m)
 {
-	int			i;
 	t_list		*process_list;
 	t_process	*process;
 
-	i = -1;
-	while (++i < m->player_count)
+	process_list = m->process_list;
+	while (process_list != 0)
 	{
-		process_list = m->player[i].process_list;
-		while (process_list != 0)
-		{
-			process = process_list->content;
-			wmove(m->win_core, 1 + (process->pc / 64),
-				2 + (process->pc % 64) * 3);
-			wattron(m->win_core, COLOR_PAIR(i + 1 + 4));
-			put_hex(m->core[process->pc].value, m->win_core);
-			wattroff(m->win_core, COLOR_PAIR(i + 1 + 4));
-			process_list = process_list->next;
-		}
+		process = process_list->content;
+		wmove(m->win_core, 1 + (process->pc / 64),
+			2 + (process->pc % 64) * 3);
+		wattron(m->win_core, COLOR_PAIR(-(process->player->id) + 4));
+		put_hex(m->core[process->pc].value, m->win_core);
+		wattroff(m->win_core, COLOR_PAIR(-(process->player->id) + 4));
+		process_list = process_list->next;
 	}
 }
 
@@ -70,23 +65,16 @@ void	display_core(t_master *m)
 
 void		find_lives(t_master *m)
 {
-	int			i;
 	t_list		*process_list;
 	t_process	*process;
 
-	i = -1;
-	while (++i < m->player_count)
+	process_list = m->process_list;
+	while (process_list != 0)
 	{
-		process_list = m->player[i].process_list;
-		while (process_list != 0)
-		{
-			process = process_list->content;
-
-			if (m->core[process->pc].value == 1)
-				highlight_pid(process, m);
-
-			process_list = process_list->next;
-		}
+		process = process_list->content;
+		if (m->core[process->pc].value == 1)
+			highlight_pid(process, m);
+		process_list = process_list->next;
 	}
 }
 
@@ -147,7 +135,16 @@ void	display_control(t_master *m)
 	wprintw(m->win_control, "  [----------------------------------------]\n");
 	wprintw(m->win_control, "\n  Last Lives Ratio:\n");
 	wprintw(m->win_control, "  [----------------------------------------]\n");
-	wprintw(m->win_control, "\n  WINNER:\t\t%s\n", "????");
+	if (m->show_winner)
+	{
+		if (m->winner == 0)
+			m->winner = &(m->player[m->player_count - 1]);
+		wprintw(m->win_control, "\n  WINNER:\t\t");
+
+		wattron(m->win_control, COLOR_PAIR(-(m->winner->id)));
+		wprintw(m->win_control, "%s", m->winner->name);
+		wattroff(m->win_control, COLOR_PAIR(-(m->winner->id)));
+	}
 	box(m->win_control, 0, 0);
 	wrefresh(m->win_control);
 }

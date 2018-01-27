@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 23:50:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 02:42:47 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ typedef struct					s_player
 	int							last_lives;
 
 	int							process_count;
-	t_list						*process_list;
 }								t_player;
 
 typedef struct					s_process
@@ -236,6 +235,12 @@ typedef struct					s_master
 	t_player					player[MAX_PLAYERS];
 
 	t_core						core[MEM_SIZE];
+	t_list						*process_list;
+
+	t_player					*winner;
+	int							show_winner;
+
+	
 
 }								t_master;
 
