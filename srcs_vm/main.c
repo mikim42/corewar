@@ -58,8 +58,12 @@ void		ft_lst_cond_remove(t_list **list, int (*cond)(void *, size_t),
 
 int			process_should_die(void *process, size_t size)
 {
+	int		should_die;
+
 	(void)size;
-	return (((t_process *)process)->lives == 0);
+	should_die = ((t_process *)process)->lives == 0;
+	((t_process *)process)->lives = 0;
+	return (should_die);
 }
 
 void		del_process(void *process, size_t size)
@@ -158,7 +162,7 @@ void		run_process(t_process *process, t_master *m)
 		process->pc = (process->pc + 1) % MEM_SIZE;
 		return ;
 	}
-	if (++process->cycles == (int)g_op_tab[process->opcode - 1].cycles)
+	if (++process->cycles >= (int)g_op_tab[process->opcode - 1].cycles)
 	{
 		g_op_tab[process->opcode - 1].func(process, m);
 		process->cycles = 0;
