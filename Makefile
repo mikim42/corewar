@@ -18,9 +18,22 @@ SRC_VM = curses.c \
 		 functions.c \
 		 functions_two.c \
 		 functions_three.c \
-		 functions_four.c \
-		 functions_five.c \
-		 functions_six.c \
+		 do_live.c \
+		 do_ld.c \
+		 do_st.c \
+		 do_add.c \
+		 do_sub.c \
+		 do_and.c \
+		 do_or.c \
+		 do_xor.c \
+		 do_zjmp.c \
+		 do_ldi.c \
+		 do_sti.c \
+		 do_fork.c \
+		 do_lld.c \
+		 do_lldi.c \
+		 do_lfork.c \
+		 do_aff.c \
 		 main.c \
 		 op_ext.c \
 		 rainbow_road.c \
