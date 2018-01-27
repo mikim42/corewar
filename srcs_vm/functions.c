@@ -56,35 +56,6 @@ void		write_int(t_process *process, t_master *m, unsigned int offset, int value)
 	m->core[(offset + 3) % MEM_SIZE].owner = process->owner;
 }
 
-int			read_arg_exact(t_process *process, t_master *m, unsigned int arg)
-{
-	unsigned char	opcode;
-	unsigned char	type;
-	unsigned int	pos;
-	unsigned int	i;
-
-	opcode = m->core[process->pc % MEM_SIZE].value;
-	pos = 2;
-	i = 0;
-	while (i < arg)
-	{
-		type = m->core[(process->pc + 1) % MEM_SIZE].value;
-		type = (type >> (2 * (3 - i++))) & 3;
-		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
-	}
-	type = m->core[(process->pc + 1) % MEM_SIZE].value;
-	type = (type >> (2 * (3 - arg))) & 3;
-	if (type == REG_CODE)
-		return (m->core[(process->pc + pos) % MEM_SIZE].value - 1);
-	else if (type == IND_CODE)
-		return (read_short(m, process->pc + pos));
-	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
-		return (read_short(m, process->pc + pos));
-	else if (type == DIR_CODE)
-		return (read_int(m, process->pc + pos));
-	return (0);
-}
-
 int			read_reg_exact(t_process *process, t_master *m, unsigned int arg)
 {
 	unsigned char	opcode;
@@ -418,6 +389,10 @@ void		do_fork(t_process *process, t_master *m)
 
 	ft_memcpy(&new_process, process, sizeof(t_process));
 	new_process.pc += read_short(m, process->pc + 1) % IDX_MOD;
+	new_process.pc %= MEM_SIZE;
+	new_process.lives = 0;
+	new_process.cycles = 0;
+	new_process.opcode = 0;
 	m->player[process->owner - 1].process_count++;
 	ft_lstadd(&(m->player[process->owner - 1].process_list),
 		ft_lstnew(&process, sizeof(t_process)));
@@ -459,6 +434,10 @@ void		do_lfork(t_process *process, t_master *m)
 
 	ft_memcpy(&new_process, process, sizeof(t_process));
 	new_process.pc += read_short(m, process->pc + 1);
+	new_process.pc %= MEM_SIZE;
+	new_process.lives = 0;
+	new_process.cycles = 0;
+	new_process.opcode = 0;
 	m->player[process->owner - 1].process_count++;
 	ft_lstadd(&(m->player[process->owner - 1].process_list),
 		ft_lstnew(&process, sizeof(t_process)));
@@ -488,6 +467,6 @@ void		append_afflog(unsigned int reg_num, t_process *process, t_master *m)
 void		do_aff(t_process *process, t_master *m)
 {
 	if (validate_args(process, m))
-		append_afflog(read_arg_exact(process, m, 0), process, m);
+		append_afflog(read_reg_exact(process, m, 0), process, m);
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }
