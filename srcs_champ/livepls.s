@@ -4,12 +4,15 @@
 init:
 		sti r1, %:lspawn, %1		; initialize live instructions
 		sti r1, %:write, %1
+		sti r1, %:live, %1
 
 		ld %0, r7					; destroy live initialization routine
 		sti r7, %:init, %0
 		sti r7, %:init, %3
 		sti r7, %:init, %7
 		sti r7, %:init, %10
+		sti r7, %:init, %14
+		sti r7, %:init, %17
 
 start:
 		ld %16777216, r2			; 0x01000000
@@ -17,7 +20,7 @@ start:
 		ld %19, r4
 		ld %1, r5
 		ld %5, r6
-		ld %512, r8
+		ld %490, r8
 
 lspawn:
 		live %0
@@ -35,7 +38,7 @@ write:
 
 		ld %:end, r7				; r7 = (r3 + %:end)
 		add r7, r3, r7
-		sub r7, r8, r7				; if (r7 <= 512)
+		sub r8, r7, r7				; if (r7 <= 490)
 		and r7, %-2147483648, r7	; 0x80000000
 		zjmp %:write
 

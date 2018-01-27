@@ -26,7 +26,7 @@ start:
 
 barrier:							; this portion is derived from helltrain
 		st r10, 11
-		st r2, -4
+		st r2, -5
 		live %0
 		st r2, -87
 		st r2, -96
@@ -74,8 +74,6 @@ barrier:							; this portion is derived from helltrain
 		st r2, -474
 		st r2, -483
 		st r2, -492
-		st r2, -501
-		st r2, -510
 		ld %0, r2
 		zjmp %:barrier
 
@@ -108,10 +106,11 @@ fork4:
 
 init:
 		sti r3, %:start, %18
-		st r2, -4
+		st r2, -5
 		sti r4, %:start, %21
-		st r2, -4
+		st r2, -5
 		sti r10, %:start, %20
+		st r2, -5
 		st r10, 11
 		st r10, 14
 
@@ -127,7 +126,7 @@ preserve:
 		ld %19, r4
 		ld %1, r5
 		ld %5, r6
-		ld %512, r8
+		ld %490, r8
 
 lspawn:
 		live %0
@@ -137,7 +136,8 @@ lspawn:
 		zjmp %:lspawn
 
 write:
-		st r10, 6
+		st r10, 11
+		st r2, -5
 		live %0
 		sti r2, %:end, r3
 		add r3, r5, r3
@@ -146,24 +146,24 @@ write:
 
 		ld %:end, r7				; r7 = (r3 + %:end)
 		add r7, r3, r7
-		sub r7, r8, r7				; if (r7 <= 512)
+		sub r8, r7, r7				; if (r7 <= 490)
 		and r7, %-2147483648, r7	; 0x80000000
 		zjmp %:write
 
 		ld %0, r7
 
 live:
-		st r10, 11
-		st r10, 14
+		st r10, 6
 		live %0
 		fork %:fortress
+		st r10, 6
 		live %0
 		fork %:end
 		zjmp %:preserve
 
 persistence:
 		st r10, 11
-		st r2, -4
+		st r2, -5
 persist:
 		live %0
 		zjmp %:persist
