@@ -103,10 +103,11 @@ void		step_forward(t_master *m)
 		m->nbr_lives = 0;
 		m->ctd_counter = 0;
 		reap_processes(m);
-		if (m->cycle_to_die <= 0 || m->process_list == 0)
-			m->show_winner = 1;
 	}
-	run_processes(m);
+	if (m->cycle_to_die <= 0 || m->process_list == 0)
+		m->show_winner = 1;
+	else
+		run_processes(m);
 	if (m->forward && !(m->show_winner) &&
 			++(m->fs_counter) < m->frame_skip)
 		return ;
