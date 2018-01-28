@@ -38,11 +38,12 @@ int				read_reg_exact(t_process *process,
 		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
 	type = get_type(process, m, arg);
+	i = process->pc;
+	i += read_short(m, process->pc + pos) % IDX_MOD;
 	if (type == REG_CODE)
 		return (m->core[(process->pc + pos) % MEM_SIZE].value - 1);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				(read_short(m, process->pc + pos) % IDX_MOD))));
+		return (read_int(m, i));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
 		return (read_short(m, process->pc + pos));
 	else if (type == DIR_CODE)
@@ -94,11 +95,12 @@ int				read_arg(t_process *process, t_master *m, unsigned int arg)
 		p += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
 	type = get_type(process, m, arg);
+	i = process->pc;
+	i += read_short(m, process->pc + p) % IDX_MOD;
 	if (type == REG_CODE)
 		return (process->reg[m->core[(process->pc + p) % MEM_SIZE].value - 1]);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				(read_short(m, process->pc + p) % IDX_MOD))));
+		return (read_int(m, i));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
 		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE)
@@ -122,11 +124,12 @@ int				read_larg(t_process *process, t_master *m, unsigned int arg)
 		p += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
 	type = get_type(process, m, arg);
+	i = process->pc;
+	i += read_short(m, process->pc + p);
 	if (type == REG_CODE)
 		return (process->reg[m->core[(process->pc + p) % MEM_SIZE].value - 1]);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				read_short(m, process->pc + p))));
+		return (read_int(m, i));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
 		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE)

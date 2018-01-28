@@ -140,7 +140,7 @@ void		run_process(t_process *process, t_master *m)
 		process->pc = (process->pc + 1) % MEM_SIZE;
 		return ;
 	}
-	if (++process->cycles >= (int)g_op_tab[process->opcode - 1].cycles)
+	if (++(process->cycles) >= (int)g_op_tab[process->opcode - 1].cycles)
 	{
 		g_op_tab[process->opcode - 1].func(process, m);
 		process->cycles = 0;

@@ -189,7 +189,7 @@ typedef struct					s_process
 	t_player					*player;
 	int							reg[REG_NUMBER];
 	unsigned int				pc;
-	int							lives;
+	unsigned int				lives;
 	unsigned char				opcode;
 	int							cycles;
 	int							carry;
@@ -262,13 +262,6 @@ typedef struct					s_op
 	int							short_dir;
 	t_func						func;
 }								t_op;
-
-typedef struct					s_op_length
-{
-	unsigned char				op_code;
-	unsigned char				args_code;	// let this be 0 if unneeded
-	unsigned int				length;
-}								t_op_length;
 
 extern t_op						g_op_tab[17];
 

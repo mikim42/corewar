@@ -52,7 +52,9 @@ SRC_CHAMP = marysue.s \
 			livepls.s \
 			replicationcentral.s \
 			doyoulikeforks.s \
-			plagiarism.s
+			plagiarism.s \
+			synchro0.s \
+			synchro1.s
 
 OBJ_VM = $(SRC_VM:.c=.o)
 OBJ_ASM = $(SRC_ASM:.c=.o)

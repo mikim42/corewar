@@ -15,7 +15,9 @@
 void	do_st(t_process *process, t_master *m)
 {
 	unsigned int	offset;
+	unsigned int	length;
 
+	length = instruction_length(process, m);
 	if (validate_args(process, m))
 	{
 		if (get_type(process, m, 1) == T_REG)
@@ -30,5 +32,5 @@ void	do_st(t_process *process, t_master *m)
 			write_int(process, m, offset, read_arg(process, m, 0));
 		}
 	}
-	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
+	process->pc = (process->pc + length) % MEM_SIZE;
 }

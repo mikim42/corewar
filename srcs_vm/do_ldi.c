@@ -24,7 +24,6 @@ void		do_ldi(t_process *process, t_master *m)
 					read_arg(process, m, 1)) % IDX_MOD;
 		reg_num = read_reg_exact(process, m, 2);
 		process->reg[reg_num] = read_int(m, offset);
-		process->carry = (process->reg[reg_num] == 0);
 	}
 	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }
