@@ -92,11 +92,10 @@ void		step_forward(t_master *m)
 {
 	if (m->show_winner)
 		return ;
-	if ((m->ctd_counter)++ >= m->cycle_to_die)
+	m->current_cycle++;
+	if (++(m->ctd_counter) >= m->cycle_to_die)
 	{
-		if (m->nbr_lives < NBR_LIVE)
-			(m->checks)++;
-		if (m->checks == MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
+		if (++(m->checks) >= MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
 			m->checks = 0;
@@ -107,7 +106,6 @@ void		step_forward(t_master *m)
 		if (m->cycle_to_die <= 0 || m->process_list == 0)
 			m->show_winner = 1;
 	}
-	m->current_cycle++;
 	run_processes(m);
 	if (m->forward && !(m->show_winner) &&
 			++(m->fs_counter) < m->frame_skip)
