@@ -91,8 +91,9 @@ void		reap_processes(t_master *m)
 void		build_last_cycle(t_master *m)
 {
 	m->current_cycle++;
+	run_processes(m);
 	reap_processes(m);
-	reap_processes(m);
+	ft_lstdel(&(m->process_list), del_process);
 }
 
 

@@ -5,11 +5,6 @@
 # r2 => thread id
 
 init:
-		lfork %2048					; attempt to hijack some other champion initialization routine
-		st r1, 6					; sizeof(st) + 1
-		live %0
-		lfork %2449					; attempt to skip any clear routine the champion may have
-
 		sti r1, %:live0, %1			; initialize live instructions
 		sti r1, %:live1, %1
 		sti r1, %:live2, %1
@@ -26,6 +21,7 @@ init:
 		sti r1, %:live13, %1
 		sti r1, %:live14, %1
 		sti r1, %:thread0, %1
+		sti r1, %:wait, %1
 		sti r1, %:copy_start, %1
 		sti r1, %:prep_jmp, %1
 
