@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 01:19:48 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 02:30:30 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@
 # define WIN_NAME				"CORE WAR"
 
 # define SQ_SIZE				3
+# define BIG_SQ_SIZE			7
 
 # define RAD_TO_DEG(a)			((a) * 180.0 / M_PI)
 # define DEG_TO_RAD(a)			((a) * M_PI / 180.0)
@@ -303,6 +304,8 @@ void							init_prog(int i, t_master *m);
 void							draw_dot(int x, int y, int color, t_master *m);
 void							draw_square(int x, int y, int color,
 											t_master *m);
+void							draw_big_square(int x, int y, int color,
+											t_master *m);
 void							draw_process_pc(t_master *m);
 
 /*
@@ -324,6 +327,11 @@ int								whose_pid(t_process *process, t_master *m);
 void							highlight_pid(t_process *process, t_master *m);
 int								total_processes(t_master *m);
 void							display_control(t_master *m);
+int								total_lives(t_master *m);
+void							display_lives_bar(t_master *m);
+int								total_last_lives(t_master *m);
+void							display_last_lives_bar(t_master *m);
+
 void							display_players(t_master *m);
 void							display_player(int i, t_master *m);
 

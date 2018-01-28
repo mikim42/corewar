@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 00:19:21 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 02:38:45 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,31 +138,122 @@ void	display_control(t_master *m)
 		(m->forward ? "*FAST FORWARD*" : "*PAUSE*"));
 	wprintw(m->win_control, "  Frame Skip:\t\t%d\n", m->frame_skip);
 
-	wprintw(m->win_control, "\n  Total Processes:\t%d\n", total_processes(m));
-
 	wprintw(m->win_control, "\n  Cycles:\t\t%d\n", m->current_cycle);
 	wprintw(m->win_control, "\n  CYCLE_TO_DIE:\t\t%d/%d\n",
 			m->ctd_counter, m->cycle_to_die);
 	wprintw(m->win_control, "  CYCLE_DELTA:\t\t%d\n", CYCLE_DELTA);
 	wprintw(m->win_control, "  NBR_LIVE:\t\t%d/%d\n", m->nbr_lives, NBR_LIVE);
 	wprintw(m->win_control, "  MAX_CHECKS:\t\t%d/%d\n", m->checks, MAX_CHECKS);
-	wprintw(m->win_control, "\n  Current Lives Ratio:\n");
-	wprintw(m->win_control, "  [----------------------------------------]\n");
-	wprintw(m->win_control, "\n  Last Lives Ratio:\n");
-	wprintw(m->win_control, "  [----------------------------------------]\n");
+	
+	wprintw(m->win_control, "\n  Total Processes:\t%d\n", total_processes(m));
+
+	wprintw(m->win_control, "\n  Current Lives Ratio:\n  ");
+	display_lives_bar(m);
+	wprintw(m->win_control, "\n\n  Last Lives Ratio:\n  ");
+	display_last_lives_bar(m);
 	if (m->show_winner)
 	{
 		if (m->winner == 0)
 			m->winner = &(m->player[m->player_count - 1]);
-		wprintw(m->win_control, "\n  WINNER:\t\t");
+		wprintw(m->win_control, "\n\n  WINNER:\t\t");
 
 		wattron(m->win_control, COLOR_PAIR(-(m->winner->id)));
-		wprintw(m->win_control, "%s", m->winner->name);
+		wprintw(m->win_control, "%.24s", m->winner->name);
 		wattroff(m->win_control, COLOR_PAIR(-(m->winner->id)));
 	}
 	box(m->win_control, 0, 0);
 	wrefresh(m->win_control);
 }
+
+
+int		total_lives(t_master *m)
+{
+	int	total;
+	int	i;
+
+	total = 0;
+	i = -1;
+	while (++i < m->player_count)
+	{
+		total += m->player[i].lives;
+	}
+	return (total);
+}
+
+
+void	display_lives_bar(t_master *m)
+{
+	int	i;
+	int	j;
+	int	filled_so_far;
+	int	count;
+
+	if (total_lives(m) == 0)
+		return ;
+	filled_so_far = 0;
+	i = -1;
+	while (++i < m->player_count - 1)
+	{
+		count = ft_round_dbl((double)m->player[i].lives / total_lives(m) * 42);
+		wattron(m->win_control, COLOR_PAIR(i + 5));
+		j = -1;
+		while (++j < count)
+			wprintw(m->win_control, " ") ? filled_so_far++ : filled_so_far++;
+		wattroff(m->win_control, COLOR_PAIR(i + 5));
+	}
+	wattron(m->win_control, COLOR_PAIR(i + 5));
+	count = 42 - filled_so_far;
+	j = -1;
+	while (++j < count)
+		wprintw(m->win_control, " ");
+	wattroff(m->win_control, COLOR_PAIR(i + 5));
+}
+
+
+int		total_last_lives(t_master *m)
+{
+	int	total;
+	int	i;
+
+	total = 0;
+	i = -1;
+	while (++i < m->player_count)
+	{
+		total += m->player[i].last_lives;
+	}
+	return (total);
+}
+
+void	display_last_lives_bar(t_master *m)
+{
+	int	i;
+	int	j;
+	int	filled_so_far;
+	int	count;
+
+	if (total_last_lives(m) == 0)
+		return ;
+	filled_so_far = 0;
+	i = -1;
+	while (++i < m->player_count - 1)
+	{
+		count = ft_round_dbl((double)m->player[i].last_lives /
+			total_last_lives(m) * 42);
+		wattron(m->win_control, COLOR_PAIR(i + 5));
+		j = -1;
+		while (++j < count)
+			wprintw(m->win_control, " ") ? filled_so_far++ : filled_so_far++;
+		wattroff(m->win_control, COLOR_PAIR(i + 5));
+	}
+	wattron(m->win_control, COLOR_PAIR(i + 5));
+	count = 42 - filled_so_far;
+	j = -1;
+	while (++j < count)
+		wprintw(m->win_control, " ");
+	wattroff(m->win_control, COLOR_PAIR(i + 5));
+}
+
+
 
 void	display_players(t_master *m)
 {
