@@ -17,10 +17,10 @@ void		do_fork(t_process *process, t_master *m)
 	t_process	new_process;
 
 	ft_memcpy(&new_process, process, sizeof(t_process));
-	new_process.pc += cached_short(process, 1) % IDX_MOD;
+	new_process.pc += read_short(m, process->pc + 1) % IDX_MOD;
 	new_process.pc %= MEM_SIZE;
 	new_process.cycles = 0;
-	ft_bzero(new_process.icache, 0x10);
+	new_process.opcode = 0;
 	process->player->process_count++;
 	ft_lstadd(&(m->process_list),
 		ft_lstnew(&new_process, sizeof(t_process)));

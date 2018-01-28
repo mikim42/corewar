@@ -14,9 +14,9 @@
 
 void		do_aff(t_process *process, t_master *m)
 {
-	if (validate_args(process))
+	if (validate_args(process, m))
 		append_afflog(read_reg_exact(process, m, 0), process);
-	process->pc = (process->pc + instruction_length(process)) % MEM_SIZE;
+	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
 }
 
 void		append_afflog(unsigned int reg_num, t_process *process)

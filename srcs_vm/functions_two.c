@@ -12,9 +12,13 @@
 
 #include "vm.h"
 
-unsigned char	get_type(t_process *process, unsigned int i)
+unsigned char	get_type(t_process *process, t_master *m, unsigned int i)
 {
-	return ((process->icache[1] >> (2 * (3 - i))) & 3);
+	unsigned char	type;
+
+	type = m->core[(process->pc + 1) % MEM_SIZE].value;
+	type = (type >> (2 * (3 - i))) & 3;
+	return (type);
 }
 
 int				read_reg_exact(t_process *process,
@@ -25,24 +29,24 @@ int				read_reg_exact(t_process *process,
 	unsigned int	pos;
 	unsigned int	i;
 
-	opcode = process->icache[0];
+	opcode = process->opcode;
 	pos = 2;
 	i = 0;
 	while (i < arg)
 	{
-		type = get_type(process, i++);
+		type = get_type(process, m, i++);
 		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
-	type = get_type(process, arg);
+	type = get_type(process, m, arg);
 	if (type == REG_CODE)
-		return (process->icache[pos] - 1);
+		return (m->core[(process->pc + pos) % MEM_SIZE].value - 1);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				(cached_short(process, pos) % IDX_MOD))));
+		return (read_short(m, ((int)process->pc +
+				(read_short(m, process->pc + pos) % IDX_MOD))));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
-		return (cached_short(process, pos));
+		return (read_short(m, process->pc + pos));
 	else if (type == DIR_CODE)
-		return (cached_int(process, pos));
+		return (read_int(m, process->pc + pos));
 	return (0);
 }
 
@@ -51,27 +55,26 @@ int				read_ind_exact(t_process *process,
 {
 	unsigned char	opcode;
 	unsigned char	type;
-	unsigned int	pos;
+	unsigned int	p;
 	unsigned int	i;
 
-	(void)m;
-	opcode = process->icache[0];
-	pos = 2;
+	opcode = process->opcode;
+	p = 2;
 	i = 0;
 	while (i < arg)
 	{
-		type = get_type(process, i++);
-		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
+		type = get_type(process, m, i++);
+		p += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
-	type = get_type(process, arg);
+	type = get_type(process, m, arg);
 	if (type == REG_CODE)
-		return (process->reg[process->icache[pos] - 1]);
+		return (process->reg[m->core[(process->pc + p) % MEM_SIZE].value - 1]);
 	else if (type == IND_CODE)
-		return (cached_short(process, pos));
+		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
-		return (cached_short(process, pos));
+		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE)
-		return (cached_int(process, pos));
+		return (read_int(m, process->pc + p));
 	return (0);
 }
 
@@ -79,27 +82,27 @@ int				read_arg(t_process *process, t_master *m, unsigned int arg)
 {
 	unsigned char	opcode;
 	unsigned char	type;
-	unsigned int	pos;
+	unsigned int	p;
 	unsigned int	i;
 
-	opcode = process->icache[0];
-	pos = 2;
+	opcode = process->opcode;
+	p = 2;
 	i = 0;
 	while (i < arg)
 	{
-		type = get_type(process, i++);
-		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
+		type = get_type(process, m, i++);
+		p += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
-	type = get_type(process, arg);
+	type = get_type(process, m, arg);
 	if (type == REG_CODE)
-		return (process->reg[process->icache[pos] - 1]);
+		return (process->reg[m->core[(process->pc + p) % MEM_SIZE].value - 1]);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				(cached_short(process, pos) % IDX_MOD))));
+		return (read_short(m, ((int)process->pc +
+				(read_short(m, process->pc + p) % IDX_MOD))));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
-		return (cached_short(process, pos));
+		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE)
-		return (cached_int(process, pos));
+		return (read_int(m, process->pc + p));
 	return (0);
 }
 
@@ -107,26 +110,26 @@ int				read_larg(t_process *process, t_master *m, unsigned int arg)
 {
 	unsigned char	opcode;
 	unsigned char	type;
-	unsigned int	pos;
+	unsigned int	p;
 	unsigned int	i;
 
-	opcode = process->icache[0];
-	pos = 2;
+	opcode = process->opcode;
+	p = 2;
 	i = 0;
 	while (i < arg)
 	{
-		type = get_type(process, i++);
-		pos += count_bytes(type, g_op_tab[opcode - 1].short_dir);
+		type = get_type(process, m, i++);
+		p += count_bytes(type, g_op_tab[opcode - 1].short_dir);
 	}
-	type = get_type(process, arg);
+	type = get_type(process, m, arg);
 	if (type == REG_CODE)
-		return (process->reg[process->icache[pos] - 1]);
+		return (process->reg[m->core[(process->pc + p) % MEM_SIZE].value - 1]);
 	else if (type == IND_CODE)
-		return (read_int(m, ((int)process->pc +
-				cached_short(process, pos))));
+		return (read_short(m, ((int)process->pc +
+				read_short(m, process->pc + p))));
 	else if (type == DIR_CODE && g_op_tab[opcode - 1].short_dir)
-		return (cached_short(process, pos));
+		return (read_short(m, process->pc + p));
 	else if (type == DIR_CODE)
-		return (cached_int(process, pos));
+		return (read_int(m, process->pc + p));
 	return (0);
 }

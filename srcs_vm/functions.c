@@ -12,18 +12,22 @@
 
 #include "vm.h"
 
-short		cached_short(t_process *process, unsigned int offset)
+size_t		count_bytes(unsigned char arg_code, int short_dir)
 {
-	return (((short)process->icache[offset + 0] << 8) |
-			((short)process->icache[offset + 1] << 0));
+	if (arg_code == REG_CODE)
+		return (1);
+	else if (arg_code == IND_CODE)
+		return (2);
+	else if (arg_code == DIR_CODE && short_dir)
+		return (2);
+	else if (arg_code == DIR_CODE && !short_dir)
+		return (4);
+	return (0);
 }
 
-int			cached_int(t_process *process, unsigned int offset)
+int			is_valid_reg(unsigned char reg_num)
 {
-	return (((int)process->icache[offset + 0] << 24) |
-			((int)process->icache[offset + 1] << 16) |
-			((int)process->icache[offset + 2] << 8) |
-			((int)process->icache[offset + 3] << 0));
+	return (reg_num >= 0 && reg_num < REG_NUMBER);
 }
 
 short		read_short(t_master *m, unsigned int offset)

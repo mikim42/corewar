@@ -83,7 +83,7 @@ int			whose_pid(t_process *process, t_master *m)
 	unsigned int	pid;
 	int				i;
 
-	pid = (unsigned int)cached_int(process, 1);
+	pid = (unsigned int)read_int(m, process->pc + 1);
 	i = -1;
 	while (++i < m->player_count)
 	{
