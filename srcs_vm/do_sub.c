@@ -16,12 +16,12 @@ void		do_sub(t_process *process, t_master *m)
 {
 	unsigned char	reg_num;
 
-	if (validate_args(process, m))
+	if (validate_args(process))
 	{
 		reg_num = read_reg_exact(process, m, 2);
 		process->reg[reg_num] =
 			read_arg(process, m, 0) - read_arg(process, m, 1);
 		process->carry = (process->reg[reg_num] == 0);
 	}
-	process->pc = (process->pc + instruction_length(process, m)) % MEM_SIZE;
+	process->pc = (process->pc + instruction_length(process)) % MEM_SIZE;
 }

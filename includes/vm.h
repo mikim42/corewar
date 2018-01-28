@@ -190,7 +190,7 @@ typedef struct					s_process
 	int							reg[REG_NUMBER];
 	unsigned int				pc;
 	int							lives;
-	unsigned char				opcode;
+	unsigned char				icache[0x10];
 	int							cycles;
 	int							carry;
 }								t_process;
@@ -354,17 +354,36 @@ void							run_process(t_process *process, t_master *m);
 /*
 ** functions.c
 */
-size_t							count_bytes(unsigned char arg_code,
-											int short_dir);
-int								is_valid_reg(unsigned char reg_num);
+short							cached_short(t_process *process,
+											unsigned int offset);
+int								cached_int(t_process *process,
+											unsigned int offset);
 short							read_short(t_master *m, unsigned int offset);
 int								read_int(t_master *m, unsigned int offset);
 void							write_int(t_process *process, t_master *m,
 											unsigned int offset, int value);
 
-int								validate_args(t_process *process, t_master *m);
-size_t							instruction_length(t_process *process,
-													t_master *m);
+/*
+** functions_two.c
+*/
+unsigned char					get_type(t_process *process, unsigned int i);
+int								read_larg(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_arg(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_ind_exact(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_reg_exact(t_process *process, t_master *m,
+												unsigned int arg);
+
+/*
+** functions_three.c
+*/
+size_t							count_bytes(unsigned char arg_code,
+											int short_dir);
+int								is_valid_reg(unsigned char reg_num);
+int								validate_args(t_process *process);
+size_t							instruction_length(t_process *process);
 
 /*
 ** do_live.c
@@ -448,16 +467,6 @@ void							do_aff(t_process *process, t_master *m);
 void							append_afflog(unsigned int reg_num,
 											t_process *process);
 
-unsigned char					get_type(t_process *process, t_master *m,
-												unsigned int i);
-int								read_larg(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_arg(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_ind_exact(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_reg_exact(t_process *process, t_master *m,
-												unsigned int arg);
 /*
 ** debug.c
 */

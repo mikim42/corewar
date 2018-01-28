@@ -91,15 +91,6 @@ void		reap_processes(t_master *m)
 
 void		step_forward(t_master *m)
 {
-	/*
-	if (m->current_cycle == 3089)
-	{
-		m->forward = 0;
-		update_windows(m);
-		update_rainbow_road(m);
-		return ;
-	}
-	*/
 	if (m->show_winner)
 		return ;
 	if (m->cycle_to_die <= 0)
@@ -118,7 +109,6 @@ void		step_forward(t_master *m)
 		if (m->checks == MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
-			m->forward = 0;
 			m->checks = 0;
 		}
 		m->nbr_lives = 0;
@@ -157,17 +147,22 @@ void		run_processes(t_master *m)
 
 void		run_process(t_process *process, t_master *m)
 {
-	if (process->cycles == 0)
-		process->opcode = m->core[process->pc].value;
+	int		i;
 
-	if (!(1 <= process->opcode && process->opcode <= 16))
+	if (process->cycles == 0)
+	{
+		i = -1;
+		while (++i < 0x10)
+			process->icache[i] = m->core[(process->pc + i) % MEM_SIZE].value;
+	}
+	if (!(1 <= process->icache[0] && process->icache[0] <= 16))
 	{
 		process->pc = (process->pc + 1) % MEM_SIZE;
 		return ;
 	}
-	if (++process->cycles >= (int)g_op_tab[process->opcode - 1].cycles)
+	if (++process->cycles >= (int)g_op_tab[process->icache[0] - 1].cycles)
 	{
-		g_op_tab[process->opcode - 1].func(process, m);
+		g_op_tab[process->icache[0] - 1].func(process, m);
 		process->cycles = 0;
 	}
 }
