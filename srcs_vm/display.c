@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 02:38:45 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 15:45:51 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,15 +194,16 @@ void	display_lives_bar(t_master *m)
 	i = -1;
 	while (++i < m->player_count - 1)
 	{
-		count = ft_round_dbl((double)m->player[i].lives / total_lives(m) * 42);
+		count = ft_round_dbl((double)m->player[i].lives / total_lives(m) *
+			LIFEBAR_WIDTH);
 		wattron(m->win_control, COLOR_PAIR(i + 5));
 		j = -1;
-		while (++j < count)
+		while (++j < count && filled_so_far < LIFEBAR_WIDTH)
 			wprintw(m->win_control, " ") ? filled_so_far++ : filled_so_far++;
 		wattroff(m->win_control, COLOR_PAIR(i + 5));
 	}
 	wattron(m->win_control, COLOR_PAIR(i + 5));
-	count = 42 - filled_so_far;
+	count = LIFEBAR_WIDTH - filled_so_far;
 	j = -1;
 	while (++j < count)
 		wprintw(m->win_control, " ");
@@ -238,15 +239,15 @@ void	display_last_lives_bar(t_master *m)
 	while (++i < m->player_count - 1)
 	{
 		count = ft_round_dbl((double)m->player[i].last_lives /
-			total_last_lives(m) * 42);
+			total_last_lives(m) * LIFEBAR_WIDTH);
 		wattron(m->win_control, COLOR_PAIR(i + 5));
 		j = -1;
-		while (++j < count)
+		while (++j < count && filled_so_far < LIFEBAR_WIDTH)
 			wprintw(m->win_control, " ") ? filled_so_far++ : filled_so_far++;
 		wattroff(m->win_control, COLOR_PAIR(i + 5));
 	}
 	wattron(m->win_control, COLOR_PAIR(i + 5));
-	count = 42 - filled_so_far;
+	count = LIFEBAR_WIDTH - filled_so_far;
 	j = -1;
 	while (++j < count)
 		wprintw(m->win_control, " ");

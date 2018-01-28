@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 02:30:30 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 15:42:33 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,8 @@
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 # define MAX_FRAME_SKIP			100
+
+# define LIFEBAR_WIDTH			42
 
 typedef struct					s_sprite
 {
