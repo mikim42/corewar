@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 00:52:07 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 01:20:40 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,6 @@ int			main(int argc, char **argv)
 	init_ncurses_stuffz(&m);
 	init_rainbow_road(&m);
 	return (0);
-}
-
-void		ft_lst_cond_remove(t_list **list, int (*cond)(void *, size_t),
-	   							void (*del)(void *, size_t))
-{
-	t_list	*temp;
-	t_list	*prev;
-	t_list	*next;
-
-	temp = *list;
-	prev = 0;
-	while (temp)
-	{
-		next = temp->next;
-		if (cond(temp->content, temp->content_size))
-		{
-			if (prev)
-				prev->next = temp->next;
-			else
-				*list = temp->next;
-			if (del)
-				del(temp->content, temp->content_size);
-			ft_memdel((void **)&temp);
-		}
-		else
-			prev = temp;
-		temp = next;
-	}
 }
 
 int			process_should_die(void *process, size_t size)

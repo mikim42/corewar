@@ -6,7 +6,7 @@
 #    By: ashih <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/01/24 14:53:44 by mikim            ###   ########.fr        #
+#    Updated: 2018/01/28 01:19:37 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC = del_and_gnl.c\
 	  ft_itoa.c\
 	  ft_lst_add_last.c\
 	  ft_lst_at.c\
+	  ft_lst_cond_remove.c\
 	  ft_lst_new_ref.c\
 	  ft_lst_remove_first.c\
 	  ft_lst_size.c\

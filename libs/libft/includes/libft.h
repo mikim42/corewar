@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/15 21:31:19 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 01:18:40 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ int					ft_strbisect(char *str, char *mid, char **new1,
 double				ft_exp_dbl(int base, unsigned int power);
 double				ft_atodbl(const char *str);
 void				del_and_gnl(int fd, char **line);
+void				ft_lst_cond_remove(t_list **list,
+	int (*cond)(void *, size_t), void (*del)(void *, size_t));
 
 /*
 ** get_next_line.c

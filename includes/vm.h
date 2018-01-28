@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 22:59:50 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 01:19:48 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,6 @@ void							update_windows(t_master *m);
 ** main.c
 */
 int								main(int argc, char **argv);
-void							ft_lst_cond_remove(t_list **list, int (*cond)(void *, size_t), void (*del)(void *, size_t));
 int								process_should_die(void *process, size_t size);
 void							reap_processes(t_master *m);
 void							step_forward(t_master *m);
