@@ -88,57 +88,33 @@ void		reap_processes(t_master *m)
 	}
 }
 
-
 void		step_forward(t_master *m)
 {
-	/*
-	if (m->current_cycle == 3089)
-	{
-		m->forward = 0;
-		update_windows(m);
-		update_rainbow_road(m);
-		return ;
-	}
-	*/
 	if (m->show_winner)
 		return ;
-	if (m->cycle_to_die <= 0)
-	{
-		m->show_winner = 1;
-		update_windows(m);
-		update_rainbow_road(m);
-		return ;
-	}
-	m->current_cycle++;
-	m->ctd_counter++;
-	if (m->ctd_counter == m->cycle_to_die)
+	if ((m->ctd_counter)++ >= m->cycle_to_die)
 	{
 		if (m->nbr_lives < NBR_LIVE)
-			m->checks++;
+			(m->checks)++;
 		if (m->checks == MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
-			m->forward = 0;
 			m->checks = 0;
 		}
 		m->nbr_lives = 0;
 		m->ctd_counter = 0;
 		reap_processes(m);
-		if (m->process_list == 0)
-		{
+		if (m->cycle_to_die <= 0 || m->process_list == 0)
 			m->show_winner = 1;
-			update_windows(m);
-			update_rainbow_road(m);
-			return ;
-		}	
 	}
+	m->current_cycle++;
 	run_processes(m);
-	if (!(m->forward) || ++(m->fs_counter) >= m->frame_skip)
-	{
-		m->fs_counter = 0;
-		update_windows(m);
-		update_rainbow_road(m);
-	}
+	if (m->forward && !(m->show_winner) &&
+			++(m->fs_counter) < m->frame_skip)
+		return ;
+	m->fs_counter = 0;
+	update_windows(m);
+	update_rainbow_road(m);
 }
 
 void		run_processes(t_master *m)
