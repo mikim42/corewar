@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 15:33:00 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 00:52:07 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,20 @@ void		reap_processes(t_master *m)
 	}
 }
 
+void		build_last_cycle(t_master *m)
+{
+	m->current_cycle++;
+	reap_processes(m);
+	reap_processes(m);
+}
+
+
 void		step_forward(t_master *m)
 {
 	if (m->show_winner)
 		return ;
 	m->current_cycle++;
+	run_processes(m);
 	if (++(m->ctd_counter) >= m->cycle_to_die)
 	{
 		if (++(m->checks) >= MAX_CHECKS || m->nbr_lives >= NBR_LIVE)
@@ -106,11 +115,11 @@ void		step_forward(t_master *m)
 	}
 	if (m->cycle_to_die <= 0 || m->process_list == 0)
 		m->show_winner = 1;
-	else
-		run_processes(m);
 	if (m->forward && !(m->show_winner) &&
 			++(m->fs_counter) < m->frame_skip)
 		return ;
+	if (m->show_winner)
+		build_last_cycle(m);
 	m->fs_counter = 0;
 	update_windows(m);
 	update_rainbow_road(m);

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 14:38:57 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/27 22:59:50 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,6 +322,7 @@ void							display_core(t_master *m);
 void							find_lives(t_master *m);
 int								whose_pid(t_process *process, t_master *m);
 void							highlight_pid(t_process *process, t_master *m);
+int								total_processes(t_master *m);
 void							display_control(t_master *m);
 void							display_players(t_master *m);
 void							display_player(int i, t_master *m);

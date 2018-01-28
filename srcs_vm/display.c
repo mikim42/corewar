@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:45:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 14:46:29 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 00:19:21 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,17 +116,32 @@ void		highlight_pid(t_process *process, t_master *m)
 	wattroff(m->win_core, WA_BOLD);
 }
 
+int		total_processes(t_master *m)
+{
+	int	total;
+	int	i;
 
+	total = 0;
+	i = -1;
+	while (++i < m->player_count)
+	{
+		total += m->player[i].process_count;
+	}
+	return (total);
+}
 
 void	display_control(t_master *m)
 {
 	wmove(m->win_control, 0, 0);
-	wprintw(m->win_control, "\n\n  *PAUSE*\n");
+	
+	wprintw(m->win_control, "\n  %s\n",
+		(m->forward ? "*FAST FORWARD*" : "*PAUSE*"));
+	wprintw(m->win_control, "  Frame Skip:\t\t%d\n", m->frame_skip);
 
-	wprintw(m->win_control, "  Frame Skip:\t\t%d\n\n", m->frame_skip);
+	wprintw(m->win_control, "\n  Total Processes:\t%d\n", total_processes(m));
 
-	wprintw(m->win_control, "  Cycles:\t\t%d\n\n", m->current_cycle);
-	wprintw(m->win_control, "  CYCLE_TO_DIE:\t\t%d/%d\n",
+	wprintw(m->win_control, "\n  Cycles:\t\t%d\n", m->current_cycle);
+	wprintw(m->win_control, "\n  CYCLE_TO_DIE:\t\t%d/%d\n",
 			m->ctd_counter, m->cycle_to_die);
 	wprintw(m->win_control, "  CYCLE_DELTA:\t\t%d\n", CYCLE_DELTA);
 	wprintw(m->win_control, "  NBR_LIVE:\t\t%d/%d\n", m->nbr_lives, NBR_LIVE);
@@ -176,12 +191,13 @@ void	display_player(int i, t_master *m)
 	wattroff(m->win_player[i], COLOR_PAIR(i + 1));
 	wprintw(m->win_player[i], "  COMMENT:\t%.33s\n", m->player[i].comment);
 	wprintw(m->win_player[i], "  PLAYER ID:\t%X\n", m->player[i].id);
+	
 	wprintw(m->win_player[i], "\n  PROCESSES:\t%d\n",
 			m->player[i].process_count);
 	wprintw(m->win_player[i], "\n  LAST LIVE:\t%d\n", m->player[i].cycle_last_live);
 	wprintw(m->win_player[i], "  LIVES:\t%d\n", m->player[i].lives);
 	wprintw(m->win_player[i], "  PREV LIVES:\t%d\n", m->player[i].last_lives);
-//	wprintw(m->win_player[i], "\n  AFF:\t\t%.33s\n", m->player[i].afflog);
+	
 	wprintw(m->win_player[i], "\n  AFF:");
 	wattron(m->win_player[i], COLOR_PAIR(i + 1));
 	wprintw(m->win_player[i], "\n  %.45s", m->player[i].afflog);
