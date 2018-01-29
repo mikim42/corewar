@@ -6,12 +6,64 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 18:12:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:05:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
+int		read_args(int argc, char **argv, t_master *m)
+{
+	int	i;
+	if (argc == 1)
+		return (ft_puterror(ERROR_USAGE, 0));
+	i = 0;
+	while (++i < argc)
+	{
+		if (parse_arg(&i, argv, m))
+			return (1);
+	}
+	init_progs(m);
+	return (0);
+}
+
+// first try to parse as flag
+// if fail, then try to read as an input program
+int		parse_arg(int *i, char **argv, t_master *m)
+{
+	if (ft_strequ(argv[*i], "-e"))
+	{
+		m->e_flag = 1;
+		return (0);
+	}
+	if (ft_strnequ(argv[*i], "-d", 2) &&
+		ft_atoi_check(argv[*i], &(m->d_flag)) == 0)
+		return (0);
+	if (ft_strnequ(argv[*i], "-n", 2) && !ft_atoi_check(argv[*i], &(m->n_flag))
+		&& 1 <= m->n_flag &&m->n_flag <= 4)
+		return (read_player(argv[++(*i)], m));
+	return (read_player(argv[*i], m));
+}
+
+int		read_player(char *argv, t_master *m)
+{
+	if (m->open_spot == 4)
+		return (ft_puterror(ERROR_MANY_PLAYERS, 1));
+	if (m->n_flag != 0)
+	{
+		m->player[m->open_spot].n_flag_pos = m->n_flag;
+		m->n_flag = 0;
+	}
+	m->player[m->open_spot].id = P1_ID - m->player_count++;
+	m->player[m->open_spot].master = m;
+	if (read_file(argv, m->player + m->open_spot))
+		return (1);
+	m->open_spot++;
+	return (0);
+}
+
+
+/*
 int		read_players(int argc, char **argv, t_master *m)
 {
 	int	i;
@@ -19,6 +71,11 @@ int		read_players(int argc, char **argv, t_master *m)
 	i = 0;
 	while (++i < argc)
 	{
+		if (m->n_flag != 0)
+		{
+			m->player[i - 1].n_flag_pos = m->n_flag;
+			m->n_flag;
+		}
 		m->player[i - 1].id = P1_ID - m->player_count++;
 		m->player[i - 1].master = m;
 		if (read_file(argv[i], m->player + i - 1))
@@ -27,6 +84,7 @@ int		read_players(int argc, char **argv, t_master *m)
 	init_progs(m);
 	return (0);
 }
+*/
 
 int		read_file(char *filename, t_player *p)
 {

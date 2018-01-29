@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 18:11:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:25:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ int			main(int argc, char **argv)
 	ft_bzero(&m, sizeof(t_master));
 	m.cycle_to_die = CYCLE_TO_DIE;
 	m.ctd_counter = 0;
-	if (argc == 1 || argc > 5)
-		return (ft_puterror(ERROR_USAGE, 0));
-	if (read_players(argc, argv, &m))
+//	if (argc == 1 || argc > 5)
+//		return (ft_puterror(ERROR_USAGE, 0));
+//	if (read_players(argc, argv, &m))
+//		return (1);
+	if (read_args(argc, argv, &m))
 		return (1);
 	init_ncurses_stuffz(&m);
 	init_rainbow_road(&m);

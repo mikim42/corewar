@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 18:15:55 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:02:42 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@
 # define ERROR_HEADER			"Invalid header"
 # define ERROR_FORMAT			"Invalid format"
 # define ERROR_CHAMP_SIZE		"Champion program size is too large"
+# define ERROR_MANY_PLAYERS		"Too many players"
 
 # define WIN_WIDTH				1300
 # define WIN_HEIGHT				1300
@@ -137,6 +138,7 @@ typedef struct					s_sprite
 typedef struct					s_player
 {
 	unsigned int				id;
+	int							n_flag_pos;
 	int							color;
 	char						name[PROG_NAME_LENGTH + 1];
 	char						comment[COMMENT_LENGTH + 1];
@@ -210,7 +212,11 @@ typedef struct					s_master
 	t_player					*winner;
 	int							show_winner;
 
-	int							e_flag;	
+	int							e_flag;
+	int							d_flag;
+	int							n_flag;
+	int							open_spot;
+	
 
 }								t_master;
 
@@ -239,8 +245,13 @@ void							draw_sprite(t_sprite *sprite, int x, int y,
 /*
 ** read.c
 */
-int								read_players(int argc, char **argv,
-												t_master *m);
+int								read_args(int argc, char **argv, t_master *m);
+int								parse_arg(int *i, char **argv, t_master *m);
+int								read_player(char *argv, t_master *m);
+
+
+
+//int								read_players(int argc, char **argv, t_master *m);
 int								read_file(char *filename, t_player *p);
 int								read_everything(int fd, t_player *p);
 void							init_progs(t_master *m);
