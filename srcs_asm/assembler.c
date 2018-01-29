@@ -12,29 +12,6 @@
 
 #include "assembler.h"
 
-void		write_byteswapped(void *dst, void *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[n - i - 1];
-		i++;
-	}
-}
-
-int			is_valid_label(char *label)
-{
-	while (*label && *(label + 1))
-	{
-		if (!ft_strchr(LABEL_CHARS, *label))
-			return (0);
-		label++;
-	}
-	return (*label == LABEL_CHAR);
-}
-
 long		preprocess(char *source, char *ref, char *dst, size_t size)
 {
 	size_t	i;
@@ -89,6 +66,35 @@ char		**parse_source(char *source, t_program *program)
 			break ;
 	}
 	return (split_syntax(source));
+}
+
+void		the_assemble_part_two(char **assembly, t_program **program)
+{
+	t_list	*labels;
+	int		error;
+	size_t	i;
+
+	i = 0;
+	*program = init_program(assembly, *program, &labels, 0);
+	if ((*program)->header.magic)
+		while (*program && assembly[i])
+		{
+			error = assemble(assembly, &i, *program, labels);
+			if (error >= 0)
+			{
+				(!error) ? i++ : 0;
+				(*program)->header.prog_size += error;
+			}
+			else
+				ft_memdel((void **)program);
+		}
+	else
+		ft_memdel((void **)program);
+	ft_lstdel(&labels, (void (*)(void *, size_t))free);
+	i = 0;
+	while (assembly[i])
+		free(assembly[i++]);
+	free(assembly);
 }
 
 t_program	*the_assemble_everything_function(char *source)

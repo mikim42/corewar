@@ -12,6 +12,18 @@
 
 #include "assembler.h"
 
+void		write_byteswapped(void *dst, void *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[n - i - 1];
+		i++;
+	}
+}
+
 long		reg_arg(char *argument, t_asm_ctx *ctx)
 {
 	size_t	i;

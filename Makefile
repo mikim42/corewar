@@ -42,9 +42,9 @@ SRC_VM = curses.c \
 
 SRC_ASM = main.c \
 		  assembler.c \
-		  assembler_two.c \
-		  assembler_three.c \
-		  assembler_four.c \
+		  init_program.c \
+		  instruction_parser.c \
+		  arg_parser.c \
 		  split_syntax.c \
 		  op_ext.c
 

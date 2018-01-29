@@ -12,6 +12,17 @@
 
 #include "assembler.h"
 
+int			is_valid_label(char *label)
+{
+	while (*label && *(label + 1))
+	{
+		if (!ft_strchr(LABEL_CHARS, *label))
+			return (0);
+		label++;
+	}
+	return (*label == LABEL_CHAR);
+}
+
 t_list		*create_label(char **assembly, t_list **labels, size_t i, size_t pc)
 {
 	t_list	*label;
@@ -85,33 +96,4 @@ t_program	*init_program(char **assembly, t_program *program,
 		ft_lstadd(labels, label);
 	}
 	return (resize_program(program, labels, pc));
-}
-
-void		the_assemble_part_two(char **assembly, t_program **program)
-{
-	t_list	*labels;
-	int		error;
-	size_t	i;
-
-	i = 0;
-	*program = init_program(assembly, *program, &labels, 0);
-	if ((*program)->header.magic)
-		while (*program && assembly[i])
-		{
-			error = assemble(assembly, &i, *program, labels);
-			if (error >= 0)
-			{
-				(!error) ? i++ : 0;
-				(*program)->header.prog_size += error;
-			}
-			else
-				ft_memdel((void **)program);
-		}
-	else
-		ft_memdel((void **)program);
-	ft_lstdel(&labels, (void (*)(void *, size_t))free);
-	i = 0;
-	while (assembly[i])
-		free(assembly[i++]);
-	free(assembly);
 }
