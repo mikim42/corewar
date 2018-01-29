@@ -29,7 +29,7 @@ start:
 		ld %0, r6
 		ld %1, r7
 		ld %16, r8
-		ld %210, r9
+		ld %210, r9					; jmp dist
 
 lspawn:
 live0:	live %0
