@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 17:47:33 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 18:11:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,7 @@ void		del_process(void *process, size_t size)
 		-(((t_process *)process)->player->id) - 1;
 	ft_memdel(&process);
 }
-/*
-void		del_process(void *process, size_t size)
-{
-	(void)size;
-	((t_process *)process)->player->process_count--;
-	ft_memdel(&process);
-}
-*/
+
 void		reap_processes(t_master *m)
 {
 	int			i;

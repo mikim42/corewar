@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 16:42:24 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 18:12:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,16 @@ int		read_file(char *filename, t_player *p)
 	int	fd;
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
-		return (ft_puterror(ERROR_OPEN_FILE, 1));
-	if (read_everything(fd, p))
+	{
+		ft_puterror(ERROR_OPEN_FILE, 1);
+		ft_printf("{poop} Invalid file: %s\n", filename);
 		return (1);
+	}
+	if (read_everything(fd, p))
+	{
+		ft_printf("{poop} Invalid file: %s\n", filename);
+		return (1);
+	}
 	if (close(fd) == -1)
 		return (ft_puterror(ERROR_CLOSE_FILE, 1));
 	return (0);
@@ -47,7 +54,7 @@ int		read_everything(int fd, t_player *p)
 
 	// check header
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\x00\xea\x83\xf3", 4) == 0))
-		return (1);
+		return (ft_puterror(ERROR_HEADER, 1));
 
 	// read player name, no error checking
 	read(fd, p->name, PROG_NAME_LENGTH);
@@ -55,15 +62,15 @@ int		read_everything(int fd, t_player *p)
 	//	p->name[PROG_NAME_LENGTH] = '\0';
 	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
-		return (1);
+		return (ft_puterror(ERROR_FORMAT, 1));
 
 	// check program size given in next 4 bytes
 	if (!(read(fd, buf, 4) == 4))
-		return (1);
+		return (ft_puterror(ERROR_FORMAT, 1));
 	p->prog_size = (unsigned int)buf[3] | ((unsigned int)buf[2] << 8) |
 		((unsigned int)buf[1] << 16) | ((unsigned int)buf[0] << 24);
 	if (p->prog_size > CHAMP_MAX_SIZE)
-		return (1);
+		return (ft_puterror(ERROR_CHAMP_SIZE, 1));
 
 	// read player comment, no error checking
 	read(fd, p->comment, COMMENT_LENGTH);
@@ -72,13 +79,13 @@ int		read_everything(int fd, t_player *p)
 
 	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
-		return (1);
+		return (ft_puterror(ERROR_FORMAT, 1));
 
 	// read the program up to the given size
 	p->prog = malloc(sizeof(unsigned char) * p->prog_size);
 	if (!(read(fd, p->prog, p->prog_size) == p->prog_size &&
 		read(fd, buf, 4) == 0))
-		return (1);
+		return (ft_puterror(ERROR_FORMAT, 1));
 	return (0);
 }
 

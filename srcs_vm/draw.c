@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:51:50 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 16:59:27 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 18:18:50 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,32 +67,13 @@ void	draw_process_pc(t_master *m)
 	while (process_list != 0)
 	{
 		process = process_list->content;
-		draw_big_square(m->core[process->pc].x - 2,
-			m->core[process->pc].y - 2,
-			color_table[-(process->player->id)], m);
-/*		
-		draw_sprite(m->sprite_table[-(process->player->id) - 1],
-			m->core[process->pc].x - 7, m->core[process->pc].y - 7, m);
-*/
+		if (m->e_flag)
+			draw_sprite(m->sprite_table[-(process->player->id) - 1],
+				m->core[process->pc].x - 7, m->core[process->pc].y - 7, m);
+		else
+			draw_big_square(m->core[process->pc].x - 2,
+				m->core[process->pc].y - 2,
+				color_table[-(process->player->id)], m);
 		process_list = process_list->next;
 	}
 }
-/*
-void	draw_dead_process_pc(t_master *m)
-{
-	t_list		*temp;
-	t_process	*process;
-
-	while (m->process_limbo != 0)
-	{
-		process = m->process_limbo->content;
-		
-		draw_sprite(m->sprite_table[0], m->core[process->pc].x - 7,
-			m->core[process->pc].y - 7, m);
-		ft_memdel((void **)&process);
-		temp = m->process_limbo;
-		m->process_limbo = m->process_limbo->next;
-		ft_memdel((void **)&temp);
-	}
-}
-*/

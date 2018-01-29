@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 17:45:26 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 18:13:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void		update_rainbow_road(t_master *m)
 				m->core[i].y - 7, m);
 	}
 	draw_process_pc(m);
-//	draw_dead_process_pc(m);
 	mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
 	str = ft_itoa(m->current_cycle);
 	mlx_string_put(m->mlx, m->win, 0, 0, DEF_COLOR, "CYCLE: ");

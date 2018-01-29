@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 17:49:39 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 18:15:55 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,15 @@
 "          \\/____/                  \\|___|"
 
 
-# define ERROR_USAGE			"usage: vm [player1.cor] [player2.cor]"\
+# define ERROR_USAGE			"usage: vm player1.cor [player2.cor]"\
 								"[player3.cor] [player4.cor]"
 # define ERROR_OPEN_FILE		"No such file"
 # define ERROR_CLOSE_FILE		"Cannot close file"
 # define ERROR_SPRITE			"Sprite file not found"
 # define ERROR_MEMORY			"Out of memory"
+# define ERROR_HEADER			"Invalid header"
+# define ERROR_FORMAT			"Invalid format"
+# define ERROR_CHAMP_SIZE		"Champion program size is too large"
 
 # define WIN_WIDTH				1300
 # define WIN_HEIGHT				1300
@@ -179,12 +182,8 @@ typedef struct					s_master
 	int							bpp;
 	int							size_line;
 	int							endian;
-
 	t_sprite					*sprite_table[MAX_PLAYERS];
 	t_sprite					*sprite_x_table[MAX_PLAYERS];
-//	t_sprite					*sprite_x;
-
-	int							forward;
 
 	WINDOW						*win_banner;
 	WINDOW						*win_core;
@@ -192,15 +191,14 @@ typedef struct					s_master
 	WINDOW						*win_player[MAX_PLAYERS];
 	WINDOW						*win_extra;
 
-	int							current_cycle;
+	int							forward;
 	int							frame_skip;
 	int							fs_counter;
 
-	unsigned int				nbr_lives;
-
+	int							current_cycle;
 	int							cycle_to_die;
 	int							ctd_counter;
-
+	unsigned int				nbr_lives;
 	int							checks;
 
 	int							player_count;
@@ -208,12 +206,11 @@ typedef struct					s_master
 
 	t_core						core[MEM_SIZE];
 	t_list						*process_list;
-//	t_list						*process_limbo;
 
 	t_player					*winner;
 	int							show_winner;
 
-	
+	int							e_flag;	
 
 }								t_master;
 
