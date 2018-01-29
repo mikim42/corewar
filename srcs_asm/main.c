@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/25 20:42:55 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 16:38:04 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,6 @@ long	throw_verr(char *format, long f0, long f1, long f2)
 	ft_printf("\n");
 	g_result = -1;
 	return (-1);
-}
-
-char	*ft_readfile(char *path)
-{
-	char	*buffer;
-	size_t	size;
-	int		fd;
-
-	if ((fd = open(path, O_RDONLY, 0)) < 0)
-		return (NULL);
-	size = lseek(fd, 0, SEEK_END);
-	if ((size < 1) || !(buffer = ft_memalloc(size + 1)))
-		return (NULL);
-	lseek(fd, 0, SEEK_SET);
-	read(fd, buffer, size);
-	close(fd);
-	return (buffer);
 }
 
 void	create_binary(t_program *program, char *name, size_t size)
@@ -69,6 +52,23 @@ void	create_binary(t_program *program, char *name, size_t size)
 	else
 		throw_error("Failed to allocate memory!", 0);
 	free(program);
+}
+
+char	*ft_readfile(char *path)
+{
+	char	*buffer;
+	size_t	size;
+	int		fd;
+
+	if ((fd = open(path, O_RDONLY, 0)) < 0)
+		return (NULL);
+	size = lseek(fd, 0, SEEK_END);
+	if ((size < 1) || !(buffer = ft_memalloc(size + 1)))
+		return (NULL);
+	lseek(fd, 0, SEEK_SET);
+	read(fd, buffer, size);
+	close(fd);
+	return (buffer);
 }
 
 int		main(int argc, char **argv)
