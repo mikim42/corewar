@@ -1,18 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functions_three.c                                  :+:      :+:    :+:   */
+/*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 18:42:45 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/27 03:06:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:51:03 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int		validate_args(t_process *process, t_master *m)
+size_t			count_bytes(unsigned char arg_code, int short_dir)
+{
+	if (arg_code == REG_CODE)
+		return (1);
+	else if (arg_code == IND_CODE)
+		return (2);
+	else if (arg_code == DIR_CODE && short_dir)
+		return (2);
+	else if (arg_code == DIR_CODE && !short_dir)
+		return (4);
+	return (0);
+}
+
+int				is_valid_reg(unsigned char reg_num)
+{
+	return (reg_num >= 0 && reg_num < REG_NUMBER);
+}
+
+unsigned char	get_type(t_process *process, t_master *m, unsigned int i)
+{
+	unsigned char	type;
+
+	type = m->core[(process->pc + 1) % MEM_SIZE].value;
+	type = (type >> (2 * (3 - i))) & 3;
+	return (type);
+}
+
+int				validate_args(t_process *process, t_master *m)
 {
 	unsigned char	index;
 	unsigned char	type;
@@ -39,7 +66,7 @@ int		validate_args(t_process *process, t_master *m)
 	return (1);
 }
 
-size_t	instruction_length(t_process *process, t_master *m)
+size_t			instruction_length(t_process *process, t_master *m)
 {
 	unsigned char	index;
 	unsigned char	type;

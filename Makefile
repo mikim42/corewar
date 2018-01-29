@@ -10,7 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC_VM = curses.c \
+SRC_VM = core_io.c \
+		 curses.c \
 		 debug.c \
 		 display.c \
 		 do_live.c \
@@ -31,14 +32,13 @@ SRC_VM = curses.c \
 		 do_aff.c \
 		 draw.c \
 		 keys.c \
-		 functions.c \
-		 functions_two.c \
-		 functions_three.c \
 		 main.c \
 		 op_ext.c \
 		 rainbow_road.c \
 		 read.c \
-		 sprite.c
+		 read_arg.c \
+		 sprite.c \
+		 validation.c
 
 SRC_ASM = main.c \
 		  assembler.c \

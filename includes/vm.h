@@ -313,16 +313,33 @@ void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);
 
 /*
-** functions.c
+** core_io.c
 */
-size_t							count_bytes(unsigned char arg_code,
-											int short_dir);
-int								is_valid_reg(unsigned char reg_num);
 short							read_short(t_master *m, unsigned int offset);
 int								read_int(t_master *m, unsigned int offset);
 void							write_int(t_process *process, t_master *m,
 											unsigned int offset, int value);
 
+/*
+** read_arg.c
+*/
+int								read_reg_exact(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_ind_exact(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_arg(t_process *process, t_master *m,
+												unsigned int arg);
+int								read_larg(t_process *process, t_master *m,
+												unsigned int arg);
+
+/*
+** validation.c
+*/
+size_t							count_bytes(unsigned char arg_code,
+											int short_dir);
+int								is_valid_reg(unsigned char reg_num);
+unsigned char					get_type(t_process *process, t_master *m,
+												unsigned int i);
 int								validate_args(t_process *process, t_master *m);
 size_t							instruction_length(t_process *process,
 													t_master *m);
@@ -409,16 +426,6 @@ void							do_aff(t_process *process, t_master *m);
 void							append_afflog(unsigned int reg_num,
 											t_process *process);
 
-unsigned char					get_type(t_process *process, t_master *m,
-												unsigned int i);
-int								read_larg(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_arg(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_ind_exact(t_process *process, t_master *m,
-												unsigned int arg);
-int								read_reg_exact(t_process *process, t_master *m,
-												unsigned int arg);
 /*
 ** debug.c
 */

@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functions_two.c                                    :+:      :+:    :+:   */
+/*   read_arg.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/26 18:08:50 by mikim             #+#    #+#             */
-/*   Updated: 2018/01/26 20:10:54 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:50:43 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-
-unsigned char	get_type(t_process *process, t_master *m, unsigned int i)
-{
-	unsigned char	type;
-
-	type = m->core[(process->pc + 1) % MEM_SIZE].value;
-	type = (type >> (2 * (3 - i))) & 3;
-	return (type);
-}
 
 int				read_reg_exact(t_process *process,
 								t_master *m, unsigned int arg)

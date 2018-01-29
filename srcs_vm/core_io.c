@@ -1,34 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   functions.c                                        :+:      :+:    :+:   */
+/*   core_io.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 15:53:27 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 20:09:45 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 19:50:30 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-
-size_t		count_bytes(unsigned char arg_code, int short_dir)
-{
-	if (arg_code == REG_CODE)
-		return (1);
-	else if (arg_code == IND_CODE)
-		return (2);
-	else if (arg_code == DIR_CODE && short_dir)
-		return (2);
-	else if (arg_code == DIR_CODE && !short_dir)
-		return (4);
-	return (0);
-}
-
-int			is_valid_reg(unsigned char reg_num)
-{
-	return (reg_num >= 0 && reg_num < REG_NUMBER);
-}
 
 short		read_short(t_master *m, unsigned int offset)
 {
