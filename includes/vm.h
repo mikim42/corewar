@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:37:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 01:18:04 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@
 
 # define SQ_SIZE				3
 # define BIG_SQ_SIZE			7
+# define HUGE_SQ_SIZE			600
 
 # define DEF_COLOR				0xC0C0C0
 # define P1_COLOR				0x00FF00
@@ -128,6 +129,11 @@
 # define SPRITE_03				"sprites/virus.sprite"
 # define SPRITE_X				"sprites/red-x.sprite"
 
+# define SPRITE_LARGE_00		"sprites/burger_large.sprite"
+# define SPRITE_LARGE_01		"sprites/chicken_large.sprite"
+# define SPRITE_LARGE_02		"sprites/robot_large.sprite"
+# define SPRITE_LARGE_03		"sprites/virus_large.sprite"
+
 /*
 ** Display-related
 */
@@ -140,7 +146,6 @@
 ** Mechanic-related
 */
 # define P1_ID					0xFFFFFFFF
-
 
 typedef struct					s_sprite
 {
@@ -201,6 +206,7 @@ typedef struct					s_master
 	int							size_line;
 	int							endian;
 	t_sprite					*sprite_table[MAX_PLAYERS];
+	t_sprite					*sprite_large_table[MAX_PLAYERS];
 	t_sprite					*sprite_x_table[MAX_PLAYERS];
 
 	WINDOW						*win_banner;
@@ -233,8 +239,6 @@ typedef struct					s_master
 	int							d_flag;
 	int							n_flag;
 	int							open_spot;
-	
-
 }								t_master;
 
 /*
@@ -254,7 +258,6 @@ int								init_sprite_dimen(t_sprite *sprite, int fd);
 void							read_sprite_data(t_sprite *sprite, int fd);
 void							draw_sprite(t_sprite *sprite, int x, int y,
 											t_master *m);
-
 /*
 ** shuffle.c
 */
@@ -296,6 +299,7 @@ int								init_minilibx(t_master *m);
 void							assign_core_pos(t_master *m);
 int								init_rainbow_road(t_master *m);
 void							update_rainbow_road(t_master *m);
+void							draw_winner(t_master *m);
 
 /*
 ** display_core.c
@@ -367,13 +371,13 @@ void							write_int(t_process *process, t_master *m,
 ** read_arg.c
 */
 int								read_reg_exact(t_process *process, t_master *m,
-												unsigned int arg);
+											unsigned int arg);
 int								read_ind_exact(t_process *process, t_master *m,
-												unsigned int arg);
+											unsigned int arg);
 int								read_arg(t_process *process, t_master *m,
-												unsigned int arg);
+											unsigned int arg);
 int								read_larg(t_process *process, t_master *m,
-												unsigned int arg);
+											unsigned int arg);
 
 /*
 ** validation.c
@@ -382,10 +386,10 @@ size_t							count_bytes(unsigned char arg_code,
 											int short_dir);
 int								is_valid_reg(unsigned char reg_num);
 unsigned char					get_type(t_process *process, t_master *m,
-												unsigned int i);
+											unsigned int i);
 int								validate_args(t_process *process, t_master *m);
 size_t							instruction_length(t_process *process,
-													t_master *m);
+											t_master *m);
 
 /*
 ** do_live.c

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 16:26:14 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 17:37:44 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 01:22:54 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ int			init_sprite_table(t_master *m)
 	if (load_sprite(m->sprite_table + 0, SPRITE_00) ||
 		load_sprite(m->sprite_table + 1, SPRITE_01) ||
 		load_sprite(m->sprite_table + 2, SPRITE_02) ||
-		load_sprite(m->sprite_table + 3, SPRITE_03))
+		load_sprite(m->sprite_table + 3, SPRITE_03) ||
+		load_sprite(m->sprite_large_table + 0, SPRITE_LARGE_00) ||
+		load_sprite(m->sprite_large_table + 1, SPRITE_LARGE_01) ||
+		load_sprite(m->sprite_large_table + 2, SPRITE_LARGE_02) ||
+		load_sprite(m->sprite_large_table + 3, SPRITE_LARGE_03))
 		return (1);
 	return (0);
 }

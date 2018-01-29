@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:04:07 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 01:26:16 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ int						init_minilibx(t_master *m)
 			&(m->endian))))
 		return (ft_puterror(ERROR_MEMORY, 1));
 	m->bpp /= 8;
-	if (init_sprite_table(m) || (init_sprite_x_table(m)))
-		return (1);
+	if (m->e_flag)
+	{
+		if (init_sprite_table(m) || (init_sprite_x_table(m)))
+			return (1);
+	}
 	assign_core_pos(m);
 	mlx_hook(m->win, 2, 0, key_press_hook, m);
 	mlx_loop_hook(m->mlx, loop_hook, m);
@@ -95,9 +98,45 @@ void					update_rainbow_road(t_master *m)
 				m->core[i].y - 7, m);
 	}
 	draw_process_pc(m);
+	draw_winner(m);
 	mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
 	str = ft_itoa(m->current_cycle);
 	mlx_string_put(m->mlx, m->win, 0, 0, DEF_COLOR, "CYCLE: ");
 	mlx_string_put(m->mlx, m->win, 80, 0, DEF_COLOR, str);
 	ft_strdel(&str);
+}
+
+void					draw_winner(t_master *m)
+{
+	static const int	color_table[5] = {
+		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
+	int					i;
+	int					j;
+	int					x;
+	int					y;
+	
+	if (m->winner == 0)
+		return ;
+	x = WIN_WIDTH / 2 - HUGE_SQ_SIZE / 2;
+	y = WIN_HEIGHT / 2 - HUGE_SQ_SIZE / 2;
+	if (m->e_flag)
+	{
+		draw_sprite(m->sprite_large_table[-(m->winner->id) - 1], x, y, m);
+		return ;
+	}
+	i = -1;
+	while (++i < HUGE_SQ_SIZE)
+	{
+		j = -1;
+		while (++j < HUGE_SQ_SIZE)
+			draw_dot(x + j, y + i, color_table[-(m->winner->id)], m);
+	}
+	i = -1;
+	while (++i < HUGE_SQ_SIZE)
+	{
+		draw_dot(x + i, y, DEF_COLOR, m);
+		draw_dot(x + i, y + HUGE_SQ_SIZE, DEF_COLOR, m);
+		draw_dot(x, y + i, DEF_COLOR, m);
+		draw_dot(x + HUGE_SQ_SIZE, y + i, DEF_COLOR, m);
+	}
 }

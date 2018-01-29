@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 23:48:32 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 01:32:11 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void		build_last_cycle(t_master *m)
 	ft_lstdel(&(m->process_list), del_process);
 }
 
-
 void		step_forward(t_master *m)
 {
 	if (m->show_winner)
@@ -47,15 +46,15 @@ void		step_forward(t_master *m)
 		{
 			m->cycle_to_die -= CYCLE_DELTA;
 			m->checks = 0;
-			if (m->stop_at_death)
-			{
-				m->stop_at_death = 0;
-				m->forward = 0;
-			}
 		}
 		m->nbr_lives = 0;
 		m->ctd_counter = 0;
 		reap_processes(m);
+		if (m->stop_at_death)
+		{
+			m->stop_at_death = 0;
+			m->forward = 0;
+		}
 	}
 	if (m->cycle_to_die <= 0 || m->process_list == 0)
 		m->show_winner = 1;
