@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 14:09:54 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/25 22:39:43 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 16:47:57 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ char				**split_syntax(const char *str);
 
 void				write_byteswapped(void *dst, void *src, size_t n);
 t_program			*the_assemble_everything_function(char *source);
+void				the_assemble_part_two(char **assembly, t_program **program);
 
 long				throw_error(char *string, long result);
 long				throw_verr(char *format, long f0, long f1, long f2);
