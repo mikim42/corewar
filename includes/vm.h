@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 16:06:15 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 16:07:29 by mikim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,10 +211,6 @@ typedef struct					s_master
 
 typedef char					t_arg_type;
 typedef void					(*t_func)(t_process *, t_master *);
-
-/*
-** op_ext.c - just the assembly instruction table lol
-*/
 
 /*
 ** keys.c
