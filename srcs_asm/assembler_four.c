@@ -73,6 +73,12 @@ t_list		*create_label(char **assembly, t_list **labels, size_t i, size_t pc)
 {
 	t_list	*label;
 
+	if (!is_valid_label(assembly[i]))
+	{
+		ft_lstdel(labels, (void (*)(void *, size_t))free);
+		throw_verr(INVALID_LABEL, (long)assembly[i], 0, 0);
+		return (NULL);
+	}
 	label = *labels;
 	while (label)
 	{
@@ -85,12 +91,10 @@ t_list		*create_label(char **assembly, t_list **labels, size_t i, size_t pc)
 		label = label->next;
 	}
 	if (!(label = ft_lstnew(assembly[i], ft_strlen(assembly[i]) + 1)))
-	{
-		ft_lstdel(labels, (void (*)(void *, size_t))free);
 		throw_error(ALLOC_FAIL, 0);
-		return (NULL);
-	}
-	label->content_size = pc;
+	if (!label)
+		ft_lstdel(labels, (void (*)(void *, size_t))free);
+	label ? label->content_size = pc : (void)0;
 	return (label);
 }
 

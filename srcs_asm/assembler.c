@@ -12,6 +12,17 @@
 
 #include "assembler.h"
 
+int			is_valid_label(char *label)
+{
+	while (*label && *(label + 1))
+	{
+		if (!ft_strchr(LABEL_CHARS, *label))
+			return (0);
+		label++;
+	}
+	return (*label == LABEL_CHAR);
+}
+
 void		the_assemble_part_two(char **assembly, t_program **program)
 {
 	t_list	*labels;

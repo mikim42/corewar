@@ -24,13 +24,14 @@
 # define EOF_ERR "'%s' reaches EOF!"
 
 # define INVALID_REG "Invalid type 'REG' for %s, argument %lu!"
-# define BAD_REG "Bad 'REG' value; '%s'!"
+# define BAD_REG "Bad 'REG' value, '%s'!"
 
+# define INVALID_LABEL "Invalid label, '%s'!"
 # define DUP_LABEL "Duplicate label, '%s'!"
-# define UNDEF_LABEL "Undefined label '%s'!"
+# define UNDEF_LABEL "Undefined label, '%s'!"
 
 # define INVALID_DIR "Invalid type 'DIRECT' for '%s', argument %lu!"
-# define BAD_DIRECT "Bad 'DIRECT' value; '%s'!"
+# define BAD_DIRECT "Bad 'DIRECT' value, '%s'!"
 
 # define INVALID_INST "Invalid instruction '%s'!"
 # define FILE_ABRUPT "File ended abruptly!"
@@ -72,6 +73,7 @@ long				ind_arg(char *argument, t_asm_ctx *ctx,
 long				check_arg(char *assem, t_asm_ctx *ctx,
 						t_program *program, t_list *labels);
 
+int					is_valid_label(char *label);
 t_list				*create_label(char **assembly, t_list **labels,
 							size_t i, size_t pc);
 long				assemble(char **assembly, size_t *i,
