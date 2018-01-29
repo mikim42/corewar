@@ -25,6 +25,7 @@ typedef struct					s_op
 	char						*debug;
 	int							type_byte;
 	int							short_dir;
+	void						(*func)();
 }								t_op;
 
 extern t_op						g_op_tab[17];
