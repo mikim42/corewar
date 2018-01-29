@@ -1,16 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   temp.c                                             :+:      :+:    :+:   */
+/*   sprite.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 16:26:14 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/25 00:23:49 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 17:37:44 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
+
+int			init_sprite_x_table(t_master *m)
+{
+	int		i;
+	int		red;
+
+	i = -1;
+	while (++i < MAX_PLAYERS)
+		if (load_sprite(m->sprite_x_table + i, SPRITE_X))
+			return (1);
+	i = -1;
+	while (++i < m->sprite_x_table[0]->width * m->sprite_x_table[0]->height)
+	{
+		red = (m->sprite_x_table[0]->color[i] & 0xFF0000) >> 16;
+		m->sprite_x_table[0]->color[i] = (red << 8);
+		m->sprite_x_table[1]->color[i] = (red << 16) | (red << 8);
+		m->sprite_x_table[2]->color[i] = (red << 16) | (red << 0);
+		m->sprite_x_table[3]->color[i] = (red << 8) | (red << 0);
+	}
+	return (0);
+}
 
 int			init_sprite_table(t_master *m)
 {

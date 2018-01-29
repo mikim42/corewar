@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/27 02:00:19 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 16:42:24 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int		read_players(int argc, char **argv, t_master *m)
 	while (++i < argc)
 	{
 		m->player[i - 1].id = P1_ID - m->player_count++;
+		m->player[i - 1].master = m;
 		if (read_file(argv[i], m->player + i - 1))
 			return (1);
 	}

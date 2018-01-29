@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/26 20:13:51 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 17:45:26 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			init_minilibx(t_master *m)
 			&(m->endian))))
 		return (ft_puterror(ERROR_MEMORY, 1));
 	m->bpp /= 8;
-	if (init_sprite_table(m))
+	if (init_sprite_table(m) || (init_sprite_x_table(m)))
 		return (1);
 	assign_core_pos(m);
 	mlx_hook(m->win, 2, 0, key_press_hook, m);
@@ -88,9 +88,15 @@ void		update_rainbow_road(t_master *m)
 	ft_bzero(m->frame, WIN_WIDTH * WIN_HEIGHT * m->bpp);
 	i = -1;
 	while (++i < MEM_SIZE)
+	{
 		draw_square(m->core[i].x, m->core[i].y,
 			color_table[m->core[i].owner], m);
+		if (m->core[i].death > m->current_cycle)
+			draw_sprite(m->sprite_x_table[m->core[i].dier], m->core[i].x - 7,
+				m->core[i].y - 7, m);
+	}
 	draw_process_pc(m);
+//	draw_dead_process_pc(m);
 	mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
 	str = ft_itoa(m->current_cycle);
 	mlx_string_put(m->mlx, m->win, 0, 0, DEF_COLOR, "CYCLE: ");

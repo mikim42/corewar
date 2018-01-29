@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 16:07:29 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/28 17:49:39 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@
 # define SPRITE_01				"sprites/chicken.sprite"
 # define SPRITE_02				"sprites/robot.sprite"
 # define SPRITE_03				"sprites/virus.sprite"
+# define SPRITE_X				"sprites/red-x.sprite"
 
 # define AFFLOG_SIZE			(45 * 3)
 
@@ -119,6 +120,7 @@
 
 # define MAX_FRAME_SKIP			100
 # define LIFEBAR_WIDTH			42
+# define DEATH_LEN				42
 
 typedef struct					s_sprite
 {
@@ -144,6 +146,7 @@ typedef struct					s_player
 	int							cycle_last_live;
 
 	int							process_count;
+	void						*master;
 }								t_player;
 
 typedef struct					s_process
@@ -163,6 +166,8 @@ typedef struct					s_core
 	int							owner;
 	int							x;
 	int							y;
+	int							death;
+	int							dier;
 }								t_core;
 
 typedef struct					s_master
@@ -176,6 +181,8 @@ typedef struct					s_master
 	int							endian;
 
 	t_sprite					*sprite_table[MAX_PLAYERS];
+	t_sprite					*sprite_x_table[MAX_PLAYERS];
+//	t_sprite					*sprite_x;
 
 	int							forward;
 
@@ -201,6 +208,7 @@ typedef struct					s_master
 
 	t_core						core[MEM_SIZE];
 	t_list						*process_list;
+//	t_list						*process_limbo;
 
 	t_player					*winner;
 	int							show_winner;
@@ -223,6 +231,7 @@ int								terminate(t_master *m);
 /*
 ** sprite.c
 */
+int								init_sprite_x_table(t_master *m);
 int								init_sprite_table(t_master *m);
 int								load_sprite(t_sprite **sprite, char *file);
 int								init_sprite_dimen(t_sprite *sprite, int fd);
@@ -249,6 +258,7 @@ void							draw_square(int x, int y, int color,
 void							draw_big_square(int x, int y, int color,
 											t_master *m);
 void							draw_process_pc(t_master *m);
+//void							draw_dead_process_pc(t_master *m);
 
 /*
 ** rainbow_road.c

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 01:20:40 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/28 17:47:33 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,24 @@ int			process_should_die(void *process, size_t size)
 
 void		del_process(void *process, size_t size)
 {
+	t_master	*m;
+
+	(void)size;
+	((t_process *)process)->player->process_count--;
+	m = ((t_process *)process)->player->master;
+	m->core[((t_process *)process)->pc].death = m->current_cycle + DEATH_LEN;
+	m->core[((t_process *)process)->pc].dier =
+		-(((t_process *)process)->player->id) - 1;
+	ft_memdel(&process);
+}
+/*
+void		del_process(void *process, size_t size)
+{
 	(void)size;
 	((t_process *)process)->player->process_count--;
 	ft_memdel(&process);
 }
-
-
+*/
 void		reap_processes(t_master *m)
 {
 	int			i;
