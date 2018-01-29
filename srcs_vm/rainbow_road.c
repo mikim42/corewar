@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 01:26:16 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 01:41:09 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int						init_minilibx(t_master *m)
 		!(m->win = mlx_new_window(m->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_NAME)) ||
 		!(m->img = mlx_new_image(m->mlx, WIN_WIDTH, WIN_HEIGHT)) ||
 		!(m->frame = mlx_get_data_addr(m->img, &(m->bpp), &(m->size_line),
-			&(m->endian))))
+			&(m->endian))) || init_sprite_x_table(m))
 		return (ft_puterror(ERROR_MEMORY, 1));
 	m->bpp /= 8;
 	if (m->e_flag)
 	{
-		if (init_sprite_table(m) || (init_sprite_x_table(m)))
+		if (init_sprite_table(m))
 			return (1);
 	}
 	assign_core_pos(m);
