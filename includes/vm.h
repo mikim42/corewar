@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 19:02:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 00:37:14 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@
 "                 \\/____/                          ~~             "\
 "          \\/____/                  \\|___|"
 
-
-# define ERROR_USAGE			"usage: vm player1.cor [player2.cor]"\
-								"[player3.cor] [player4.cor]"
+/*
+** Error Messages
+*/
+# define ERROR_USAGE			"usage: corewar [-e] [-dump nbr_cycle] "\
+"[[-n number] champion1.cor] ..."
 # define ERROR_OPEN_FILE		"No such file"
 # define ERROR_CLOSE_FILE		"Cannot close file"
 # define ERROR_SPRITE			"Sprite file not found"
@@ -94,17 +96,25 @@
 # define ERROR_HEADER			"Invalid header"
 # define ERROR_FORMAT			"Invalid format"
 # define ERROR_CHAMP_SIZE		"Champion program size is too large"
-# define ERROR_MANY_PLAYERS		"Too many players"
+# define ERROR_MANY_PLAYERS		"Too many champions (maximum of 4 allowed)"
+# define ERROR_FEW_PLAYERS		"Need at least one champion"
 
+/*
+** Minilibx
+*/
 # define WIN_WIDTH				1300
 # define WIN_HEIGHT				1300
 # define WIN_NAME				"CORE WAR"
 
+# define KEY_ESC				53
+# define KEY_SPACEBAR			49
+# define KEY_TAB				48
+# define RIGHT_ARROW			124
+# define UP_ARROW				126
+# define DOWN_ARROW				125
+
 # define SQ_SIZE				3
 # define BIG_SQ_SIZE			7
-
-# define RAD_TO_DEG(a)			((a) * 180.0 / M_PI)
-# define DEG_TO_RAD(a)			((a) * M_PI / 180.0)
 
 # define DEF_COLOR				0xC0C0C0
 # define P1_COLOR				0x00FF00
@@ -118,13 +128,19 @@
 # define SPRITE_03				"sprites/virus.sprite"
 # define SPRITE_X				"sprites/red-x.sprite"
 
-# define AFFLOG_SIZE			(45 * 3)
-
-# define P1_ID					0xFFFFFFFF
-
+/*
+** Display-related
+*/
 # define MAX_FRAME_SKIP			100
 # define LIFEBAR_WIDTH			42
 # define DEATH_LEN				42
+# define AFFLOG_SIZE			(45 * 3)
+
+/*
+** Mechanic-related
+*/
+# define P1_ID					0xFFFFFFFF
+
 
 typedef struct					s_sprite
 {
@@ -194,6 +210,7 @@ typedef struct					s_master
 	WINDOW						*win_extra;
 
 	int							forward;
+	int							stop_at_death;
 	int							frame_skip;
 	int							fs_counter;
 
@@ -220,14 +237,10 @@ typedef struct					s_master
 
 }								t_master;
 
-typedef char					t_arg_type;
-typedef void					(*t_func)(t_process *, t_master *);
-
 /*
 ** keys.c
 */
 int								key_press_hook(int keycode, t_master *m);
-int								key_release_hook(int keycode, t_master *m);
 int								loop_hook(t_master *m);
 int								terminate(t_master *m);
 
@@ -243,17 +256,26 @@ void							draw_sprite(t_sprite *sprite, int x, int y,
 											t_master *m);
 
 /*
-** read.c
+** shuffle.c
 */
-int								read_args(int argc, char **argv, t_master *m);
-int								parse_arg(int *i, char **argv, t_master *m);
+void							shuffle_players(t_master *m);
+void							shuffle_players_part_two(t_player array[],
+											t_master *m);
+int								empty_pos(t_player array[], int i, t_master *m);
+
+/*
+** parse.c
+*/
+int								parse_args(int argc, char **argv, t_master *m);
+int								parse_arg(int argc, int *i, char **argv,
+											t_master *m);
 int								read_player(char *argv, t_master *m);
-
-
-
-//int								read_players(int argc, char **argv, t_master *m);
 int								read_file(char *filename, t_player *p);
 int								read_everything(int fd, t_player *p);
+
+/*
+** init_progs.c
+*/
 void							init_progs(t_master *m);
 void							init_prog(int i, t_master *m);
 
@@ -266,7 +288,6 @@ void							draw_square(int x, int y, int color,
 void							draw_big_square(int x, int y, int color,
 											t_master *m);
 void							draw_process_pc(t_master *m);
-//void							draw_dead_process_pc(t_master *m);
 
 /*
 ** rainbow_road.c
@@ -277,21 +298,37 @@ int								init_rainbow_road(t_master *m);
 void							update_rainbow_road(t_master *m);
 
 /*
-** display.c - wprintw() to ncurses windows
+** display_core.c
 */
-void							puthex(unsigned char c, WINDOW *win);
-void							display_process_pc(t_master *m);
 void							display_core(t_master *m);
-void							find_lives(t_master *m);
-int								whose_pid(t_process *process, t_master *m);
-void							highlight_pid(t_process *process, t_master *m);
-int								total_processes(t_master *m);
-void							display_control(t_master *m);
-int								total_lives(t_master *m);
-void							display_lives_bar(t_master *m);
-int								total_last_lives(t_master *m);
-void							display_last_lives_bar(t_master *m);
+void							put_hex(unsigned char c, WINDOW *win);
 
+/*
+** display_process_pc.c
+*/
+void							display_process_pc(t_master *m);
+void							find_lives(t_master *m);
+void							highlight_pid(t_process *process, t_master *m);
+int								whose_pid(t_process *process, t_master *m);
+
+/*
+** display_control.c
+*/
+void							display_control(t_master *m);
+int								total_processes(t_master *m);
+void							display_winner(t_master *m);
+
+/*
+** display_lives_bar.c
+*/
+void							display_lives_bar(t_master *m);
+int								total_lives(t_master *m);
+void							display_last_lives_bar(t_master *m);
+int								total_last_lives(t_master *m);
+
+/*
+** display_players.c
+*/
 void							display_players(t_master *m);
 void							display_player(int i, t_master *m);
 
@@ -306,11 +343,17 @@ void							update_windows(t_master *m);
 ** main.c
 */
 int								main(int argc, char **argv);
-int								process_should_die(void *process, size_t size);
-void							reap_processes(t_master *m);
+void							build_last_cycle(t_master *m);
 void							step_forward(t_master *m);
 void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);
+
+/*
+** reap.c
+*/
+void							reap_processes(t_master *m);
+int								process_should_die(void *process, size_t size);
+void							del_process(void *process, size_t size);
 
 /*
 ** core_io.c
@@ -425,7 +468,6 @@ void							do_lfork(t_process *process, t_master *m);
 void							do_aff(t_process *process, t_master *m);
 void							append_afflog(unsigned int reg_num,
 											t_process *process);
-
 /*
 ** debug.c
 */

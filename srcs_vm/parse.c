@@ -1,47 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read.c                                             :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/23 22:24:31 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 19:05:36 by ashih            ###   ########.fr       */
+/*   Created: 2018/01/28 23:49:33 by ashih             #+#    #+#             */
+/*   Updated: 2018/01/28 23:53:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int		read_args(int argc, char **argv, t_master *m)
+int		parse_args(int argc, char **argv, t_master *m)
 {
 	int	i;
-	if (argc == 1)
-		return (ft_puterror(ERROR_USAGE, 0));
+
 	i = 0;
 	while (++i < argc)
 	{
-		if (parse_arg(&i, argv, m))
+		if (parse_arg(argc, &i, argv, m))
 			return (1);
 	}
+	if (m->open_spot == 0)
+		return (ft_puterror(ERROR_FEW_PLAYERS, 1));
+	shuffle_players(m);
 	init_progs(m);
 	return (0);
 }
 
-// first try to parse as flag
-// if fail, then try to read as an input program
-int		parse_arg(int *i, char **argv, t_master *m)
+// first try parse a term, which might be a flag involving more terms,
+// or it might be just a champion program
+int		parse_arg(int argc, int *i, char **argv, t_master *m)
 {
 	if (ft_strequ(argv[*i], "-e"))
 	{
 		m->e_flag = 1;
 		return (0);
 	}
-	if (ft_strnequ(argv[*i], "-d", 2) &&
-		ft_atoi_check(argv[*i], &(m->d_flag)) == 0)
-		return (0);
-	if (ft_strnequ(argv[*i], "-n", 2) && !ft_atoi_check(argv[*i], &(m->n_flag))
-		&& 1 <= m->n_flag &&m->n_flag <= 4)
-		return (read_player(argv[++(*i)], m));
+	if (ft_strequ(argv[*i], "-d"))
+	{
+		return ((++(*i) < argc && !ft_atoi_check(argv[*i],
+			&(m->n_flag))) ? 0 : ft_puterror(ERROR_USAGE, 1));
+	}
+	if (ft_strequ(argv[*i], "-n"))
+	{
+		if (++(*i) < argc && !ft_atoi_check(argv[*i],
+			&(m->n_flag)))
+			return (ft_puterror(ERROR_USAGE, 1));
+		if (++(*i) < argc)
+			return (ft_puterror(ERROR_USAGE, 1));
+		return (read_player(argv[*i], m));
+	}
 	return (read_player(argv[*i], m));
 }
 
@@ -61,30 +71,6 @@ int		read_player(char *argv, t_master *m)
 	m->open_spot++;
 	return (0);
 }
-
-
-/*
-int		read_players(int argc, char **argv, t_master *m)
-{
-	int	i;
-
-	i = 0;
-	while (++i < argc)
-	{
-		if (m->n_flag != 0)
-		{
-			m->player[i - 1].n_flag_pos = m->n_flag;
-			m->n_flag;
-		}
-		m->player[i - 1].id = P1_ID - m->player_count++;
-		m->player[i - 1].master = m;
-		if (read_file(argv[i], m->player + i - 1))
-			return (1);
-	}
-	init_progs(m);
-	return (0);
-}
-*/
 
 int		read_file(char *filename, t_player *p)
 {
@@ -133,8 +119,6 @@ int		read_everything(int fd, t_player *p)
 	// read player comment, no error checking
 	read(fd, p->comment, COMMENT_LENGTH);
 
-	//	p->comment[COMMENT_LENGTH] = '\0';
-
 	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
 		return (ft_puterror(ERROR_FORMAT, 1));
@@ -145,37 +129,4 @@ int		read_everything(int fd, t_player *p)
 		read(fd, buf, 4) == 0))
 		return (ft_puterror(ERROR_FORMAT, 1));
 	return (0);
-}
-
-void	init_progs(t_master *m)
-{
-	int	i;
-
-	i = -1;
-	while (++i < m->player_count)
-		init_prog(i, m);
-}
-
-void	init_prog(int i, t_master *m)
-{
-	t_process		*first;
-	unsigned int	j;
-
-	// initialize 1 process
-	first = ft_memalloc(sizeof(t_process));
-	m->player[i].process_count++;
-	first->player = &(m->player[i]);
-	first->reg[0] = m->player[i].id;
-	ft_lstadd(&(m->process_list),
-		ft_lst_new_ref(first, sizeof(t_process)));
-
-	// copy prog to core
-	first->pc = MEM_SIZE / (unsigned int)m->player_count * i;
-	j = 0;
-	while (j < m->player[i].prog_size)
-	{
-		m->core[(first->pc + j) % MEM_SIZE].value = m->player[i].prog[j];
-		m->core[(first->pc + j) % MEM_SIZE].owner = i + 1;
-		j++;
-	}
 }

@@ -6,14 +6,18 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/27 03:17:26 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/29 00:38:24 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_VM = core_io.c \
 		 curses.c \
 		 debug.c \
-		 display.c \
+		 display_control.c \
+		 display_core.c \
+		 display_lives_bar.c \
+		 display_players.c \
+		 display_process_pc.c \
 		 do_live.c \
 		 do_ld.c \
 		 do_st.c \
@@ -31,12 +35,15 @@ SRC_VM = core_io.c \
 		 do_lfork.c \
 		 do_aff.c \
 		 draw.c \
+		 init_progs.c \
 		 keys.c \
 		 main.c \
 		 op_ext.c \
+		 parse.c \
 		 rainbow_road.c \
-		 read.c \
+		 reap.c \
 		 read_arg.c \
+		 shuffle.c \
 		 sprite.c \
 		 validation.c
 

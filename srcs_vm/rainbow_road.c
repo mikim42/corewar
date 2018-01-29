@@ -6,13 +6,13 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 18:13:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 00:04:07 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int			init_minilibx(t_master *m)
+int						init_minilibx(t_master *m)
 {
 	if (!(m->mlx = mlx_init()) ||
 		!(m->win = mlx_new_window(m->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_NAME)) ||
@@ -25,12 +25,11 @@ int			init_minilibx(t_master *m)
 		return (1);
 	assign_core_pos(m);
 	mlx_hook(m->win, 2, 0, key_press_hook, m);
-	mlx_hook(m->win, 3, 0, key_release_hook, m);
 	mlx_loop_hook(m->mlx, loop_hook, m);
 	return (0);
 }
 
-void		assign_core_pos(t_master *m)
+void					assign_core_pos(t_master *m)
 {
 	static const int	radius_table[16] = {
 		WIN_WIDTH / 2 - 5, WIN_WIDTH / 2 - 10,
@@ -54,7 +53,7 @@ void		assign_core_pos(t_master *m)
 	}
 }
 
-int			init_rainbow_road(t_master *m)
+int						init_rainbow_road(t_master *m)
 {
 	static const int	color_table[5] = {
 		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
@@ -77,7 +76,7 @@ int			init_rainbow_road(t_master *m)
 	return (0);
 }
 
-void		update_rainbow_road(t_master *m)
+void					update_rainbow_road(t_master *m)
 {
 	static const int	color_table[5] = {
 		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
