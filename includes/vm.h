@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 01:18:04 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 15:19:54 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,13 +147,17 @@
 */
 # define P1_ID					0xFFFFFFFF
 
+typedef struct					s_color
+{
+	int							rgb;
+	int							alpha;
+}								t_color;
+
 typedef struct					s_sprite
 {
-	int							id;
 	int							width;
 	int							height;
-	int							*color;
-	int							*alpha;
+	t_color						color[];
 }								t_sprite;
 
 typedef struct					s_player
@@ -254,8 +258,6 @@ int								terminate(t_master *m);
 int								init_sprite_x_table(t_master *m);
 int								init_sprite_table(t_master *m);
 int								load_sprite(t_sprite **sprite, char *file);
-int								init_sprite_dimen(t_sprite *sprite, int fd);
-void							read_sprite_data(t_sprite *sprite, int fd);
 void							draw_sprite(t_sprite *sprite, int x, int y,
 											t_master *m);
 /*

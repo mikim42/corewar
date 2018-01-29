@@ -10,25 +10,26 @@
 #                                                                              #
 # **************************************************************************** #
 
+import struct
 import numpy as np
 import matplotlib.pylab as plb
 import sys
 
 def rip_sprite(file):
-    array = plb.imread(file)
-    array[:, :, 0:3] *= 255;
-    
-    fd = open(file.replace(".png", ".sprite"), "w")
-    fd.write(file.replace(".png", ".sprite") + "\n")
-    fd.write(str(array.shape) + "\n")
-    
-    for i in range(0, array.shape[0]):
-        for j in range(0, array.shape[1]):
-	    fd.write(str(int(array[i][j][0] * array[i][j][3])) + ", " +
-	        str(int(array[i][j][1] * array[i][j][3])) + ", " +
-                str(int(array[i][j][2] * array[i][j][3])) + ", " +
-                str(int(array[i][j][3] * 255)) + "\n")
-    fd.close()
+	array = plb.imread(file)
+	array[:, :, 0:3] *= 255;
+
+	fd = open(file.replace(".png", ".sprite"), "wb")
+	fd.write(struct.pack("i", array.shape[0]))
+	fd.write(struct.pack("i", array.shape[1]))
+
+	for i in range(0, array.shape[0]):
+		for j in range(0, array.shape[1]):
+			fd.write(struct.pack("i", (int(array[i][j][0] * array[i][j][3]) << 16) |
+									  (int(array[i][j][1] * array[i][j][3]) << 8) |
+									  (int(array[i][j][2] * array[i][j][3]) << 0)))
+			fd.write(struct.pack("i", int(array[i][j][3] * 255)))
+	fd.close()
 
 for arg in sys.argv[1:]:
-    rip_sprite(arg)
+	rip_sprite(arg)
