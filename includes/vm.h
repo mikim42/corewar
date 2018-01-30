@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 19:55:52 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 22:56:24 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@
 # define SPRITE_LARGE_02		"sprites/robot_large.sprite"
 # define SPRITE_LARGE_03		"sprites/virus_large.sprite"
 
+# define DEATH_SOUND			"sound/eurgh.wav"
+
 /*
 ** Display-related
 */
@@ -202,9 +204,21 @@ typedef struct					s_core
 	int							dier;
 }								t_core;
 
+typedef struct					s_mlx
+{
+	void						*appid;
+	void						*win_list;
+	void						*img_list;
+	void						(*loop_hook)(void *);
+	void						*loop_hook_data;
+	void						*loop_timer;
+	void						**font;
+	int							main_loop_active;
+}								t_mlx;
+
 typedef struct					s_master
 {
-	void						*mlx;
+	t_mlx						*mlx;
 	void						*win;
 	void						*img;
 	char						*frame;
@@ -357,7 +371,13 @@ void							verbose_intro(t_master *m);
 void							verbose_outro(t_master *m);
 void							dump_core(t_master *m);
 
-
+/*
+** freedom.c
+*/
+void							free_all(t_master *m);
+void							free_ncurses_stuff(t_master *m);
+void							safe_delwin(WINDOW *win);
+void							free_mlx_stuff(t_master *m);
 
 /*
 ** main.c

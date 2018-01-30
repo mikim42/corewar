@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 19:56:17 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 22:33:05 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			main(int argc, char **argv)
 		while (!m.show_winner)
 			step_forward(&m);
 		verbose_outro(&m);
+		free_all(&m);
 	}
 	return (0);
 }

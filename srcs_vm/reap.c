@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 22:49:54 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 22:50:47 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 22:16:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void			reap_processes(t_master *m)
 {
 	int			i;
+	int			count;
 
+	count = total_processes(m);
 	ft_lst_cond_remove(&(m->process_list), process_should_die,
 		del_process);
 	i = -1;
@@ -24,6 +26,8 @@ void			reap_processes(t_master *m)
 		m->player[i].last_lives = m->player[i].lives;
 		m->player[i].lives = 0;
 	}
+	if (m->v_flag && total_processes(m) < count)
+		system("afplay sound/eurgh.wav &");
 }
 
 int				process_should_die(void *process, size_t size)

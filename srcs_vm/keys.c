@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 23:24:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 16:00:29 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 22:09:54 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ int			loop_hook(t_master *m)
 
 int			terminate(t_master *m)
 {
-//	free_everything_that_is_in_our_master_struct(m);
-	(void)m;
 	endwin();
+	free_all(m);
 	exit(0);
 	return (0);
 }
