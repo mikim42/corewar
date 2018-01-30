@@ -68,7 +68,7 @@ char		**parse_source(char *source, t_program *program)
 	return (split_syntax(source));
 }
 
-void		the_assemble_part_two(char **assembly, t_program **program)
+void		assemble_program(char **assembly, t_program **program)
 {
 	t_list	*labels;
 	int		error;
@@ -105,7 +105,7 @@ t_program	*the_assemble_everything_function(char *source)
 	if ((program = ft_memalloc(sizeof(t_program))))
 	{
 		if ((assembly = parse_source(source, program)))
-			the_assemble_part_two(assembly, &program);
+			assemble_program(assembly, &program);
 		else
 			ft_memdel((void **)&program);
 	}
