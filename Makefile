@@ -162,7 +162,6 @@ $(OBJDIR_CHAMP)%.cor: $(SRCDIR_CHAMP)%.s
 	@/bin/mkdir -p $(OBJDIR_CHAMP)
 	@./$(ASM) $<
 	@/bin/mv $(<:.s=.cor) $(OBJDIR_CHAMP)
-	@echo "\x1b[32;1m[$(notdir $(<:.s=)) has joined the LEAGUE!]\x1b[0m"
 
 $(CHAMP): $(OBJS_CHAMP)
 

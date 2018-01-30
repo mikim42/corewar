@@ -17,7 +17,7 @@ int			fail_cor_ender(char *filename)
 	char	ender[5];
 	int		i;
 
-	if (ft_strlen(filename) <= 4)
+	if (ft_strlen(filename) < 4)
 		return (1);
 	ft_strcpy(ender, filename + ft_strlen(filename) - 4);
 	i = 0;

@@ -12,18 +12,19 @@
 
 #include "assembler.h"
 
+char	*g_path = 0;
 int		g_result = 0;
 
 long	throw_error(char *string, long result)
 {
-	ft_printf("[!] %s\n", string);
+	ft_printf("[!] '%s' -> %s\n", g_path, string);
 	g_result = -1;
 	return (result);
 }
 
 long	throw_verr(char *format, long f0, long f1, long f2)
 {
-	ft_printf("[!] ");
+	ft_printf("[!] '%s' -> ", g_path);
 	ft_printf(format, f0, f1, f2);
 	ft_printf("\n");
 	g_result = -1;
@@ -44,6 +45,7 @@ void	create_binary(t_program *program, char *name, size_t size)
 			write_byteswapped(&program->header.prog_size, &size, 4);
 			write(fd, program, sizeof(t_program) + size);
 			close(fd);
+			ft_printf("Done! Program written to '%s'.\n", tmp);
 		}
 		else
 			throw_verr("Failed to write '%s'!", (long)tmp, 0, 0);
@@ -79,13 +81,13 @@ int		main(int argc, char **argv)
 	int			i;
 
 	i = 0;
-	while (!g_result && ++i < argc)
+	while (!g_result && ++i < argc && (g_path = argv[i]))
 	{
 		if (!(size = ft_strlen(argv[i])) || (argv[i][size - 1] != 's' &&
 			argv[i][size - 1] != 'S') || argv[i][size - 2] != '.')
 		{
 			ft_printf("[!] '%s' has an invalid filetype!\n", argv[i]);
-			return (-1);
+			g_result = -1;
 		}
 		if ((source = ft_readfile(argv[i])))
 		{
@@ -95,7 +97,7 @@ int		main(int argc, char **argv)
 			continue ;
 		}
 		ft_printf("[!] Failed to read '%s'!\n", argv[i]);
-		return (-1);
+		g_result = -1;
 	}
 	return (g_result);
 }
