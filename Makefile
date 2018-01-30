@@ -60,23 +60,7 @@ SRC_ASM = assembler.c \
 SRC_DISASM = disassembler.c \
 			 main.c \
 			 op_ext.c \
-			 validation.c \
-			 write_live.c \
-			 write_ld.c \
-			 write_st.c \
-			 write_add.c \
-			 write_sub.c \
-			 write_and.c \
-			 write_or.c \
-			 write_xor.c \
-			 write_zjmp.c \
-			 write_ldi.c \
-			 write_sti.c \
-			 write_fork.c \
-			 write_lld.c \
-			 write_lldi.c \
-			 write_lfork.c \
-			 write_aff.c
+			 validation.c
 
 SRC_CHAMP = marysue.s \
 			livepls.s \
@@ -93,7 +77,7 @@ OBJ_CHAMP = $(SRC_CHAMP:.s=.cor)
 
 SRCDIR_VM = srcs_vm/
 SRCDIR_ASM = srcs_asm/
-OBJDIR_DISASM = srcs_disasm/
+SRCDIR_DISASM = srcs_disasm/
 
 OBJDIR_VM = objs_vm/
 OBJDIR_ASM = objs_asm/
@@ -137,7 +121,7 @@ CHAMP = champions
 .PHONY: all $(CHAMP) clean fclean re
 .SUFFIXES: .c .o .s .cor
 
-all: $(VM) $(ASM) $(CHAMP)
+all: $(VM) $(ASM) $(DISASM) $(CHAMP)
 
 #COMPILING VIRTUAL MACHINE
 $(OBJDIR_VM)%.o: $(SRCDIR_VM)%.c
@@ -184,7 +168,7 @@ $(CHAMP): $(OBJS_CHAMP)
 
 
 clean:
-	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM)
+	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM) $(OBJDIR_DISASM)
 	@make -s -C $(LIBFT) clean
 	@make -s -C $(MLX) clean
 	@echo "\x1b[35;1m[$(VM) - clean]\x1b[0m"
