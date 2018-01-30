@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 01:41:09 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 15:39:45 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,33 +110,17 @@ void					draw_winner(t_master *m)
 {
 	static const int	color_table[5] = {
 		DEF_COLOR, P1_COLOR, P2_COLOR, P3_COLOR, P4_COLOR};
-	int					i;
-	int					j;
 	int					x;
 	int					y;
-	
+
 	if (m->winner == 0)
 		return ;
 	x = WIN_WIDTH / 2 - HUGE_SQ_SIZE / 2;
 	y = WIN_HEIGHT / 2 - HUGE_SQ_SIZE / 2;
 	if (m->e_flag)
 	{
-		draw_sprite(m->sprite_large_table[-(m->winner->id) - 1], x, y, m);
-		return ;
+		return (draw_sprite(m->sprite_large_table[-(m->winner->id) - 1],
+			x, y, m));
 	}
-	i = -1;
-	while (++i < HUGE_SQ_SIZE)
-	{
-		j = -1;
-		while (++j < HUGE_SQ_SIZE)
-			draw_dot(x + j, y + i, color_table[-(m->winner->id)], m);
-	}
-	i = -1;
-	while (++i < HUGE_SQ_SIZE)
-	{
-		draw_dot(x + i, y, DEF_COLOR, m);
-		draw_dot(x + i, y + HUGE_SQ_SIZE, DEF_COLOR, m);
-		draw_dot(x, y + i, DEF_COLOR, m);
-		draw_dot(x + HUGE_SQ_SIZE, y + i, DEF_COLOR, m);
-	}
+	draw_huge_square(x, y, color_table[-(m->winner->id)], m);
 }

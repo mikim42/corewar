@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 23:24:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:00:37 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 16:00:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			key_press_hook(int keycode, t_master *m)
 	else if (keycode == DOWN_ARROW && m->frame_skip > 0)
 		m->frame_skip--;
 	else if (keycode == KEY_SPACEBAR)
-		m->forward = ~(m->forward);
+		m->forward = !(m->forward);
 	else if (keycode == KEY_TAB)
 	{
 		m->stop_at_death = 1;

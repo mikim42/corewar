@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 23:49:33 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 23:53:36 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 16:01:02 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,14 @@ int		parse_args(int argc, char **argv, t_master *m)
 // or it might be just a champion program
 int		parse_arg(int argc, int *i, char **argv, t_master *m)
 {
+	if (ft_strequ(argv[*i], "-v"))
+		return (!(m->v_flag = 1));
 	if (ft_strequ(argv[*i], "-e"))
-	{
-		m->e_flag = 1;
-		return (0);
-	}
-	if (ft_strequ(argv[*i], "-d"))
+		return (!(m->e_flag = 1));
+	if (ft_strequ(argv[*i], "-dump"))
 	{
 		return ((++(*i) < argc && !ft_atoi_check(argv[*i],
-			&(m->n_flag))) ? 0 : ft_puterror(ERROR_USAGE, 1));
+			&(m->d_flag))) ? 0 : ft_puterror(ERROR_USAGE, 1));
 	}
 	if (ft_strequ(argv[*i], "-n"))
 	{

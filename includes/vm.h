@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 15:19:54 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 16:41:32 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@
 # define ERROR_CHAMP_SIZE		"Champion program size is too large"
 # define ERROR_MANY_PLAYERS		"Too many champions (maximum of 4 allowed)"
 # define ERROR_FEW_PLAYERS		"Need at least one champion"
+# define UNSET_VALUE			(-42)
 
 /*
 ** Minilibx
@@ -239,6 +240,7 @@ typedef struct					s_master
 	t_player					*winner;
 	int							show_winner;
 
+	int							v_flag;
 	int							e_flag;
 	int							d_flag;
 	int							n_flag;
@@ -291,6 +293,8 @@ void							draw_dot(int x, int y, int color, t_master *m);
 void							draw_square(int x, int y, int color,
 											t_master *m);
 void							draw_big_square(int x, int y, int color,
+											t_master *m);
+void							draw_huge_square(int x, int y, int color,
 											t_master *m);
 void							draw_process_pc(t_master *m);
 
@@ -348,6 +352,9 @@ void							update_windows(t_master *m);
 /*
 ** main.c
 */
+unsigned int					ft_rand(void);
+void							verbose_intro(t_master *m);
+void							verbose_outro(t_master *m);
 int								main(int argc, char **argv);
 void							build_last_cycle(t_master *m);
 void							step_forward(t_master *m);

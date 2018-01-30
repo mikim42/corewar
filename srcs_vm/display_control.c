@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 00:24:48 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:34:19 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 16:41:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	display_winner(t_master *m)
 {
 	if (m->show_winner == 0)
 		return ;
-	if (m->winner == 0)
-		m->winner = &(m->player[m->player_count - 1]);
 	wprintw(m->win_control, "\n\n  WINNER:\t\t");
 	wattron(m->win_control, COLOR_PAIR(-(m->winner->id)));
 	wprintw(m->win_control, "%.24s", m->winner->name);

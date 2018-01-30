@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 16:26:14 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 15:21:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 15:28:02 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int			load_sprite(t_sprite **sprite, char *file)
 		return (ft_puterror(ERROR_SPRITE, 1));
 	read(fd, &width, 4);
 	read(fd, &height, 4);
-	*sprite = ft_memalloc(sizeof(t_sprite) + (sizeof(t_color) * width * height));
+	*sprite = ft_memalloc(sizeof(t_sprite) + sizeof(t_color) * width * height);
 	if (*sprite == 0)
 		return (ft_puterror(ERROR_MEMORY, 1));
 	(*sprite)->width = width;
@@ -67,8 +67,6 @@ int			load_sprite(t_sprite **sprite, char *file)
 		return (ft_puterror(ERROR_CLOSE_FILE, 1));
 	return (0);
 }
-
-
 
 void		draw_sprite(t_sprite *sprite, int x, int y, t_master *m)
 {

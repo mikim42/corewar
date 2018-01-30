@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 22:51:50 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:03:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 15:36:13 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,28 @@ void					draw_big_square(int x, int y, int color, t_master *m)
 		draw_dot(x + i, y + BIG_SQ_SIZE, DEF_COLOR, m);
 		draw_dot(x, y + i, DEF_COLOR, m);
 		draw_dot(x + BIG_SQ_SIZE, y + i, DEF_COLOR, m);
+	}
+}
+
+void					draw_huge_square(int x, int y, int color, t_master *m)
+{
+	int					i;
+	int					j;
+
+	i = -1;
+	while (++i < HUGE_SQ_SIZE)
+	{
+		j = -1;
+		while (++j < HUGE_SQ_SIZE)
+			draw_dot(x + j, y + i, color, m);
+	}
+	i = -1;
+	while (++i < HUGE_SQ_SIZE)
+	{
+		draw_dot(x + i, y, DEF_COLOR, m);
+		draw_dot(x + i, y + HUGE_SQ_SIZE, DEF_COLOR, m);
+		draw_dot(x, y + i, DEF_COLOR, m);
+		draw_dot(x + HUGE_SQ_SIZE, y + i, DEF_COLOR, m);
 	}
 }
 
