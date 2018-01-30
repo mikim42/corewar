@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/28 16:38:04 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/30 15:44:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int		main(int argc, char **argv)
 	int			i;
 
 	i = 0;
-	while (!g_result && ++i < argc && (g_path = argv[i]))
+	while (++i < argc && (g_path = argv[i]))
 	{
 		if (!(size = ft_strlen(argv[i])) || (argv[i][size - 1] != 's' &&
 			argv[i][size - 1] != 'S') || argv[i][size - 2] != '.')
