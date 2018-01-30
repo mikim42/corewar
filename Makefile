@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/29 19:56:40 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/30 15:36:04 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -132,8 +132,9 @@ $(VM): $(OBJS_VM)
 	@make -s -C $(LIBFT)
 	@make -s -C $(MLX)
 	@$(CC) $(OBJS_VM) $(VM_LIBS) -o $@
-	@echo "\x1b[32;1m[$(VM) - 모래반지 빵야빵야!]\x1b[0m"
-
+	@echo "\x1b[33;1m[$(VM) - LADIES AND GENTLEMAN, WELCOME TO THE CORE. "\
+		"ARE YOU READY FOR COOOOOOOOOOREWAAAAAAR?]\x1b[0m"
+	@echo
 
 #COMPILING ASSEMBLER
 $(OBJDIR_ASM)%.o: $(SRCDIR_ASM)%.c
@@ -143,8 +144,10 @@ $(OBJDIR_ASM)%.o: $(SRCDIR_ASM)%.c
 $(ASM): $(OBJS_ASM)
 	@make -s -C $(LIBFT)
 	@$(CC) $(OBJS_ASM) $(ASM_LIBS) -o $@
-	@echo "\x1b[32;1m[$(ASM) - 모래반지 빵야빵야!]\x1b[0m"
-
+	@echo "\x1b[32;1m[$(ASM) - Partcipiants, please line up in an orderly"\
+		"fashion, and I shall translate your champion source files into the"\
+		"finest binaries of the land!]\x1b[0m"
+	@echo
 
 #COMPILING DISASSEMBLER
 $(OBJDIR_DISASM)%.o: $(SRCDIR_DISASM)%.c
@@ -154,14 +157,21 @@ $(OBJDIR_DISASM)%.o: $(SRCDIR_DISASM)%.c
 $(DISASM): $(OBJS_DISASM)
 	@make -s -C $(LIBFT)
 	@$(CC) $(OBJS_DISASM) $(ASM_LIBS) -o $@
-	@echo "\x1b[32;1m[$(DISASM) - Built successfully!]\x1b[0m"
-
+	@echo "\x1b[34;1m[$(DISASM) - Bring me the corpses of your vanquished"\
+		"champions, and I shall reveal the inner workings of their source"\
+		"design!]\x1b[0m"
+	@echo
  
 #COMPILING CHAMPIONS
 $(OBJDIR_CHAMP)%.cor: $(SRCDIR_CHAMP)%.s
 	@/bin/mkdir -p $(OBJDIR_CHAMP)
+	@echo "\x1b[32;1m[$(ASM) - Now registering champion from $(<)..."\
+		"]\x1b[0m"
 	@./$(ASM) $<
+	@echo "\x1b[33;1mGreetings, $(notdir $(<:.s=.cor)), please proceed to"\
+		"the arena at $(OBJDIR_CHAMP)\x1b[0m"
 	@/bin/mv $(<:.s=.cor) $(OBJDIR_CHAMP)
+	@echo
 
 $(CHAMP): $(OBJS_CHAMP)
 
@@ -170,10 +180,15 @@ clean:
 	@/bin/rm -rf $(OBJDIR_VM) $(OBJDIR_ASM) $(OBJDIR_DISASM)
 	@make -s -C $(LIBFT) clean
 	@make -s -C $(MLX) clean
-	@echo "\x1b[35;1m[$(VM) - clean]\x1b[0m"
+	@echo "\x1b[35;1m[clean - Kicking out crowds from the last"\
+		"COOOOOOOOOOREWAAAAAAR...]\x1b[0m"
+	@echo
 
 fclean: clean
 	@/bin/rm -rf $(VM) $(ASM) $(DISASM) $(LIBFT)libft.a $(OBJDIR_CHAMP)
-	@echo "\x1b[31;1m[$(VM) - fclean]\x1b[0m"
+	@echo "\x1b[31;1m[fclean - Demolishing the old colosseum, so an even"\
+		"fancier new one can be built for the next"\
+		"COOOOOOOOOOREWAAAAAAR...]\x1b[0m"
+	@echo
 
 re: fclean all
