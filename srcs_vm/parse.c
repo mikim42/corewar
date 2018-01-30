@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 23:49:33 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 19:32:11 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 20:11:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int		parse_arg(int argc, int *i, char **argv, t_master *m)
 	}
 	if (ft_strequ(argv[*i], "-n"))
 	{
-		if (++(*i) < argc && !ft_atoi_check(argv[*i],
+		if (++(*i) >= argc || ft_atoi_check(argv[*i],
 			&(m->n_flag)))
 			return (ft_puterror(ERROR_USAGE, 1));
-		if (++(*i) < argc)
+		if (++(*i) >= argc)
 			return (ft_puterror(ERROR_USAGE, 1));
 		return (read_player(argv[*i], m));
 	}
