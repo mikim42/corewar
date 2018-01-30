@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/29 00:38:24 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/29 19:56:40 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ SRC_VM = core_io.c \
 		 read_arg.c \
 		 shuffle.c \
 		 sprite.c \
-		 validation.c
+		 validation.c \
+		 verbose.c
 
 SRC_ASM = main.c \
 		  assembler.c \

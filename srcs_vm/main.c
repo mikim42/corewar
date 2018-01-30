@@ -6,69 +6,23 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 16:41:50 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 19:56:17 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-
-unsigned int		ft_rand(void)
-{
-	static int		fd;
-	unsigned int	result;
-
-	if (fd <= 0)
-		fd = open("/dev/urandom", O_RDONLY, 0);
-	if (fd < 0)
-		return (-1);
-	read(fd, &result, sizeof(unsigned int));
-	return (result);
-}
-
-void		verbose_intro(t_master *m)
-{
-	static const char *colours[MAX_PLAYERS] = {
-		"{green}", "{yellow}", "{magenta}", "{cyan}" };
-	int		i;
-
-	ft_printf("Ladies and gentlemen, welcome to the"
-		" COREWAAAAAAAAAAAAAAAAAAAAAR CHAMPIONSHIP GRAND PRIX "
-		"%b!!!!!!!!!\n", ft_rand());
-	ft_printf("Introducing our contestants...\n");
-	i = -1;
-	while (++i < m->player_count)
-	{
-		ft_printf("Player %d, weighing at %u bytes, ", i + 1,
-			m->player[i].prog_size);
-		ft_printf(colours[i]);
-		ft_printf("{bold}%s{reset}!\n", m->player[i].name);
-		ft_printf("  \"");
-		ft_printf(colours[i]);
-		ft_printf("%s{reset}\"\n", m->player[i].comment);
-	}
-}
-
-void		verbose_outro(t_master *m)
-{
-	static const char *colours[MAX_PLAYERS] = {
-		"{green}", "{yellow}", "{magenta}", "{cyan}" };
-
-	ft_printf("\nThe winner is...\n");
-	ft_printf(colours[-(m->winner->id) - 1]);
-	ft_printf("  {bold}%s{reset}!!!!!!!!\n", m->winner->name);
-}
-
 
 int			main(int argc, char **argv)
 {
 	t_master	m;
 
 	ft_bzero(&m, sizeof(t_master));
-	m.d_flag = UNSET_VALUE;
+	m.d_flag = DUMMY_VALUE;
 	m.cycle_to_die = CYCLE_TO_DIE;
-	m.ctd_counter = 0;
 	if (parse_args(argc, argv, &m))
 		return (0);
+	if (m.d_flag != DUMMY_VALUE)
+		m.v_flag = 0;
 	if (m.v_flag)
 	{
 		init_ncurses_stuffz(&m);
@@ -98,6 +52,8 @@ void		step_forward(t_master *m)
 {
 	if (m->show_winner)
 		return ;
+	if (m->current_cycle == m->d_flag)
+		dump_core(m);
 	m->current_cycle++;
 	run_processes(m);
 	if (++(m->ctd_counter) >= m->cycle_to_die)

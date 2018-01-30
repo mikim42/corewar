@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 16:41:32 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 19:55:52 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@
 # define ERROR_CHAMP_SIZE		"Champion program size is too large"
 # define ERROR_MANY_PLAYERS		"Too many champions (maximum of 4 allowed)"
 # define ERROR_FEW_PLAYERS		"Need at least one champion"
-# define UNSET_VALUE			(-42)
+# define ERROR_COR_TYPE			"Champion file must end in \".[cC][oO][rR]\""
+# define DUMMY_VALUE			(-42)
 
 /*
 ** Minilibx
@@ -350,11 +351,17 @@ int								init_windows(t_master *m);
 void							update_windows(t_master *m);
 
 /*
-** main.c
+** verbose.c
 */
-unsigned int					ft_rand(void);
 void							verbose_intro(t_master *m);
 void							verbose_outro(t_master *m);
+void							dump_core(t_master *m);
+
+
+
+/*
+** main.c
+*/
 int								main(int argc, char **argv);
 void							build_last_cycle(t_master *m);
 void							step_forward(t_master *m);

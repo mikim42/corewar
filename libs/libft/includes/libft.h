@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/28 01:18:40 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 19:50:58 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ double				ft_atodbl(const char *str);
 void				del_and_gnl(int fd, char **line);
 void				ft_lst_cond_remove(t_list **list,
 	int (*cond)(void *, size_t), void (*del)(void *, size_t));
+unsigned int		ft_rand(void);
+void				ft_srand(unsigned long seed);
 
 /*
 ** get_next_line.c

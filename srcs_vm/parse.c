@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 23:49:33 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 16:01:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/29 19:32:11 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,20 @@ int		parse_arg(int argc, int *i, char **argv, t_master *m)
 	return (read_player(argv[*i], m));
 }
 
+int		fail_cor_ender(char *filename)
+{
+	char	ender[5];
+	int		i;
+
+	if (ft_strlen(filename) <= 4)
+		return (1);
+	ft_strcpy(ender, filename + ft_strlen(filename) - 4);
+	i = 0;
+	while (++i < 4)
+		ender[i] = (char)ft_toupper(ender[i]);
+	return (ft_strequ(".COR", ender) ? 0 : 1);
+}
+
 int		read_player(char *argv, t_master *m)
 {
 	if (m->open_spot == 4)
@@ -75,6 +89,12 @@ int		read_file(char *filename, t_player *p)
 {
 	int	fd;
 
+	if (fail_cor_ender(filename))
+	{
+		ft_puterror(ERROR_COR_TYPE, 1);
+		ft_printf("{poop} Invalid file: %s\n", filename);
+		return (1);
+	}
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
 		ft_puterror(ERROR_OPEN_FILE, 1);
@@ -83,6 +103,7 @@ int		read_file(char *filename, t_player *p)
 	}
 	if (read_everything(fd, p))
 	{
+		close(fd);
 		ft_printf("{poop} Invalid file: %s\n", filename);
 		return (1);
 	}

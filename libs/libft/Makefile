@@ -6,7 +6,7 @@
 #    By: ashih <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/01/28 01:19:37 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/29 19:51:36 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,6 +93,7 @@ SRC = del_and_gnl.c\
 	  ft_putnbr_fd.c\
 	  ft_putstr.c\
 	  ft_putstr_fd.c\
+	  ft_rand.c\
 	  ft_round_dbl.c\
 	  ft_round_ldbl.c\
 	  ft_sqrt.c\
