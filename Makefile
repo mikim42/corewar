@@ -93,11 +93,11 @@ OBJ_CHAMP = $(SRC_CHAMP:.s=.cor)
 
 SRCDIR_VM = srcs_vm/
 SRCDIR_ASM = srcs_asm/
-SRCDIR_ASM = srcs_disasm/
+OBJDIR_DISASM = srcs_disasm/
 
 OBJDIR_VM = objs_vm/
 OBJDIR_ASM = objs_asm/
-SRCDIR_ASM = objs_disasm/
+OBJDIR_DISASM = objs_disasm/
 
 SRCDIR_CHAMP = srcs_champ/
 OBJDIR_CHAMP = objs_champ/
