@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:53:21 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 00:09:48 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/30 22:13:01 by Mingyun K        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		init_ncurses_stuffz(t_master *m)
 int		init_windows(t_master *m)
 {
 	m->win_banner = newwin(24 - 2, 195, 0, 0);
-	wprintw(m->win_banner, "%s", BANNER2);
+	wprintw(m->win_banner, "%s", BANNER);
 	box(m->win_banner, 0, 0);
 	wrefresh(m->win_banner);
 	m->win_core = newwin(66, 195, 24 - 2, 0);
