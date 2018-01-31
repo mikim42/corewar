@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/30 22:11:00 by Mingyun K        ###   ########.fr       */
+/*   Created: 2018/01/30 22:44:07 by ashih             #+#    #+#             */
+/*   Updated: 2018/01/30 22:45:08 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@
 /*
 ** Error Messages
 */
-# define ERROR_USAGE			"usage: corewar [-e] " ERROR_USAGE2 
+# define ERROR_USAGE			"usage: corewar [-e] " ERROR_USAGE2
 # define ERROR_USAGE2			"[-dump nbr_cycle] [[" ERROR_USAGE3
 # define ERROR_USAGE3			"-n number] champion1.cor] ..."
 # define ERROR_OPEN_FILE		"No such file"
