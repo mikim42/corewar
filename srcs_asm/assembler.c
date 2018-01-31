@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 14:09:54 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/28 16:38:02 by mikim            ###   ########.fr       */
+/*   Updated: 2018/01/30 16:57:40 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ long		preprocess(char *source, char *ref, char *dst, size_t size)
 	return (i);
 }
 
-char		**parse_source(char *source, t_program *program)
+char		**parse_source(char *source, t_program *program, int flags[])
 {
 	size_t	i;
 	long	result;
@@ -53,11 +53,13 @@ char		**parse_source(char *source, t_program *program)
 				program->header.prog_name, PROG_NAME_LENGTH);
 		if (result == -1)
 			return (0);
+		flags[0] |= (result) ? 1 : 0;
 		i += (size_t)result;
 		result = preprocess(&source[i], COMMENT_CMD_STRING,
 				program->header.comment, COMMENT_LENGTH);
 		if (result < 0)
 			return (0);
+		flags[1] |= (result) ? 1 : 0;
 		i += (size_t)result;
 		if (source[i] == COMMENT_CHAR || source[i] == COMMENT_ALT)
 			while (source[i] && source[i] != '\n')
@@ -97,14 +99,14 @@ void		assemble_program(char **assembly, t_program **program)
 	free(assembly);
 }
 
-t_program	*the_assemble_everything_function(char *source)
+t_program	*the_assemble_everything_function(char *source, int flags[])
 {
 	t_program	*program;
 	char		**assembly;
 
 	if ((program = ft_memalloc(sizeof(t_program))))
 	{
-		if ((assembly = parse_source(source, program)))
+		if ((assembly = parse_source(source, program, flags)))
 			assemble_program(assembly, &program);
 		else
 			ft_memdel((void **)&program);

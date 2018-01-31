@@ -6,7 +6,7 @@
 /*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 13:55:08 by apuel             #+#    #+#             */
-/*   Updated: 2018/01/30 15:44:28 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/30 16:44:39 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,25 +79,25 @@ int		main(int argc, char **argv)
 	char		*source;
 	size_t		size;
 	int			i;
+	int			flags[2];
 
 	i = 0;
 	while (++i < argc && (g_path = argv[i]))
 	{
+		ft_bzero(&flags, sizeof(flags));
 		if (!(size = ft_strlen(argv[i])) || (argv[i][size - 1] != 's' &&
 			argv[i][size - 1] != 'S') || argv[i][size - 2] != '.')
-		{
-			ft_printf("[!] '%s' has an invalid filetype!\n", argv[i]);
-			g_result = -1;
-		}
+			g_result = ft_printf("[!] '%s' has an invalid filetype!\n",
+				argv[i]) ? -1 : -1;
 		if ((source = ft_readfile(argv[i])))
 		{
-			if ((program = the_assemble_everything_function(source)))
+			if ((program = the_assemble_everything_function(source, flags)) &&
+				!check_name(flags, argv[i]) && !check_comment(flags, argv[i]))
 				create_binary(program, argv[i], size);
 			free(source);
 			continue ;
 		}
-		ft_printf("[!] Failed to read '%s'!\n", argv[i]);
-		g_result = -1;
+		g_result = ft_printf("[!] Failed to read '%s'!\n", argv[i]) ? -1 : -1;
 	}
 	return (g_result);
 }

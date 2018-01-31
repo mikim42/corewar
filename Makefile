@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/30 15:36:04 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/30 16:45:14 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC_VM = core_io.c \
 
 SRC_ASM = assembler.c \
 		  arg_parser.c \
+		  check_name_comment.c \
 		  init_program.c \
 		  instruction_parser.c \
 		  main.c \
