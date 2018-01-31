@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:11:03 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/30 00:08:20 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/30 17:44:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@
 # define ERROR_HEADER			"Invalid header"
 # define ERROR_FORMAT			"Invalid format"
 # define ERROR_CHAMP_SIZE		"Champion program size is too large"
+# define ERROR_EMPTY_SIZE		"Champion program contains no instruction"
 # define ERROR_MANY_PLAYERS		"Too many champions (maximum of 4 allowed)"
 # define ERROR_FEW_PLAYERS		"Need at least one champion"
 # define ERROR_COR_TYPE			"Champion file must end in \".[cC][oO][rR]\""
@@ -286,6 +287,11 @@ void							shuffle_players_part_two(t_player array[],
 int								empty_pos(t_player array[], int i, t_master *m);
 
 /*
+** cor_hotfix.c
+*/
+int								fail_cor_ender(char *filename);
+
+/*
 ** parse.c
 */
 int								parse_args(int argc, char **argv, t_master *m);
@@ -383,8 +389,9 @@ void							free_mlx_stuff(t_master *m);
 ** main.c
 */
 int								main(int argc, char **argv);
-void							build_last_cycle(t_master *m);
 void							step_forward(t_master *m);
+void							update_cycle_to_die(t_master *m);
+void							build_last_cycle(t_master *m);
 void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);
 

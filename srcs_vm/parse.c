@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 23:49:33 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 20:11:25 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/30 17:39:55 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ int		parse_args(int argc, char **argv, t_master *m)
 	return (0);
 }
 
-// first try parse a term, which might be a flag involving more terms,
-// or it might be just a champion program
+/*
+** int parse_arg(int argc, int *i, char **argv, t_master *m);
+**
+** First try to parse an arg as a flag, which might involve more args;
+** If failed, try to parse as a champion program.
+*/
+
 int		parse_arg(int argc, int *i, char **argv, t_master *m)
 {
 	if (ft_strequ(argv[*i], "-v"))
@@ -52,20 +57,6 @@ int		parse_arg(int argc, int *i, char **argv, t_master *m)
 		return (read_player(argv[*i], m));
 	}
 	return (read_player(argv[*i], m));
-}
-
-int		fail_cor_ender(char *filename)
-{
-	char	ender[5];
-	int		i;
-
-	if (ft_strlen(filename) <= 4)
-		return (1);
-	ft_strcpy(ender, filename + ft_strlen(filename) - 4);
-	i = 0;
-	while (++i < 4)
-		ender[i] = (char)ft_toupper(ender[i]);
-	return (ft_strequ(".COR", ender) ? 0 : 1);
 }
 
 int		read_player(char *argv, t_master *m)
@@ -112,38 +103,36 @@ int		read_file(char *filename, t_player *p)
 	return (0);
 }
 
+/*
+** int read_everything(int fd, t_player *p);
+**
+** (1) Read 4 bytes and check it matches the magic header.
+** (2) Read 128 bytes of program name, followed by 4 zeroed bytes.
+** (3) Read 4 bytes which indicate size of program instructions.
+** (4) Read 2048 bytes of program comment, followed by 4 zeroed bytes.
+** (5) Read the program instructions of exactly prog_size bytes given earlier.
+*/
+
 int		read_everything(int fd, t_player *p)
 {
 	unsigned char	buf[4];
 
-	// check header
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\x00\xea\x83\xf3", 4) == 0))
 		return (ft_puterror(ERROR_HEADER, 1));
-
-	// read player name, no error checking
 	read(fd, p->name, PROG_NAME_LENGTH);
-
-	//	p->name[PROG_NAME_LENGTH] = '\0';
-	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
 		return (ft_puterror(ERROR_FORMAT, 1));
-
-	// check program size given in next 4 bytes
 	if (!(read(fd, buf, 4) == 4))
 		return (ft_puterror(ERROR_FORMAT, 1));
 	p->prog_size = (unsigned int)buf[3] | ((unsigned int)buf[2] << 8) |
 		((unsigned int)buf[1] << 16) | ((unsigned int)buf[0] << 24);
 	if (p->prog_size > CHAMP_MAX_SIZE)
 		return (ft_puterror(ERROR_CHAMP_SIZE, 1));
-
-	// read player comment, no error checking
+	if (p->prog_size == 0)
+		return (ft_puterror(ERROR_EMPTY_SIZE, 1));
 	read(fd, p->comment, COMMENT_LENGTH);
-
-	// check 4 bytes of zero padding
 	if (!(read(fd, buf, 4) == 4 && ft_memcmp(buf, "\0\0\0\0", 4) == 0))
 		return (ft_puterror(ERROR_FORMAT, 1));
-
-	// read the program up to the given size
 	p->prog = malloc(sizeof(unsigned char) * p->prog_size);
 	if (!(read(fd, p->prog, p->prog_size) == p->prog_size &&
 		read(fd, buf, 4) == 0))

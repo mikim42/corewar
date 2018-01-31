@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/29 21:49:59 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 23:14:26 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/30 17:20:22 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void		free_mlx_stuff(t_master *m)
 		ft_memdel((void **)&(m->mlx));
 	}
 	i = -1;
-	while (++ i < MAX_PLAYERS * 3)
+	while (++i < MAX_PLAYERS * 3)
 		ft_memdel((void **)&(m->sprite_table[i]));
 }

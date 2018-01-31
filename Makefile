@@ -6,11 +6,12 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/30 16:45:14 by ashih            ###   ########.fr        #
+#    Updated: 2018/01/30 17:45:29 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_VM = core_io.c \
+SRC_VM = cor_hotfix.c \
+		 core_io.c \
 		 curses.c \
 		 debug.c \
 		 display_control.c \
@@ -46,6 +47,7 @@ SRC_VM = core_io.c \
 		 read_arg.c \
 		 shuffle.c \
 		 sprite.c \
+		 step.c \
 		 validation.c \
 		 verbose.c
 
