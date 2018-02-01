@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/29 15:39:45 by ashih            ###   ########.fr       */
+/*   Updated: 2018/01/31 18:19:39 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int						init_minilibx(t_master *m)
 	}
 	assign_core_pos(m);
 	mlx_hook(m->win, 2, 0, key_press_hook, m);
+	mlx_hook(m->win, 17, 0, terminate, m);
 	mlx_loop_hook(m->mlx, loop_hook, m);
 	return (0);
 }
