@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/30 22:44:07 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/30 22:45:08 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/02 17:27:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,6 +411,10 @@ void							free_mlx_stuff(t_master *m);
 ** main.c
 */
 int								main(int argc, char **argv);
+
+/*
+** step.c
+*/
 void							step_forward(t_master *m);
 void							update_cycle_to_die(t_master *m);
 void							build_last_cycle(t_master *m);

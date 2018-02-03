@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/31 18:19:39 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/02 17:34:12 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int						init_rainbow_road(t_master *m)
 	mlx_string_put(m->mlx, m->win, 0, 0, DEF_COLOR, "CYCLE: ");
 	mlx_string_put(m->mlx, m->win, 80, 0, DEF_COLOR, str);
 	ft_strdel(&str);
+	system("say -v Victoria -r 250 'ladies and gentlemen, welcome"\
+		"to. co~o~o~o~o~ore wo~o~o~ore' &");
 	mlx_loop(m->mlx);
 	return (0);
 }
@@ -119,9 +121,7 @@ void					draw_winner(t_master *m)
 	x = WIN_WIDTH / 2 - HUGE_SQ_SIZE / 2;
 	y = WIN_HEIGHT / 2 - HUGE_SQ_SIZE / 2;
 	if (m->e_flag)
-	{
-		return (draw_sprite(m->sprite_large_table[-(m->winner->id) - 1],
-			x, y, m));
-	}
-	draw_huge_square(x, y, color_table[-(m->winner->id)], m);
+		draw_sprite(m->sprite_large_table[-(m->winner->id) - 1], x, y, m);
+	else
+		draw_huge_square(x, y, color_table[-(m->winner->id)], m);
 }
