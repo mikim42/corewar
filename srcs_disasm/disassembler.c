@@ -67,14 +67,17 @@ void	disassemble(t_program *program)
 	{
 		if (program->code[i] == 0 || program->code[i] > 16 ||
 			i == prog_size - 1 ||
-			i + instruction_length(&(program->code[i])) > prog_size ||
-			!validate_args(&(program->code[i])))
+			i + instruction_length(&(program->code[i])) > prog_size)
 		{
-			ft_printf("# Invalid instruction @ .text:%08lX (0x%02X)\n",
+			ft_printf("# Invalid instruction @ .text:%08lX => 0x%02X\n",
 				i, program->code[i]);
 			i++;
 		}
 		else
+		{
+			if (!validate_args(&(program->code[i])))
+				ft_printf("# Invalid arguments @ .text:%08lX => ", i);
 			i += print_instruction(&(program->code[i]));
+		}
 	}
 }

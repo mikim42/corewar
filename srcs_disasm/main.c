@@ -69,6 +69,8 @@ int			main(int argc, char **argv)
 		}
 		if ((program = read_program(argv[i])))
 		{
+			if (i > 1)
+				ft_printf("\n");
 			disassemble(program);
 			free(program);
 			continue ;
