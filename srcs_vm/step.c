@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/30 17:44:02 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/02 17:32:51 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 16:34:12 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,6 @@ void		update_cycle_to_die(t_master *m)
 			m->forward = 0;
 		}
 	}
-}
-
-void		build_last_cycle(t_master *m)
-{
-	static const char	*who_won[8] = {
-		"say -v Victoria -r 240 'Player 1. won' &",
-		"say -v Victoria -r 240 'Player 2. won' &",
-		"say -v Victoria -r 240 'Player 3. won' &",
-		"say -v Victoria -r 240 'Player 4. won' &",
-		"say -v Victoria -r 240 'Burger. won' &",
-		"say -v Victoria -r 240 'Chicken. won' &",
-		"say -v Victoria -r 240 'Robot. won' &",
-		"say -v Victoria -r 240 'Virus. won' &"};
-	int					i;
-
-	m->current_cycle++;
-	run_processes(m);
-	reap_processes(m);
-	ft_lstdel(&(m->process_list), del_process);
-	if (m->winner == 0)
-		m->winner = &(m->player[m->player_count - 1]);
-	if (m->v_flag == 0)
-		return ;
-	i = -(m->winner->id) - 1;
-	if (m->e_flag)
-		i += 4;
-	sleep(1);
-	system(who_won[i]);
 }
 
 void		run_processes(t_master *m)

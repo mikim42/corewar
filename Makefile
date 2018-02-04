@@ -6,7 +6,7 @@
 #    By: mikim <mikim@student.42.us.org>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/21 19:53:23 by mikim             #+#    #+#              #
-#    Updated: 2018/01/30 17:45:29 by ashih            ###   ########.fr        #
+#    Updated: 2018/02/03 16:34:45 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRC_VM = cor_hotfix.c \
 		 freedom.c \
 		 init_progs.c \
 		 keys.c \
+		 last_cycle.c \
 		 main.c \
 		 op_ext.c \
 		 parse.c \
@@ -65,7 +66,9 @@ SRC_DISASM = disassembler.c \
 			 op_ext.c \
 			 validation.c
 
-SRC_CHAMP = marysue.s \
+SRC_CHAMP = affbot.s \
+			laffbot.s \
+			marysue.s \
 			livepls.s \
 			replicationcentral.s \
 			doyoulikeforks.s \

@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/30 22:44:07 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/02 17:27:29 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 16:32:58 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@
 /*
 ** Display-related
 */
-# define MAX_FRAME_SKIP			100
+# define MAX_FRAME_SKIP			200
 # define LIFEBAR_WIDTH			42
 # define DEATH_LEN				42
 # define AFFLOG_SIZE			(45 * 3)
@@ -417,9 +417,14 @@ int								main(int argc, char **argv);
 */
 void							step_forward(t_master *m);
 void							update_cycle_to_die(t_master *m);
-void							build_last_cycle(t_master *m);
 void							run_processes(t_master *m);
 void							run_process(t_process *process, t_master *m);
+
+/*
+** last_cycle.c
+*/
+void							build_last_cycle(t_master *m);
+void							announce_winner(t_master *m);
 
 /*
 ** reap.c

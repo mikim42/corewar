@@ -1,5 +1,5 @@
-.name "laughingbot"
-.comment "LOL"
+.name "laffbot"
+.comment "i liek 2 laff"
 
 sti r1, %:time_to_aff, %1
 st r2, -5
