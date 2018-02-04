@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/25 00:26:23 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/02 17:34:12 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 17:20:59 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@ int						init_minilibx(t_master *m)
 		!(m->win = mlx_new_window(m->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_NAME)) ||
 		!(m->img = mlx_new_image(m->mlx, WIN_WIDTH, WIN_HEIGHT)) ||
 		!(m->frame = mlx_get_data_addr(m->img, &(m->bpp), &(m->size_line),
-			&(m->endian))) || init_sprite_x_table(m))
+			&(m->endian))))
 		return (ft_puterror(ERROR_MEMORY, 1));
+	if (init_sprite_x_table(m))
+		return (1);
+	if (m->e_flag && init_sprite_table(m))
+		return (1);
 	m->bpp /= 8;
-	if (m->e_flag)
-	{
-		if (init_sprite_table(m))
-			return (1);
-	}
 	assign_core_pos(m);
 	mlx_hook(m->win, 2, 0, key_press_hook, m);
 	mlx_hook(m->win, 17, 0, terminate, m);
@@ -76,9 +75,6 @@ int						init_rainbow_road(t_master *m)
 	mlx_string_put(m->mlx, m->win, 0, 0, DEF_COLOR, "CYCLE: ");
 	mlx_string_put(m->mlx, m->win, 80, 0, DEF_COLOR, str);
 	ft_strdel(&str);
-	system("say -v Victoria -r 250 'ladies and gentlemen, welcome"\
-		"to. co~o~o~o~o~ore wo~o~o~ore' &");
-	mlx_loop(m->mlx);
 	return (0);
 }
 

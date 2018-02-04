@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/30 22:44:07 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/03 16:32:58 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 17:15:39 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,6 +390,7 @@ void							display_player(int i, t_master *m);
 */
 int								init_ncurses_stuffz(t_master *m);
 int								init_windows(t_master *m);
+void							init_print_windows(t_master *m);
 void							update_windows(t_master *m);
 
 /*

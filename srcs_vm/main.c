@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/24 21:00:51 by ashih             #+#    #+#             */
-/*   Updated: 2018/01/30 17:44:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 17:20:30 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int			main(int argc, char **argv)
 		m.v_flag = 0;
 	if (m.v_flag)
 	{
-		init_ncurses_stuffz(&m);
-		init_rainbow_road(&m);
+		if (init_rainbow_road(&m) || init_ncurses_stuffz(&m))
+			terminate(&m);
+		mlx_loop(m.mlx);
 	}
 	else
 	{
