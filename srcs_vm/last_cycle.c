@@ -6,7 +6,7 @@
 /*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 16:33:22 by ashih             #+#    #+#             */
-/*   Updated: 2018/02/03 16:34:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/02/03 16:37:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,3 @@ void			announce_winner(t_master *m)
 	system(full_str);
 	ft_strdel(&full_str);
 }
-
